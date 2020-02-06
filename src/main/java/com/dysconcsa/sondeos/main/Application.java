@@ -29,18 +29,18 @@ public class Application extends javafx.application.Application {
         } catch (Exception ex) {
             configurationProperty = new ConfigurationProperty(0, "EMPRESA", "/image/company_name.png");
         }
-        AdemeController.ademeProperties = FXCollections.observableArrayList();
-        Flow flow = new Flow(MainController.class);
-        FlowHandler flowHandler = flow.createHandler();
-        StackPane pane = flowHandler.start(new DefaultFlowContainer());
-        pane.getStylesheets().add("/css/application.css");
-        Scene scene = new Scene(pane);
-        primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
-        primaryStage.setResizable(true);
-        primaryStage.setMaximized(true);
-        primaryStage.getIcons().add(new Image("/image/Sondeos.png"));
         try {
+            AdemeController.ademeProperties = FXCollections.observableArrayList();
+            Flow flow = new Flow(MainController.class);
+            FlowHandler flowHandler = flow.createHandler();
+            StackPane pane = flowHandler.start(new DefaultFlowContainer());
+            pane.getStylesheets().add("/css/application.css");
+            Scene scene = new Scene(pane);
+            primaryStage.setScene(scene);
+            primaryStage.centerOnScreen();
+            primaryStage.setResizable(true);
+            primaryStage.setMaximized(true);
+            primaryStage.getIcons().add(new Image("/image/Sondeos.png"));
             primaryStage.setTitle("Aplicacion de Sondeos - " + configurationProperty.getNombreEmpresa().toUpperCase());
         } catch (Exception ex) {
             primaryStage.setTitle("Aplicacion de Sondeos");
