@@ -571,6 +571,7 @@ public class FormValoresController {
         colProfundidadInicial.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadInicial(value);
+            tableDatos.getSelectionModel().select(event.getTablePosition().getRow(), colProfundidadFinal);
             tableDatos.refresh();
         });
         colProfundidadFinal.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
@@ -624,6 +625,7 @@ public class FormValoresController {
         colProfundidadInicialHumedad.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadInicial(value);
+            tableHumedad.getSelectionModel().select(event.getTablePosition().getRow(), colProfundidadFinalHumedad);
             tableHumedad.refresh();
         });
         colProfundidadFinalHumedad.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
@@ -631,6 +633,7 @@ public class FormValoresController {
         colProfundidadFinalHumedad.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadFinal(value);
+            tableHumedad.getSelectionModel().select(event.getTablePosition().getRow(), colContenidoHumedad);
             tableHumedad.refresh();
         });
         colContenidoHumedad.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
@@ -650,6 +653,7 @@ public class FormValoresController {
         colProfundidadTrepano.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidad(value);
+            tableTrepano.getSelectionModel().select(event.getTablePosition().getRow(), colTrepano);
             tableTrepano.refresh();
         });
         colTrepano.setCellFactory(cell -> {
