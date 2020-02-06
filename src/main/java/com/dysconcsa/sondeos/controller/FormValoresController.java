@@ -516,6 +516,7 @@ public class FormValoresController {
         colProfundidadSucs.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidad(value);
+            tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colLimiteLiquido);
             tableClasificacion.refresh();
         });
         colLimiteLiquido.setCellValueFactory(value -> value.getValue().limiteLiquidoProperty().asObject());
@@ -523,6 +524,7 @@ public class FormValoresController {
         colLimiteLiquido.setOnEditCommit(event -> {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setLimiteLiquido(value);
+            tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colIndicePlasticidad);
             tableClasificacion.refresh();
         });
         colIndicePlasticidad.setCellValueFactory(value -> value.getValue().indicePlasticidadProperty().asObject());
@@ -530,6 +532,7 @@ public class FormValoresController {
         colIndicePlasticidad.setOnEditCommit(event -> {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setIndicePlasticidad(value);
+            tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colTipoSuelo);
             tableClasificacion.refresh();
         });
         colTipoSuelo.setCellFactory(param -> {
@@ -546,11 +549,11 @@ public class FormValoresController {
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
-            ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
+            /*ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
             SuelosProperty suelos = event.getNewValue();
             TablePosition<ClasificacionSucsProperty, ?> pos = tableClasificacion.getFocusModel().getFocusedCell();
             clasificacionSucsProperties.get(pos.getRow()).setDescripcion(suelos.getNombre().toUpperCase());
-            clasificacionSucsProperty.setTipoSuelo(suelos.getID());
+            clasificacionSucsProperty.setTipoSuelo(suelos.getID());*/
         });
         colDescipcion.setCellValueFactory(value -> value.getValue().descripcionProperty());
         colDescipcion.setCellFactory(EditCell.forTableColumn(new DefaultStringConverter()));
