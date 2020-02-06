@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="centerPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane fx:id="anchorPane" prefHeight="550.0" prefWidth="800.0" StackPane.alignment="CENTER">
+         <children>
+            <MenuBar stylesheets="@../css/application.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="Archivo">
+                  <items>
+                    <MenuItem fx:id="menuGuardar" mnemonicParsing="false" text="Guardar" />
+                        <MenuItem fx:id="menuAbrir" mnemonicParsing="false" text="Abrir" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Generar">
+                  <items>
+                    <MenuItem fx:id="menuReporte" mnemonicParsing="false" text="Reporte" />
+                        <MenuItem fx:id="menuVerGrafico" mnemonicParsing="false" text="Ver Grafico" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Cliente">
+                  <items>
+                    <MenuItem fx:id="menuCliente" mnemonicParsing="false" text="Buscar" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <TableView fx:id="tableValores" editable="true" fixedCellSize="0.0" layoutX="54.0" layoutY="35.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+              <columns>
+                <TableColumn fx:id="colEstrato" prefWidth="130.0" text="Estrato" />
+                <TableColumn fx:id="colAdeme" prefWidth="130.0" text="Ademe" />
+                  <TableColumn fx:id="colTrepano" prefWidth="130.0" text="Trepano" />
+                  <TableColumn fx:id="colTipoSuelo" prefWidth="180.0" text="SUCS" />
+                  <TableColumn fx:id="colLimiteLiquido" prefWidth="130.0" text="Limite Liq." />
+                  <TableColumn fx:id="colIndicePlasticidad" prefWidth="130.0" text="Indice Plast." />
+                  <TableColumn fx:id="colIndiceHumedad" prefWidth="130.0" text="Indice Hum." />
+                  <TableColumn fx:id="colRecobro" prefWidth="130.0" text="Recobro" />
+                  <TableColumn fx:id="colGolpes" prefWidth="130.0" text="Golpes" />
+                  <TableColumn fx:id="colCodcliente" prefWidth="130.0" text="Cod. Cliente" />
+              </columns>
+            </TableView>
+            <Button fx:id="btnEliminar" layoutX="728.0" layoutY="38.0" mnemonicParsing="false" text="Eliminar" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
+            <Button fx:id="btnDuplicar" layoutX="661.0" layoutY="38.0" mnemonicParsing="false" text="Duplicar" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="40.0" />
+         </children></AnchorPane>
+   </children>
+</StackPane>

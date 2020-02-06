@@ -1,0 +1,60 @@
+
+* {
+
+    -fx-primarytext: #B2B2B2;
+    -fx-color-1: #1976D2;
+    -fx-blue: #007bff;
+    -fx-indigo: #6610f2;
+    -fx-purple: #6f42c1;
+    -fx-pink: #e83e8c;
+    -fx-red: #dc3545;
+    -fx-orange: #fd7e14;
+    -fx-yellow: #ffc107;
+    -fx-green: #28a745;
+    -fx-teal: #20c997;
+    -fx-cyan: #17a2b8;
+    -fx-white: #fff;
+    -fx-gray: #6c757d;
+    -fx-gray-dark: #343a40;
+    -fx-primary: #007bff;
+    -fx-secondary: #6c757d;
+    -fx-success: #28a745;
+    -fx-info: #17a2b8;
+    -fx-warning: #ffc107;
+    -fx-danger: #dc3545;
+    -fx-light: #f8f9fa;
+    -fx-dark: #343a40;
+}
+
+.root {
+    -fx-background-color: -fx-success;
+    -fx-border-color: -fx-gray-dark;
+}
+.button{
+    -fx-text-fill: -fx-white;
+    -fx-background-color: -fx-info;
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 4.0px;
+    -fx-background-border-radius: 4.0px;
+    -fx-background-border:4px;
+    -fx-font-size: 10.0pt;
+}
+.button:hover,button:focused{
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-white;
+}
+.button-hamburger {
+    -fx-text-fill: -fx-white;
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 0.0px;
+    -fx-background-radius: 0.0px;
+    -fx-font-size: 12.0pt;
+}
+
+.button-hamburger:hover, .button-hamburger:focused {
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-white;
+}

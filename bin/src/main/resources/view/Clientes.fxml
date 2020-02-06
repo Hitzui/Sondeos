@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="centerPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane StackPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tableClientes" layoutX="29.0" layoutY="81.0" prefHeight="483.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+              <columns>
+                <TableColumn fx:id="colCodigoCliente" prefWidth="100.0" text="Codigo" />
+                <TableColumn fx:id="colNombreCliente" prefWidth="150.0" text="Cliente" />
+                  <TableColumn fx:id="colProyecto" prefWidth="250.0" text="Proyecto" />
+                  <TableColumn fx:id="colLugar" prefWidth="150.0" text="Lugar" />
+                  <TableColumn fx:id="colOperador" prefWidth="200.0" text="Operador" />
+                  <TableColumn fx:id="colFecha" prefWidth="150.0" text="Fecha" />
+              </columns>
+            </TableView>
+            <Button fx:id="btnNuevo" layoutX="42.0" layoutY="34.0" mnemonicParsing="false" text="Nuevo" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="15.0" />
+            <Button fx:id="btnEliminar" layoutX="650.0" layoutY="34.0" mnemonicParsing="false" text="Eliminar" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="15.0" />
+            <Button fx:id="btnEditar" layoutX="517.0" layoutY="34.0" mnemonicParsing="false" text="Editar" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="15.0" />
+         </children></AnchorPane>
+    </children>
+</StackPane>

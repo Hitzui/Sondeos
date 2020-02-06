@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="anchorPane" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane layoutX="678.0" layoutY="505.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <JFXButton fx:id="btnCerrar" buttonType="RAISED" text="Cerrar" />
+         </children>
+      </AnchorPane>
+      <JFXButton fx:id="btnGuardar" buttonType="RAISED" layoutX="442.0" layoutY="505.0" text="Guardar Grafico" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="210.0" />
+   </children>
+</AnchorPane>

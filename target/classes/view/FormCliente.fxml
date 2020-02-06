@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="432.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/8.0.181"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <GridPane prefHeight="375.0" prefWidth="505.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                  AnchorPane.topAnchor="10.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="127.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="374.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Cliente"/>
+                <Label text="Proyecto" GridPane.rowIndex="1"/>
+                <Label text="Sondeo No" GridPane.rowIndex="2"/>
+                <Label text="Lugar" GridPane.rowIndex="3"/>
+                <Label text="Operador" GridPane.rowIndex="4"/>
+                <Label text="Nivel Freatico" GridPane.rowIndex="5"/>
+                <Label text="Observaciones" GridPane.rowIndex="6"/>
+                <Label text="Archivo" GridPane.rowIndex="7"/>
+                <Label text="Fecha" GridPane.rowIndex="8"/>
+                <JFXTextField fx:id="txtCliente" maxWidth="-Infinity" prefHeight="25.0" prefWidth="240.0"
+                              GridPane.columnIndex="1"/>
+                <JFXTextField fx:id="txtProyecto" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <JFXTextField fx:id="txtSondeoN" maxWidth="-Infinity" prefHeight="25.0" prefWidth="140.0"
+                              GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <JFXTextField fx:id="txtLugar" maxWidth="-Infinity" prefHeight="25.0" prefWidth="366.0"
+                              GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <JFXTextField fx:id="txtOperador" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <JFXTextField fx:id="txtNivel" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <JFXTextField fx:id="txtObservaciones" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <JFXTextField fx:id="txtArchivo" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <JFXDatePicker fx:id="txtFecha" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+            </children>
+        </GridPane>
+        <JFXButton fx:id="btnCancelar" buttonType="RAISED" layoutX="409.0" layoutY="398.0" text="Volver a la lista"/>
+        <JFXButton fx:id="btnAceptar" buttonType="RAISED" layoutX="206.0" layoutY="398.0" text="Aceptar"/>
+    </children>
+</AnchorPane>
