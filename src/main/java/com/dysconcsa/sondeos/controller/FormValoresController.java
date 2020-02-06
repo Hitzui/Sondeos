@@ -41,7 +41,7 @@ import java.util.List;
 @FXMLController("/view/FormValores.fxml")
 public class FormValoresController {
 
-    private static String lastVisitedDirectory = System.getProperty("user.home");
+    private static String lastVisitedDirectory = System.getProperty("user.dir");
     private final double tabWidth = 90.0;
     private final ObservableList<String> trepanoList = FXCollections.observableArrayList();
     private static int lastSelectedTabIndex = 0;
