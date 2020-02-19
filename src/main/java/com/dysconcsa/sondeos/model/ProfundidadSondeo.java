@@ -1,6 +1,7 @@
 package com.dysconcsa.sondeos.model;
 
 public class ProfundidadSondeo {
+    private String sondeoNumero;
     private Double profundidadMinima;
     private Double profundidadMaxima;
     private Double elevacion;
@@ -8,10 +9,19 @@ public class ProfundidadSondeo {
     public ProfundidadSondeo() {
     }
 
-    public ProfundidadSondeo(Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
+    public ProfundidadSondeo(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
+        this.sondeoNumero = sondeoNumero;
         this.profundidadMinima = profundidadMinima;
         this.profundidadMaxima = profundidadMaxima;
         this.elevacion = elevacion;
+    }
+
+    public String getSondeoNumero() {
+        return sondeoNumero;
+    }
+
+    public void setSondeoNumero(String sondeoNumero) {
+        this.sondeoNumero = sondeoNumero;
     }
 
     public Double getProfundidadMinima() {

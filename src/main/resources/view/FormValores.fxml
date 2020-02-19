@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="formValores" prefHeight="537.0" prefWidth="847.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="formValores" prefHeight="687.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane fx:id="anchorPane" prefHeight="505.0" prefWidth="689.0" style="-fx-border-color: #343a40;">
             <children>
@@ -30,7 +30,7 @@
                     <Tab fx:id="tabValores" text="Valores de campo">
                         <AnchorPane prefHeight="478.0" prefWidth="797.0">
                             <children>
-                                <TableView fx:id="tableDatos" editable="true" layoutX="28.0" layoutY="62.0" prefHeight="377.0" prefWidth="502.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="62.0">
+                                <TableView fx:id="tableDatos" editable="true" layoutX="28.0" layoutY="62.0" prefHeight="377.0" prefWidth="502.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="62.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadInicial" prefWidth="75.0" text="Pof. Ini." />
                                         <TableColumn fx:id="colProfundidadFinal" prefWidth="75.0" sortable="false" text="Prof. Fin." />
@@ -43,17 +43,17 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                 </TableView>
-                                <JFXTextField fx:id="txtElevacion" labelFloat="true" layoutX="607.0" layoutY="187.0" promptText="Elevación:">
+                                <JFXTextField fx:id="txtElevacion" labelFloat="true" layoutX="688.0" layoutY="172.0" promptText="Elevación:" AnchorPane.rightAnchor="50.39999999999998">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
                                 </JFXTextField>
-                                <JFXTextField fx:id="txtProfundidadMaxima" labelFloat="true" layoutX="607.0" layoutY="118.0" promptText="Profundidad Máxima:">
+                                <JFXTextField fx:id="txtProfundidadMaxima" labelFloat="true" layoutX="688.0" layoutY="121.0" promptText="Profundidad Máxima:" AnchorPane.rightAnchor="50.39999999999998">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
                                 </JFXTextField>
-                                <JFXTextField fx:id="txtProfundidadMinima" labelFloat="true" layoutX="607.0" layoutY="41.0" promptText="Profundidad Mínima:">
+                                <JFXTextField fx:id="txtProfundidadMinima" labelFloat="true" layoutX="688.0" layoutY="62.0" promptText="Profundidad Mínima:" AnchorPane.rightAnchor="50.39999999999998">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
@@ -61,7 +61,7 @@
                                 <AnchorPane layoutX="-1.0" layoutY="305.0" />
                                 <JFXButton fx:id="btnEliminar" buttonType="RAISED" layoutX="473.0" layoutY="14.0" text="Eliminar" />
                                 <JFXButton fx:id="btnCargarDatos" buttonType="RAISED" layoutX="28.0" layoutY="14.0" text="Cargar Datos" />
-                                <TableView fx:id="tableTrepano" layoutX="563.0" layoutY="239.0" prefHeight="200.0" prefWidth="235.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="563.0" AnchorPane.topAnchor="240.0">
+                                <TableView fx:id="tableTrepano" layoutX="539.0" layoutY="232.0" prefHeight="259.0" prefWidth="238.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="230.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadTrepano" prefWidth="75.0" text="Profundidad" />
                                         <TableColumn fx:id="colTrepano" prefWidth="75.0" text="Trepano" />
@@ -72,6 +72,7 @@
                                 </TableView>
                                 <JFXButton fx:id="btnLimpiarDatos" buttonType="RAISED" layoutX="177.0" layoutY="14.0" text="Limpiar Datos" />
                         <JFXButton fx:id="btnInsertar" buttonType="RAISED" layoutX="381.0" layoutY="14.0" text="Insertar" />
+                        <JFXTextField fx:id="txtSondeoNumero" labelFloat="true" layoutX="688.0" layoutY="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="146.0" promptText="Sondeo N°" AnchorPane.rightAnchor="50.0" />
                             </children>
                         </AnchorPane>
                     </Tab>

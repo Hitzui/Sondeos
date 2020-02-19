@@ -152,6 +152,9 @@ public class FormValoresController {
     private TableColumn<TrepanoProperty, String> colTrepano;
 
     @FXML
+    private JFXTextField txtSondeoNumero;
+
+    @FXML
     private JFXTextField txtElevacion;
 
     @FXML
@@ -362,7 +365,7 @@ public class FormValoresController {
                         archivoXml.prepararElementosDatos(datosCampoProperties, anchorPane);
                         archivoXml.prepararElementosClasificacion(clasificacionSucsProperties, anchorPane);
                         archivoXml.prepararElementHumedad(humedadProperties, anchorPane);
-                        archivoXml.prepararElementosProfundidad(Double.parseDouble(txtProfundidadMinima.getText()),
+                        archivoXml.prepararElementosProfundidad(txtSondeoNumero.getText(),Double.parseDouble(txtProfundidadMinima.getText()),
                                 Double.parseDouble(txtProfundidadMaxima.getText()),
                                 Double.parseDouble(txtElevacion.getText()));
                         archivoXml.prepararElementosAdeme(ademeProperties, anchorPane);
@@ -400,7 +403,7 @@ public class FormValoresController {
                         archivoExcel.setDatosCampoProperties(datosCampoProperties);
                         archivoExcel.setHumedadProperties(humedadProperties);
                         List<ProfundidadSondeo> profundidadSondeos = new ArrayList<>();
-                        profundidadSondeos.add(new ProfundidadSondeo(Double.parseDouble(txtProfundidadMinima.getText()),
+                        profundidadSondeos.add(new ProfundidadSondeo(txtSondeoNumero.getText(),Double.parseDouble(txtProfundidadMinima.getText()),
                                 Double.parseDouble(txtProfundidadMaxima.getText()),
                                 Double.parseDouble(txtElevacion.getText())));
                         archivoExcel.setProfundidadSondeos(profundidadSondeos);

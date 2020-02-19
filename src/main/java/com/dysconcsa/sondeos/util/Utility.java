@@ -45,6 +45,7 @@ public class Utility {
     Map<Integer, List<Integer>> mapRotadosX;
     Map<Integer, List<Double>> mapRotadosY;
     public static int idcliente;
+    public static String sondeoNumero;
 
     void setWb(XSSFWorkbook wb) {
         this.wb = wb;

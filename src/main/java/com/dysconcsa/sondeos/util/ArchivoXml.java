@@ -67,8 +67,6 @@ public class ArchivoXml {
                 Element valores = document.createElement("valores");
                 datosElement.appendChild(valores);
                 valores.setAttribute("linea", String.valueOf(linea));
-                Element sondeoNumero = document.createElement("sondeoNumero");
-                sondeoNumero.appendChild(document.createTextNode(""));
                 Element profundidadInicial = document.createElement("profundidadInicial");
                 profundidadInicial.appendChild(document.createTextNode(Double.toString(datos.getProfundidadInicial())));
                 valores.appendChild(profundidadInicial);
@@ -94,12 +92,15 @@ public class ArchivoXml {
         }
     }
 
-    public void prepararElementosProfundidad(Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
+    public void prepararElementosProfundidad(String sondeoNumero,Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
         try {
             Element valores = document.createElement("valores");
             Element rootProfundidad = document.createElement("estrato");
             rootElement.appendChild(rootProfundidad);
             rootProfundidad.appendChild(valores);
+            Element elemntSondeoNumero = document.createElement("sondeoNumero");
+            elemntSondeoNumero.appendChild(document.createTextNode(sondeoNumero));
+            valores.appendChild(elemntSondeoNumero);
             Element elementProfundidadMinima = document.createElement("profundidadMinima");
             elementProfundidadMinima.appendChild(document.createTextNode(Double.toString(profundidadMinima)));
             valores.appendChild(elementProfundidadMinima);
@@ -207,7 +208,8 @@ public class ArchivoXml {
             linea += 1;
         }
     }
-    public void prepararElementosTrepano(ObservableList<TrepanoProperty> trepanoProperties,AnchorPane anchorPane){
+
+    public void prepararElementosTrepano(ObservableList<TrepanoProperty> trepanoProperties, AnchorPane anchorPane) {
         Utility utility = new Utility();
         JFXButton buttonAceptar = new JFXButton("Aceptar");
         JFXDialog dialog = utility.showDialog(anchorPane, "Datos", "Debe especificar los datos de campo para poder continuar", buttonAceptar);
@@ -222,14 +224,14 @@ public class ArchivoXml {
         for (TrepanoProperty dato : trepanoProperties) {
             Element valores = document.createElement("valores");
             elementTrepano.appendChild(valores);
-            valores.setAttribute("linea",String.valueOf(linea));
+            valores.setAttribute("linea", String.valueOf(linea));
             Element profundidad = document.createElement("profundidad");
             profundidad.appendChild(document.createTextNode(String.valueOf(dato.getProfundidad())));
             valores.appendChild(profundidad);
             Element trepano = document.createElement("trepano");
             trepano.appendChild(document.createTextNode(dato.getTrepano().toUpperCase()));
             valores.appendChild(trepano);
-            linea+=1;
+            linea += 1;
         }
     }
 
@@ -322,11 +324,12 @@ public class ArchivoXml {
             Element element = this.getNodeList(file, "estrato");
             NodeList nodeList = element.getElementsByTagName("valores");
             for (int j = 0; j < nodeList.getLength(); j++) {
+                String sondeoNumero = element.getElementsByTagName("sondeoNumero").item(j).getTextContent();
                 Double profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
                 Double profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
                 Double elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
                 System.out.println(profundidadMinima);
-                datos.add(new ProfundidadSondeo(profundidadMinima,profundidadMaxima,elevacion));
+                datos.add(new ProfundidadSondeo(sondeoNumero,profundidadMinima, profundidadMaxima, elevacion));
             }
             return datos;
         } catch (Exception ex) {
@@ -351,7 +354,7 @@ public class ArchivoXml {
         }
     }
 
-    public ObservableList<TrepanoProperty> cargarDatosTrepano(File file){
+    public ObservableList<TrepanoProperty> cargarDatosTrepano(File file) {
         try {
             ObservableList<TrepanoProperty> datos = FXCollections.observableArrayList();
             Element element = this.getNodeList(file, "trepano");
