@@ -67,6 +67,8 @@ public class ArchivoXml {
                 Element valores = document.createElement("valores");
                 datosElement.appendChild(valores);
                 valores.setAttribute("linea", String.valueOf(linea));
+                Element sondeoNumero = document.createElement("sondeoNumero");
+                sondeoNumero.appendChild(document.createTextNode(""));
                 Element profundidadInicial = document.createElement("profundidadInicial");
                 profundidadInicial.appendChild(document.createTextNode(Double.toString(datos.getProfundidadInicial())));
                 valores.appendChild(profundidadInicial);
