@@ -81,15 +81,15 @@ public class FormClienteController {
         daoEmpresa = new DaoEmpresa();
         utility = new Utility();
         txtFecha.setValue(LocalDate.now());
-        utility.keyPressed(txtCliente,txtProyecto);
-        utility.keyPressed(txtProyecto,txtSondeoN);
-        utility.keyPressed(txtSondeoN,txtLugar);
-        utility.keyPressed(txtLugar,txtOperador);
-        utility.keyPressed(txtOperador,txtNivel);
-        utility.keyPressed(txtNivel,txtObservaciones);
-        utility.keyPressed(txtObservaciones,txtArchivo);
-        txtArchivo.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.ENTER){
+        utility.keyPressed(txtCliente, txtProyecto);
+        utility.keyPressed(txtProyecto, txtSondeoN);
+        utility.keyPressed(txtSondeoN, txtLugar);
+        utility.keyPressed(txtLugar, txtOperador);
+        utility.keyPressed(txtOperador, txtNivel);
+        utility.keyPressed(txtNivel, txtObservaciones);
+        utility.keyPressed(txtObservaciones, txtArchivo);
+        txtArchivo.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
                 txtFecha.requestFocus();
             }
         });
@@ -111,16 +111,16 @@ public class FormClienteController {
             return;
         }
         String sondeoN = txtSondeoN.getText();
-        empresaProperty = new EmpresaProperty(txtCliente.getText(), txtProyecto.getText(), sondeoN, txtLugar.getText(),
+        empresaProperty = new EmpresaProperty(txtCliente.getText(), txtProyecto.getText(), txtLugar.getText(),
                 txtOperador.getText(), txtNivel.getText(), txtObservaciones.getText(),
                 txtArchivo.getText(), DateUtil.format(txtFecha.getValue()));
         switch (aux) {
             case 0:
                 //guardar datos
                 daoEmpresa.save(empresaProperty);
-                if(daoEmpresa.get_error() != null){
+                if (daoEmpresa.get_error() != null) {
                     AlertError.showAlert(daoEmpresa.get_error());
-                }else{
+                } else {
                     dialog("", "Se han guardado los datos de forma correcta");
                     clear();
                 }
@@ -129,9 +129,9 @@ public class FormClienteController {
                 //editar datos
                 empresaProperty.setId(idEmpresa);
                 daoEmpresa.update(empresaProperty);
-                if(daoEmpresa.get_error() != null){
+                if (daoEmpresa.get_error() != null) {
                     AlertError.showAlert(daoEmpresa.get_error());
-                }else{
+                } else {
                     dialog("", "Se han guardado los datos de forma correcta");
                     clear();
                 }
@@ -160,7 +160,6 @@ public class FormClienteController {
         txtArchivo.setText(empresaProperty.getArchivo());
         txtObservaciones.setText(empresaProperty.getObservaciones());
         txtNivel.setText(empresaProperty.getNivel());
-        txtSondeoN.setText(String.valueOf(empresaProperty.getSondeoN()));
         txtFecha.setValue(DateUtil.parse(empresaProperty.getFecha()));
     }
 

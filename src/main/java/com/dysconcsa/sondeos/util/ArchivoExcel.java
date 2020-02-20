@@ -137,7 +137,7 @@ public class ArchivoExcel {
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 22, 23));
             cell = row.createCell(24);
             cell.setCellStyle(cellStyleLeft);
-            cell.setCellValue(empresaProperty.getSondeoN());
+            cell.setCellValue(Utility.sondeoNumero);
             // lugar
             row = sheet.createRow(3);
             cell = row.createCell(6);

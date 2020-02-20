@@ -9,7 +9,7 @@ public class EmpresaProperty {
     IntegerProperty id;
     StringProperty cliente;
     StringProperty proyecto;
-    StringProperty sondeoN;
+    //StringProperty sondeoN;
     StringProperty lugar;
     StringProperty operador;
     StringProperty nivel;
@@ -17,10 +17,9 @@ public class EmpresaProperty {
     StringProperty archivo;
     StringProperty fecha;
 
-    public EmpresaProperty(String cliente, String proyecto, String sondeoN, String lugar, String operador, String nivel, String observaciones, String archivo, String fecha) {
+    public EmpresaProperty(String cliente, String proyecto, String lugar, String operador, String nivel, String observaciones, String archivo, String fecha) {
         this.cliente = new SimpleStringProperty(cliente);
         this.proyecto = new SimpleStringProperty(proyecto);
-        this.sondeoN = new SimpleStringProperty(sondeoN);
         this.lugar = new SimpleStringProperty(lugar);
         this.operador = new SimpleStringProperty(operador);
         this.nivel = new SimpleStringProperty(nivel);
@@ -59,18 +58,6 @@ public class EmpresaProperty {
 
     public StringProperty proyectoProperty() {
         return proyecto;
-    }
-
-    public String getSondeoN() {
-        return sondeoN.get();
-    }
-
-    public StringProperty sondeoNProperty() {
-        return sondeoN;
-    }
-
-    public void setSondeoN(String sondeoN) {
-        this.sondeoN.set(sondeoN);
     }
 
     public String getLugar() {

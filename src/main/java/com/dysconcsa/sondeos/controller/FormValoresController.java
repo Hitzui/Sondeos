@@ -197,6 +197,7 @@ public class FormValoresController {
             txtElevacion.setText("0.0");
             txtProfundidadMaxima.setText("0.0");
             txtProfundidadMinima.setText("0.0");
+            txtSondeoNumero.setText("");
             this.file = null;
         } catch (Exception ex) {
             AlertError.showAlert(ex);
@@ -234,6 +235,7 @@ public class FormValoresController {
                 list.stream()
                         .peek((profundidadSondeo) -> txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion())))
                         .peek((profundidadSondeo) -> txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima())))
+                        .peek((profundidadSondeo)->txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
                         .forEachOrdered((profundidadSondeo) -> txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima())));
             }
             lastVisitedDirectory = (_file != null) ? _file.getParent() : System.getProperty("user.home");
@@ -245,6 +247,7 @@ public class FormValoresController {
     @FXML
     public void initialize() {
         try {
+            txtSondeoNumero.setText("");
             txtElevacion.setText("0.0");
             txtProfundidadMaxima.setText("0.0");
             txtProfundidadMinima.setText("0.0");
@@ -365,7 +368,7 @@ public class FormValoresController {
                         archivoXml.prepararElementosDatos(datosCampoProperties, anchorPane);
                         archivoXml.prepararElementosClasificacion(clasificacionSucsProperties, anchorPane);
                         archivoXml.prepararElementHumedad(humedadProperties, anchorPane);
-                        archivoXml.prepararElementosProfundidad(txtSondeoNumero.getText(),Double.parseDouble(txtProfundidadMinima.getText()),
+                        archivoXml.prepararElementosProfundidad(txtSondeoNumero.getText(), Double.parseDouble(txtProfundidadMinima.getText()),
                                 Double.parseDouble(txtProfundidadMaxima.getText()),
                                 Double.parseDouble(txtElevacion.getText()));
                         archivoXml.prepararElementosAdeme(ademeProperties, anchorPane);
@@ -403,13 +406,14 @@ public class FormValoresController {
                         archivoExcel.setDatosCampoProperties(datosCampoProperties);
                         archivoExcel.setHumedadProperties(humedadProperties);
                         List<ProfundidadSondeo> profundidadSondeos = new ArrayList<>();
-                        profundidadSondeos.add(new ProfundidadSondeo(txtSondeoNumero.getText(),Double.parseDouble(txtProfundidadMinima.getText()),
+                        profundidadSondeos.add(new ProfundidadSondeo(txtSondeoNumero.getText(), Double.parseDouble(txtProfundidadMinima.getText()),
                                 Double.parseDouble(txtProfundidadMaxima.getText()),
                                 Double.parseDouble(txtElevacion.getText())));
                         archivoExcel.setProfundidadSondeos(profundidadSondeos);
                         archivoExcel.setTrepanoProperties(trepanoProperties);
                         archivoExcel.setTabPane(tabContainer);
                         archivoExcel.setTabToUse(tabCliente);
+                        Utility.sondeoNumero = txtSondeoNumero.getText();
                         archivoExcel.crearArchivo(anchorPane, file, Utility.idcliente, ademeProperties);
                     }
                     lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
