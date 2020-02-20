@@ -26,7 +26,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <JFXTabPane fx:id="tabContainer" layoutX="14.0" layoutY="51.0" prefHeight="312.0" prefWidth="497.0" side="LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
+                <JFXTabPane fx:id="tabContainer" layoutX="2.0" layoutY="51.0" prefHeight="636.0" prefWidth="924.0" side="LEFT" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="50.0">
                     <Tab fx:id="tabValores" text="Valores de campo">
                         <AnchorPane prefHeight="478.0" prefWidth="797.0">
                             <children>

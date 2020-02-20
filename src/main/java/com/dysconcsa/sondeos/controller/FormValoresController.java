@@ -174,7 +174,29 @@ public class FormValoresController {
     @ActionTrigger("action_btnCargarDatos")
     private JFXButton btnCargarDatos;
 
+    @FXML
+    @ActionTrigger("action_btnInsertar")
+    private JFXButton btnInsertar;
+
     private File file;
+
+    @ActionMethod("action_btnInsertar")
+    public void action_btnInsertar() {
+        DatosCampoProperty datosCampoProperty = tableDatos.getSelectionModel().getSelectedItem();
+        int index = tableDatos.getSelectionModel().getSelectedIndex();
+        index += 1;
+        Double profInicial = datosCampoProperty.getProfundidadInicial() + 1.5;
+        Double profFinal = datosCampoProperty.getProfundidadFinal() + 1.5;
+        DatosCampoProperty addDatos = new DatosCampoProperty(profInicial, profFinal,
+                datosCampoProperty.getRecobro(), datosCampoProperty.getGolpe1(), datosCampoProperty.getGolpe2(),
+                datosCampoProperty.getGolpe3());
+        for (int i = index; i < datosCampoProperties.size(); i++) {
+            DatosCampoProperty datos = datosCampoProperties.get(i);
+            datos.setProfundidadInicial(datos.getProfundidadInicial() + 1.5);
+            datos.setProfundidadFinal(datos.getProfundidadFinal() + 1.5);
+        }
+        tableDatos.getItems().add(index, addDatos);
+    }
 
     @ActionMethod("action_btnLimpiarDatos")
     public void action_btnLimpiarDatos() {
@@ -235,7 +257,7 @@ public class FormValoresController {
                 list.stream()
                         .peek((profundidadSondeo) -> txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion())))
                         .peek((profundidadSondeo) -> txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima())))
-                        .peek((profundidadSondeo)->txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
+                        .peek((profundidadSondeo) -> txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
                         .forEachOrdered((profundidadSondeo) -> txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima())));
             }
             lastVisitedDirectory = (_file != null) ? _file.getParent() : System.getProperty("user.home");
