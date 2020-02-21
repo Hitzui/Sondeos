@@ -164,7 +164,8 @@ public class FormValoresController {
     private JFXTextField txtProfundidadMinima;
 
     @FXML
-    private JFXButton btnElminar;
+    @ActionTrigger("action_btnEliminar")
+    private JFXButton btnEliminar;
 
     @FXML
     @ActionTrigger("action_btnLimpiarDatos")
@@ -179,6 +180,21 @@ public class FormValoresController {
     private JFXButton btnInsertar;
 
     private File file;
+
+    @ActionMethod("action_btnEliminar")
+    public void action_btnEliminar() {
+        if (datosCampoProperties.size() <= 1) {
+            return;
+        }
+        int index = tableDatos.getSelectionModel().getSelectedIndex();
+        DatosCampoProperty datosCampoProperty = tableDatos.getSelectionModel().getSelectedItem();
+        datosCampoProperties.remove(datosCampoProperty);
+        for (int i = index; i < datosCampoProperties.size(); i++) {
+            DatosCampoProperty datos = datosCampoProperties.get(i);
+            datos.setProfundidadInicial(datos.getProfundidadInicial() - 1.5);
+            datos.setProfundidadFinal(datos.getProfundidadFinal() - 1.5);
+        }
+    }
 
     @ActionMethod("action_btnInsertar")
     public void action_btnInsertar() {
@@ -505,15 +521,6 @@ public class FormValoresController {
         tab.setGraphic(tabPane);
 
         tab.setOnSelectionChanged(onSelectionChangedEvent);
-    }
-
-    @ActionMethod("action_btnEliminar")
-    public void action_btnEliminar() {
-        if (datosCampoProperties.size() <= 1) {
-            return;
-        }
-        DatosCampoProperty datosCampoProperty = tableDatos.getSelectionModel().getSelectedItem();
-        datosCampoProperties.remove(datosCampoProperty);
     }
 
     private void listSuelosProperties() {
