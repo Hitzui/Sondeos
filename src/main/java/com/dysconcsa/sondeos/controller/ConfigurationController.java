@@ -60,7 +60,7 @@ public class ConfigurationController {
             txtNombreEmpresa.setText(configurationProperty.getNombreEmpresa());
             imageLoader.updateImageView(imagen,String.valueOf(new File(configurationProperty.getImagen()).toURI()));
         } catch (Exception ex) {
-            imageLoader.updateImageView(imagen, String.valueOf(getClass().getResource("/image/company_name.png").toURI()));
+            imageLoader.updateImageView(imagen, String.valueOf(getClass().getResource("/image/logo.jpg").toURI()));
         }
         Utility utility = new Utility();
         btnCancelar.setOnAction(e -> {
