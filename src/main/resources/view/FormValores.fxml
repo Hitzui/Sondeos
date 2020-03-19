@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="formValores" prefHeight="687.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="formValores" prefHeight="687.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane fx:id="anchorPane" prefHeight="505.0" prefWidth="689.0" style="-fx-border-color: #343a40;">
             <children>
@@ -81,17 +81,17 @@
                             <children>
                                 <TableView fx:id="tableClasificacion" editable="true" layoutX="14.0" layoutY="7.0" prefHeight="165.0" prefWidth="673.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="50.0">
                                     <columns>
-                                        <TableColumn fx:id="colProfundidadSucs" prefWidth="94.0" sortable="false" text="Profundidad" />
-                                        <TableColumn fx:id="colLimiteLiquido" prefWidth="91.0" sortable="false" text="Limite Liq." />
-                                        <TableColumn fx:id="colIndicePlasticidad" prefWidth="109.0" sortable="false" text="Indice Plast." />
-                                        <TableColumn fx:id="colTipoSuelo" prefWidth="87.0" sortable="false" text="Clasificacion" />
-                                        <TableColumn fx:id="colDescipcion" prefWidth="297.0" sortable="false" text="Descripcion" />
+                                        <TableColumn fx:id="colProfundidadSucs" prefWidth="109.0" sortable="false" text="Profundidad" />
+                                        <TableColumn fx:id="colLimiteLiquido" prefWidth="97.0" sortable="false" text="Limite Liq." />
+                                        <TableColumn fx:id="colIndicePlasticidad" prefWidth="103.0" sortable="false" text="Indice Plast." />
+                                        <TableColumn fx:id="colTipoSuelo" prefWidth="134.0" sortable="false" text="Clasificacion" />
+                                        <TableColumn fx:id="colDescipcion" prefWidth="311.0" sortable="false" text="Descripcion" />
                                     </columns>
                                 </TableView>
                                 <TableView fx:id="tableHumedad" editable="true" layoutX="15.0" layoutY="195.0" prefHeight="200.0" prefWidth="390.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="195.0">
                                     <columns>
-                                        <TableColumn fx:id="colProfundidadInicialHumedad" prefWidth="103.0" sortable="false" text="Prof. Inicial" />
-                                        <TableColumn fx:id="colProfundidadFinalHumedad" prefWidth="105.0" sortable="false" text="Prof. Final" />
+                                        <TableColumn fx:id="colProfundidadInicialHumedad" prefWidth="111.0" sortable="false" text="Prof. Inicial" />
+                                        <TableColumn fx:id="colProfundidadFinalHumedad" prefWidth="148.0" sortable="false" text="Prof. Final" />
                                         <TableColumn fx:id="colContenidoHumedad" prefWidth="209.0" sortable="false" text="Contenido Humedad" />
                                     </columns>
                                     <columnResizePolicy>
@@ -100,8 +100,8 @@
                                 </TableView>
                                 <TableView fx:id="tableAdeme" editable="true" layoutX="435.0" layoutY="195.0" prefHeight="200.0" prefWidth="321.0" AnchorPane.leftAnchor="435.0" AnchorPane.topAnchor="195.0">
                                     <columns>
-                                        <TableColumn fx:id="colProfundidadAdeme" prefWidth="98.0" text="Prof. Ademe" />
-                                        <TableColumn fx:id="colAdemeDescripion" editable="false" prefWidth="204.0" sortable="false" text="Descripcion" />
+                                        <TableColumn fx:id="colProfundidadAdeme" prefWidth="134.0" text="Prof. Ademe" />
+                                        <TableColumn fx:id="colAdemeDescripion" editable="false" prefWidth="186.0" sortable="false" text="Descripcion" />
                                     </columns>
                                 </TableView>
                             </children>

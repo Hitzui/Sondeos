@@ -177,8 +177,7 @@ public class ClienteController extends AbstractController implements Initializab
     }
 
     private void dialog(String header, String content) {
-        Utility utility = new Utility();
-        utility.dialog(ClienteController._cliente, header, content);
+        Utility.dialog(ClienteController._cliente, header, content);
     }
 
     private void initPopup(TableRow<EmpresaProperty> row, double x, double y) {

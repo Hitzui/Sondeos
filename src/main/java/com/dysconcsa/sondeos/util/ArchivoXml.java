@@ -92,7 +92,7 @@ public class ArchivoXml {
         }
     }
 
-    public void prepararElementosProfundidad(String sondeoNumero,Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
+    public void prepararElementosProfundidad(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
         try {
             Element valores = document.createElement("valores");
             Element rootProfundidad = document.createElement("estrato");
@@ -324,12 +324,18 @@ public class ArchivoXml {
             Element element = this.getNodeList(file, "estrato");
             NodeList nodeList = element.getElementsByTagName("valores");
             for (int j = 0; j < nodeList.getLength(); j++) {
-                String sondeoNumero = element.getElementsByTagName("sondeoNumero").item(j).getTextContent();
+                String sondeoNumero;
+                try {
+                    sondeoNumero = element.getElementsByTagName("sondeoNumero").item(j).getTextContent();
+                } catch (Exception ex) {
+                    sondeoNumero = "1";
+                }
+
                 Double profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
                 Double profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
                 Double elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
                 System.out.println(profundidadMinima);
-                datos.add(new ProfundidadSondeo(sondeoNumero,profundidadMinima, profundidadMaxima, elevacion));
+                datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, elevacion));
             }
             return datos;
         } catch (Exception ex) {

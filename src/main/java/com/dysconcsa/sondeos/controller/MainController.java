@@ -66,7 +66,8 @@ public class MainController extends AbstractController implements Initializable 
             onIngresoValores();
             DaoConfiguration daoConfiguration = new DaoConfiguration();
             ConfigurationProperty configurationProperty = daoConfiguration.findOne();
-            imageLoader.updateImageView(imagenEmpresa, String.valueOf(new File(configurationProperty.getImagen()).toURI()));
+            //imageLoader.updateImageView(imagenEmpresa, String.valueOf(new File(configurationProperty.getImagen()).toURI()));
+            imageLoader.updateImageView(imagenEmpresa, String.valueOf(getClass().getResource("/image/logo.jpg").toURI()));
         } catch (Exception ignored) {
         }
     }
@@ -116,9 +117,9 @@ public class MainController extends AbstractController implements Initializable 
             ConfigurationController configurationController = (ConfigurationController) flowHandler.getCurrentView().getViewContext().getController();
             configurationController.setStage(dialogStage);
             dialogStage.showAndWait();
-            if (!configurationController.isCancel) {
+            /*if (!configurationController.isCancel) {
                 imagenEmpresa.setImage(new Image(String.valueOf(new File(configurationController.getPathImagen()).toURI())));
-            }
+            }*/
         } catch (FlowException e) {
             e.printStackTrace();
         }

@@ -86,9 +86,11 @@ public class ArchivoExcel {
             DaoConfiguration daoConfiguration = new DaoConfiguration();
             ConfigurationProperty configurationProperty = daoConfiguration.findOne();
             Utility utility = new Utility();
+            String pathImage = "";
             if (configurationProperty == null) {
-                Utility.dialog("Error", "", "No se ha establecido una imagen de la empresa.");
-                return;
+                pathImage=String.valueOf(getClass().getResource("/image/logo.jpg"));
+            }else{
+                pathImage = configurationProperty.getImagen();
             }
             XSSFSheet sheet = wb.createSheet();
             XSSFPrintSetup ps = sheet.getPrintSetup();
@@ -97,7 +99,7 @@ public class ArchivoExcel {
             sheet.setHorizontallyCenter(true);
             ps.setFitHeight((short) 0);
             ps.setFitWidth((short) 1);
-            insertImage(wb, sheet, 0, 0, false, 5, 4, configurationProperty.getImagen());
+            insertImage(wb, sheet, 0, 0, false, 5, 4, pathImage);
             // datos del cliente
             Font fontBold = wb.createFont();
             fontBold.setFontHeightInPoints((short) 12);
@@ -545,6 +547,7 @@ public class ArchivoExcel {
         try {
             CreationHelper helper = wb.getCreationHelper();
             // add a picture in this workbook.
+            //InputStream is = new FileInputStream(getClass().getResource("/image/logo.jpg").getPath());
             InputStream is = new FileInputStream(path);
             byte[] bytes = IOUtils.toByteArray(is);
             is.close();

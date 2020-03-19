@@ -39,9 +39,6 @@ public class FormClienteController {
     private JFXTextField txtProyecto;
 
     @FXML
-    private JFXTextField txtSondeoN;
-
-    @FXML
     private JFXTextField txtLugar;
 
     @FXML
@@ -82,8 +79,7 @@ public class FormClienteController {
         utility = new Utility();
         txtFecha.setValue(LocalDate.now());
         utility.keyPressed(txtCliente, txtProyecto);
-        utility.keyPressed(txtProyecto, txtSondeoN);
-        utility.keyPressed(txtSondeoN, txtLugar);
+        utility.keyPressed(txtProyecto, txtLugar);
         utility.keyPressed(txtLugar, txtOperador);
         utility.keyPressed(txtOperador, txtNivel);
         utility.keyPressed(txtNivel, txtObservaciones);
@@ -110,7 +106,6 @@ public class FormClienteController {
             dialog("Fecha", "Debe especificar una fecha del proyecto para poder continuar");
             return;
         }
-        String sondeoN = txtSondeoN.getText();
         empresaProperty = new EmpresaProperty(txtCliente.getText(), txtProyecto.getText(), txtLugar.getText(),
                 txtOperador.getText(), txtNivel.getText(), txtObservaciones.getText(),
                 txtArchivo.getText(), DateUtil.format(txtFecha.getValue()));
@@ -164,7 +159,6 @@ public class FormClienteController {
     }
 
     private void clear() {
-        txtSondeoN.clear();
         txtCliente.clear();
         txtArchivo.clear();
         txtLugar.clear();

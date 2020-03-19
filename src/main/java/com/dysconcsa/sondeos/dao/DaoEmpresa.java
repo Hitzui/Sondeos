@@ -53,21 +53,21 @@ public class DaoEmpresa {
     private void parameters(PreparedStatement preparedStatement, EmpresaProperty empresaProperty) throws SQLException {
         preparedStatement.setString(1, empresaProperty.getCliente());
         preparedStatement.setString(2, empresaProperty.getProyecto());
-        preparedStatement.setString(4, empresaProperty.getLugar());
-        preparedStatement.setString(5, empresaProperty.getOperador());
-        preparedStatement.setString(6, empresaProperty.getNivel());
-        preparedStatement.setString(7, empresaProperty.getObservaciones());
-        preparedStatement.setString(8, empresaProperty.getArchivo());
-        preparedStatement.setString(9, empresaProperty.getFecha());
+        preparedStatement.setString(3, empresaProperty.getLugar());
+        preparedStatement.setString(4, empresaProperty.getOperador());
+        preparedStatement.setString(5, empresaProperty.getNivel());
+        preparedStatement.setString(6, empresaProperty.getObservaciones());
+        preparedStatement.setString(7, empresaProperty.getArchivo());
+        preparedStatement.setString(8, empresaProperty.getFecha());
     }
 
     public void update(EmpresaProperty empresaProperty) {
         try {
-            String sql = "UPDATE empresa set cliente = ?, proyecto = ?,sondeoN = ?,lugar = ?,operador = ?,nivel = ?,observaciones = ?,archivo = ?,fecha = ? WHERE id = ?";
+            String sql = "UPDATE empresa set cliente = ?, proyecto = ?,lugar = ?,operador = ?,nivel = ?,observaciones = ?,archivo = ?,fecha = ? WHERE id = ?";
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql);
             parameters(preparedStatement, empresaProperty);
-            preparedStatement.setInt(10, empresaProperty.getId());
+            preparedStatement.setInt(9, empresaProperty.getId());
             this.idAfterSave = preparedStatement.executeUpdate();
         } catch (Exception ex) {
             _error = ex;

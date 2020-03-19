@@ -179,7 +179,7 @@ public class FormValoresController {
     @ActionTrigger("action_btnInsertar")
     private JFXButton btnInsertar;
 
-    private File file;
+    public static File file = null;
 
     @ActionMethod("action_btnEliminar")
     public void action_btnEliminar() {
@@ -245,37 +245,17 @@ public class FormValoresController {
     @ActionMethod("action_btnCargarDatos")
     public void action_btnCargarDatos() {
         try {
-            ArchivoXml archivoXml = new ArchivoXml();
+            //ArchivoXml archivoXml = new ArchivoXml();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Cargar daatos");
             fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Sondeos files (*.sxml)", "*.sxml");
             fileChooser.getExtensionFilters().add(extFilter);
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             File _file;
             _file = fileChooser.showOpenDialog(stage);
-            file = _file;
-            if (_file != null) {
-                datosCampoProperties.clear();
-                datosCampoProperties.addAll(archivoXml.cargarDatosCampo(_file));
-                clasificacionSucsProperties.clear();
-                clasificacionSucsProperties.addAll(archivoXml.cargarDatosClasificacion(_file));
-                humedadProperties.clear();
-                humedadProperties.addAll(archivoXml.cargarDatosHumedad(_file));
-                ademeProperties.clear();
-                ademeProperties.addAll(archivoXml.cargarDatosAdeme(_file));
-                trepanoProperties.clear();
-                ObservableList<TrepanoProperty> datos = archivoXml.cargarDatosTrepano(_file);
-                if (datos.size() > 0) {
-                    trepanoProperties.addAll(datos);
-                }
-                List<ProfundidadSondeo> list = archivoXml.cargarDatosIniciales(_file);
-                list.stream()
-                        .peek((profundidadSondeo) -> txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion())))
-                        .peek((profundidadSondeo) -> txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima())))
-                        .peek((profundidadSondeo) -> txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
-                        .forEachOrdered((profundidadSondeo) -> txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima())));
-            }
+            loadSxml(_file);
+            ((Stage) btnCargarDatos.getScene().getWindow()).setTitle("Aplicacion de Sondeos - " + _file.getName());
             lastVisitedDirectory = (_file != null) ? _file.getParent() : System.getProperty("user.home");
         } catch (Exception ex) {
             AlertError.showAlert(ex);
@@ -289,6 +269,7 @@ public class FormValoresController {
             txtElevacion.setText("0.0");
             txtProfundidadMaxima.setText("0.0");
             txtProfundidadMinima.setText("0.0");
+            loadSxml(file);
             txtProfundidadMaxima.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     txtElevacion.requestFocus();
@@ -389,8 +370,8 @@ public class FormValoresController {
                 tabContainer.getSelectionModel().select(lastSelectedTabIndex);
                 try {
                     FileChooser fileChooser = new FileChooser();
-                    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML Files (*.xml)",
-                            "*.xml");
+                    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Sondeos Files (*.sxml)",
+                            "*.sxml");
                     fileChooser.getExtensionFilters().add(extFilter);
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
@@ -545,15 +526,16 @@ public class FormValoresController {
         colAdemeDescripion.setCellValueFactory(value -> value.getValue().descripcionProperty());
     }
 
-    @SuppressWarnings("unchecked")
     private void setupClasificacionColumn() {
         colProfundidadSucs.setCellValueFactory(value -> value.getValue().profundidadProperty().asObject());
         colProfundidadSucs.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colProfundidadSucs.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
+            System.out.println("Old value: " + event.getOldValue() + " - New value: " + event.getNewValue());
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidad(value);
             tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colLimiteLiquido);
-            tableClasificacion.refresh();
+            event.consume();
+            //tableClasificacion.refresh();
         });
         colLimiteLiquido.setCellValueFactory(value -> value.getValue().limiteLiquidoProperty().asObject());
         colLimiteLiquido.setCellFactory(EditCell.forTableColumn(new IntegerStringConverter()));
@@ -561,7 +543,7 @@ public class FormValoresController {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setLimiteLiquido(value);
             tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colIndicePlasticidad);
-            tableClasificacion.refresh();
+            event.consume();
         });
         colIndicePlasticidad.setCellValueFactory(value -> value.getValue().indicePlasticidadProperty().asObject());
         colIndicePlasticidad.setCellFactory(EditCell.forTableColumn(new IntegerStringConverter()));
@@ -569,7 +551,7 @@ public class FormValoresController {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setIndicePlasticidad(value);
             tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colTipoSuelo);
-            tableClasificacion.refresh();
+            event.consume();
         });
         colTipoSuelo.setCellFactory(param -> {
             ComboBoxTableCell<ClasificacionSucsProperty, SuelosProperty> comboBoxTableCell = new ComboBoxTableCell<>();
@@ -596,7 +578,7 @@ public class FormValoresController {
         colDescipcion.setOnEditCommit(event -> {
             final String value = !event.getNewValue().isEmpty() ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setDescripcion(value.toUpperCase());
-            tableClasificacion.refresh();
+            event.consume();
         });
         setTableEditableClasificacionSucs();
     }
@@ -810,9 +792,11 @@ public class FormValoresController {
                         event.consume();
                     } else {
                         tableClasificacion.getSelectionModel().selectNext();
+                        event.consume();
                     }
                 } else {
                     tableClasificacion.getSelectionModel().selectNext();
+                    event.consume();
                 }
             }
         });
@@ -882,4 +866,28 @@ public class FormValoresController {
         tableDatos.edit(focusedCell.getRow(), focusedCell.getTableColumn());
     }
 
+    private void loadSxml(File file) {
+        if (file != null) {
+            ArchivoXml archivoXml = new ArchivoXml();
+            datosCampoProperties.clear();
+            datosCampoProperties.addAll(archivoXml.cargarDatosCampo(file));
+            clasificacionSucsProperties.clear();
+            clasificacionSucsProperties.addAll(archivoXml.cargarDatosClasificacion(file));
+            humedadProperties.clear();
+            humedadProperties.addAll(archivoXml.cargarDatosHumedad(file));
+            ademeProperties.clear();
+            ademeProperties.addAll(archivoXml.cargarDatosAdeme(file));
+            trepanoProperties.clear();
+            ObservableList<TrepanoProperty> datos = archivoXml.cargarDatosTrepano(file);
+            if (datos.size() > 0) {
+                trepanoProperties.addAll(datos);
+            }
+            List<ProfundidadSondeo> list = archivoXml.cargarDatosIniciales(file);
+            list.stream()
+                    .peek((profundidadSondeo) -> txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion())))
+                    .peek((profundidadSondeo) -> txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima())))
+                    .peek((profundidadSondeo) -> txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
+                    .forEachOrdered((profundidadSondeo) -> txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima())));
+        }
+    }
 }
