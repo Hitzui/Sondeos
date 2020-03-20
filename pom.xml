@@ -93,9 +93,23 @@
                     <verbose>true</verbose>
                     <bundleArguments>
                         <icon>${project.basedir}/src/main/resources/image/Sondeos.ico</icon>
+                        <!-- to include "dtjava.js" and other related files, set this to TRUE -->
+                        <jnlp.includeDT>true</jnlp.includeDT>
+                        <!-- the JNLP-bundler needs this, they don't use "appName" for the filename ... you have to set this, otherwise it doesn't build -->
+                        <!-- for details of that JNLP-bundler, please have a look at the source -->
+                        <!-- https://github.com/Debian/openjfx/blob/e32fd960e20c58c9b7db27e426b4bca6d52add2f/modules/fxpackager/src/main/java/com/oracle/tools/packager/jnlp/JNLPBundler.java#L84 -->
+                        <jnlp.outfile>Sondeos</jnlp.outfile>
                     </bundleArguments>
                     <vendor>Innovasoft SA</vendor>
                     <mainClass>com.dysconcsa.sondeos.main.Application</mainClass>
+                    <fileAssociations>
+                        <fileAssociation>
+                            <description>Sondeos</description>
+                            <extensions>sxml</extensions>
+                            <contentType>application/dummy</contentType>
+                            <icon>${project.basedir}/src/main/resources/image/Sondeos.ico</icon>
+                        </fileAssociation>
+                    </fileAssociations>
                 </configuration>
             </plugin>
             <plugin>

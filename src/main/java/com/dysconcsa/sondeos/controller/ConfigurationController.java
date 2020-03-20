@@ -55,14 +55,14 @@ public class ConfigurationController {
     private void initialize() throws URISyntaxException {
         DaoConfiguration daoConfiguration = new DaoConfiguration();
         ImageLoader imageLoader = new ImageLoader();
-        imageLoader.updateImageView(imagen, String.valueOf(getClass().getResource("/image/logo.jpg").toURI()));
-        /*try {
+        //imageLoader.updateImageView(imagen, String.valueOf(getClass().getResource("/image/logo.jpg").toURI()));
+        try {
             ConfigurationProperty configurationProperty = daoConfiguration.findOne();
             txtNombreEmpresa.setText(configurationProperty.getNombreEmpresa());
             imageLoader.updateImageView(imagen,String.valueOf(new File(configurationProperty.getImagen()).toURI()));
         } catch (Exception ex) {
             imageLoader.updateImageView(imagen, String.valueOf(getClass().getResource("/image/logo.jpg").toURI()));
-        }*/
+        }
         Utility utility = new Utility();
         btnCancelar.setOnAction(e -> {
             isCancel=true;
