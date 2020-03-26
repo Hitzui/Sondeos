@@ -564,14 +564,16 @@ public class FormValoresController {
         colTipoSuelo.setCellValueFactory(value -> {
             DaoSuelos daoSuelos = new DaoSuelos();
             SuelosProperty suelosProperty = daoSuelos.findById(value.getValue().getTipoSuelo());
+            System.out.println(value.getValue().getDescripcion());
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
-            /*ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
+            ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
             SuelosProperty suelos = event.getNewValue();
-            TablePosition<ClasificacionSucsProperty, ?> pos = tableClasificacion.getFocusModel().getFocusedCell();
-            clasificacionSucsProperties.get(pos.getRow()).setDescripcion(suelos.getNombre().toUpperCase());
-            clasificacionSucsProperty.setTipoSuelo(suelos.getID());*/
+            //TablePosition<ClasificacionSucsProperty, ?> pos = tableClasificacion.getFocusModel().getFocusedCell();
+            //clasificacionSucsProperties.get(pos.getRow()).setDescripcion(suelos.getNombre().toUpperCase());
+            clasificacionSucsProperty.setTipoSuelo(suelos.getID());
+            event.consume();
         });
         colDescipcion.setCellValueFactory(value -> value.getValue().descripcionProperty());
         colDescipcion.setCellFactory(EditCell.forTableColumn(new DefaultStringConverter()));
@@ -590,7 +592,7 @@ public class FormValoresController {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadInicial(value);
             tableDatos.getSelectionModel().select(event.getTablePosition().getRow(), colProfundidadFinal);
-            tableDatos.refresh();
+            event.consume();
         });
         colProfundidadFinal.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colProfundidadFinal.setCellValueFactory(value -> value.getValue().profundidadFinalProperty().asObject());
