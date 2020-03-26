@@ -597,7 +597,7 @@ public class FormValoresController {
         colProfundidadFinal.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadFinal(value);
-            tableDatos.refresh();
+            event.consume();
         });
     }
 
@@ -608,7 +608,7 @@ public class FormValoresController {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setRecobro(value);
             tableDatos.getSelectionModel().select(event.getTablePosition().getRow(), colGolpe1);
-            tableDatos.refresh();
+            event.consume();
         });
 
         colGolpe1.setCellFactory(EditCell.forTableColumn(new IntegerStringConverter()));
@@ -617,7 +617,7 @@ public class FormValoresController {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setGolpe1(value);
             tableDatos.getSelectionModel().select(event.getTablePosition().getRow(), colGolpe2);
-            tableDatos.refresh();
+            event.consume();
         });
         colGolpe2.setCellFactory(EditCell.forTableColumn(new IntegerStringConverter()));
         colGolpe2.setCellValueFactory(value -> value.getValue().golpe2Property().asObject());
@@ -625,14 +625,14 @@ public class FormValoresController {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setGolpe2(value);
             tableDatos.getSelectionModel().select(event.getTablePosition().getRow(), colGolpe3);
-            tableDatos.refresh();
+            event.consume();
         });
         colGolpe3.setCellFactory(EditCell.forTableColumn(new IntegerStringConverter()));
         colGolpe3.setCellValueFactory(value -> value.getValue().golpe3Property().asObject());
         colGolpe3.setOnEditCommit(event -> {
             final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setGolpe3(value);
-            tableDatos.refresh();
+            event.consume();
         });
     }
 
@@ -644,7 +644,7 @@ public class FormValoresController {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadInicial(value);
             tableHumedad.getSelectionModel().select(event.getTablePosition().getRow(), colProfundidadFinalHumedad);
-            tableHumedad.refresh();
+            event.consume();
         });
         colProfundidadFinalHumedad.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colProfundidadFinalHumedad.setCellValueFactory(value -> value.getValue().profundidadFinalProperty().asObject());
@@ -652,14 +652,14 @@ public class FormValoresController {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidadFinal(value);
             tableHumedad.getSelectionModel().select(event.getTablePosition().getRow(), colContenidoHumedad);
-            tableHumedad.refresh();
+            event.consume();
         });
         colContenidoHumedad.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colContenidoHumedad.setCellValueFactory(value -> value.getValue().humedadProperty().asObject());
         colContenidoHumedad.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setHumedad(value);
-            tableHumedad.refresh();
+            event.consume();
         });
     }
 
@@ -672,7 +672,7 @@ public class FormValoresController {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidad(value);
             tableTrepano.getSelectionModel().select(event.getTablePosition().getRow(), colTrepano);
-            tableTrepano.refresh();
+            event.consume();
         });
         colTrepano.setCellFactory(cell -> {
             ComboBoxTableCell<TrepanoProperty, String> comboBoxTableCell = new ComboBoxTableCell<>();
@@ -686,7 +686,7 @@ public class FormValoresController {
             try {
                 final String value = !event.getNewValue().equals(event.getOldValue()) ? event.getNewValue() : event.getOldValue();
                 event.getTableView().getItems().get(event.getTablePosition().getRow()).setTrepano(value.toUpperCase());
-                tableTrepano.refresh();
+                event.consume();
             } catch (Exception ex) {
                 event.getTableView().getItems().get(event.getTablePosition().getRow()).setTrepano(event.getOldValue().toUpperCase());
             }
