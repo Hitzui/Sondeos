@@ -234,11 +234,11 @@ public class ArchivoExcel {
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 24));
-        cellLugar = rowVacia.createCell(22);
+        cellLugar = rowVacia.createCell(23);
         cellLugar.setCellValue(empresaProperty.getNivel());
         cellLugar.setCellStyle(cellStyleLeft);
-        rowVacia = sheet.createRow(7);
         // ***************** observaciones *******************/
+        rowVacia = sheet.createRow(7);
         cellLugar = rowVacia.createCell(10);
         cellLugar.setCellValue("Observaciones:");
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 10, 12));
