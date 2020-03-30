@@ -88,8 +88,8 @@ public class ArchivoExcel {
             Utility utility = new Utility();
             String pathImage = "";
             if (configurationProperty == null) {
-                pathImage=String.valueOf(getClass().getResource("/image/logo.jpg"));
-            }else{
+                pathImage = String.valueOf(getClass().getResource("/image/logo.jpg"));
+            } else {
                 pathImage = configurationProperty.getImagen();
             }
             XSSFSheet sheet = wb.createSheet();
