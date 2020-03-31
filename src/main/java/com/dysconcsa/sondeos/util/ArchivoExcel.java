@@ -146,7 +146,7 @@ public class ArchivoExcel {
             cell.setCellValue("Lugar:");
             cell.setCellStyle(cellStyleRight);
             cell = row.createCell(7);
-            cell.setCellValue(empresaProperty.getLugar());
+            //cell.setCellValue(empresaProperty.getLugar());
             cell.setCellStyle(cellStyleLeft);
             sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
 
@@ -225,7 +225,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 20));
         cellLugar = rowVacia.createCell(13);
-        cellLugar.setCellValue(empresaProperty.getOperador());
+        //cellLugar.setCellValue(empresaProperty.getOperador());
         cellLugar.setCellStyle(cellStyleLeft);
         // ********************** nivel friatico *************************/
         cellLugar = rowVacia.createCell(21);
@@ -235,7 +235,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 24));
         cellLugar = rowVacia.createCell(23);
-        cellLugar.setCellValue(empresaProperty.getNivel());
+        //cellLugar.setCellValue(empresaProperty.getNivel());
         cellLugar.setCellStyle(cellStyleLeft);
         // ***************** observaciones *******************/
         rowVacia = sheet.createRow(7);
@@ -245,7 +245,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, 24));
         cellLugar = rowVacia.createCell(13);
-        cellLugar.setCellValue(empresaProperty.getObservaciones());
+        //cellLugar.setCellValue(empresaProperty.getObservaciones());
         cellLugar.setCellStyle(cellStyleLeft);
         // *****************************************************/
         rowVacia = sheet.createRow(8);
@@ -255,7 +255,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 10, 12));
         cellLugar = rowVacia.createCell(13);
-        cellLugar.setCellValue(empresaProperty.getArchivo());
+        //cellLugar.setCellValue(empresaProperty.getArchivo());
         cellLugar.setCellStyle(cellStyleLeft);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 19));
         // ************** fecha *******************************/

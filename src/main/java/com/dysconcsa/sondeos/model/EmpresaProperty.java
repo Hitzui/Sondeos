@@ -9,22 +9,11 @@ public class EmpresaProperty {
     IntegerProperty id;
     StringProperty cliente;
     StringProperty proyecto;
-    //StringProperty sondeoN;
-    StringProperty lugar;
-    StringProperty operador;
-    StringProperty nivel;
-    StringProperty observaciones;
-    StringProperty archivo;
     StringProperty fecha;
 
-    public EmpresaProperty(String cliente, String proyecto, String lugar, String operador, String nivel, String observaciones, String archivo, String fecha) {
+    public EmpresaProperty(String cliente, String proyecto, String fecha) {
         this.cliente = new SimpleStringProperty(cliente);
         this.proyecto = new SimpleStringProperty(proyecto);
-        this.lugar = new SimpleStringProperty(lugar);
-        this.operador = new SimpleStringProperty(operador);
-        this.nivel = new SimpleStringProperty(nivel);
-        this.observaciones = new SimpleStringProperty(observaciones);
-        this.archivo = new SimpleStringProperty(archivo);
         this.fecha = new SimpleStringProperty(fecha);
     }
 
@@ -58,46 +47,6 @@ public class EmpresaProperty {
 
     public StringProperty proyectoProperty() {
         return proyecto;
-    }
-
-    public String getLugar() {
-        return lugar.get();
-    }
-
-    public StringProperty lugarProperty() {
-        return lugar;
-    }
-
-    public String getOperador() {
-        return operador.get();
-    }
-
-    public StringProperty operadorProperty() {
-        return operador;
-    }
-
-    public String getNivel() {
-        return nivel.get();
-    }
-
-    public StringProperty nivelProperty() {
-        return nivel;
-    }
-
-    public String getObservaciones() {
-        return observaciones.get();
-    }
-
-    public StringProperty observacionesProperty() {
-        return observaciones;
-    }
-
-    public String getArchivo() {
-        return archivo.get();
-    }
-
-    public StringProperty archivoProperty() {
-        return archivo;
     }
 
     public String getFecha() {

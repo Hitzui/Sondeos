@@ -63,12 +63,6 @@ public class ClienteController extends AbstractController implements Initializab
     private TableColumn<EmpresaProperty, String> colProyecto;
 
     @FXML
-    private TableColumn<EmpresaProperty, String> colLugar;
-
-    @FXML
-    private TableColumn<EmpresaProperty, String> colOperador;
-
-    @FXML
     private TableColumn<EmpresaProperty, String> colFecha;
 
     @FXML
@@ -95,9 +89,7 @@ public class ClienteController extends AbstractController implements Initializab
     public void initialize(URL location, ResourceBundle resources) {
         colCodigoCliente.setCellValueFactory(value -> value.getValue().idProperty().asObject());
         colNombreCliente.setCellValueFactory(value -> value.getValue().clienteProperty());
-        colOperador.setCellValueFactory(value -> value.getValue().operadorProperty());
         colFecha.setCellValueFactory(value -> value.getValue().fechaProperty());
-        colLugar.setCellValueFactory(value -> value.getValue().lugarProperty());
         colProyecto.setCellValueFactory(value -> value.getValue().proyectoProperty());
         tableClientes.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> empresaProperty = newValue));
         tableClientes.setRowFactory(event -> {

@@ -1,6 +1,7 @@
 package com.dysconcsa.sondeos.controller;
 
 import com.dysconcsa.sondeos.dao.DaoSuelos;
+import com.dysconcsa.sondeos.main.Application;
 import com.dysconcsa.sondeos.model.*;
 import com.dysconcsa.sondeos.util.*;
 import com.jfoenix.controls.JFXButton;
@@ -18,7 +19,9 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,11 +31,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
+import javax.xml.ws.Action;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ import java.util.List;
 public class FormValoresController {
 
     private static String lastVisitedDirectory = System.getProperty("user.dir");
+    private ProfundidadSondeo profundidadSondeo;
     private final double tabWidth = 90.0;
     private final ObservableList<String> trepanoList = FXCollections.observableArrayList();
     private static int lastSelectedTabIndex = 0;
@@ -179,7 +185,15 @@ public class FormValoresController {
     @ActionTrigger("action_btnInsertar")
     private JFXButton btnInsertar;
 
+    @FXML
+    @ActionTrigger("action_btnDatosSondeos")
+    private JFXButton btnDatosSondeos;
     public static File file = null;
+
+    @ActionMethod("action_btnDatosSondeos")
+    public void action_btnDatosSondeos() {
+        this.showDatosSondeosDialog(profundidadSondeo);
+    }
 
     @ActionMethod("action_btnEliminar")
     public void action_btnEliminar() {
@@ -236,7 +250,7 @@ public class FormValoresController {
             txtProfundidadMaxima.setText("0.0");
             txtProfundidadMinima.setText("0.0");
             txtSondeoNumero.setText("");
-            this.file = null;
+            file = null;
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
@@ -265,10 +279,7 @@ public class FormValoresController {
     @FXML
     public void initialize() {
         try {
-            txtSondeoNumero.setText("");
-            txtElevacion.setText("0.0");
-            txtProfundidadMaxima.setText("0.0");
-            txtProfundidadMinima.setText("0.0");
+            profundidadSondeo = new ProfundidadSondeo();
             loadSxml(file);
             txtProfundidadMaxima.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
@@ -316,6 +327,7 @@ public class FormValoresController {
             setupClasificacionColumn();
             setupAdemeColumn();
             configureView();
+
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
@@ -376,10 +388,11 @@ public class FormValoresController {
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
                     File _file;
-                    if (this.file != null) {
-                        _file = this.file;
+                    if (file != null) {
+                        _file = file;
                     } else {
                         _file = fileChooser.showSaveDialog(stage);
+                        file = _file;
                     }
                     if (_file != null) {
                         ArchivoXml archivoXml = new ArchivoXml();
@@ -387,9 +400,7 @@ public class FormValoresController {
                         archivoXml.prepararElementosDatos(datosCampoProperties, anchorPane);
                         archivoXml.prepararElementosClasificacion(clasificacionSucsProperties, anchorPane);
                         archivoXml.prepararElementHumedad(humedadProperties, anchorPane);
-                        archivoXml.prepararElementosProfundidad(txtSondeoNumero.getText(), Double.parseDouble(txtProfundidadMinima.getText()),
-                                Double.parseDouble(txtProfundidadMaxima.getText()),
-                                Double.parseDouble(txtElevacion.getText()));
+                        archivoXml.prepararElementosProfundidad(profundidadSondeo);
                         archivoXml.prepararElementosAdeme(ademeProperties, anchorPane);
                         archivoXml.prepararElementosTrepano(trepanoProperties, anchorPane);
                         archivoXml.guardarArchivoXml(_file);
@@ -425,9 +436,7 @@ public class FormValoresController {
                         archivoExcel.setDatosCampoProperties(datosCampoProperties);
                         archivoExcel.setHumedadProperties(humedadProperties);
                         List<ProfundidadSondeo> profundidadSondeos = new ArrayList<>();
-                        profundidadSondeos.add(new ProfundidadSondeo(txtSondeoNumero.getText(), Double.parseDouble(txtProfundidadMinima.getText()),
-                                Double.parseDouble(txtProfundidadMaxima.getText()),
-                                Double.parseDouble(txtElevacion.getText())));
+                        profundidadSondeos.add(profundidadSondeo);
                         archivoExcel.setProfundidadSondeos(profundidadSondeos);
                         archivoExcel.setTrepanoProperties(trepanoProperties);
                         archivoExcel.setTabPane(tabContainer);
@@ -885,11 +894,32 @@ public class FormValoresController {
                 trepanoProperties.addAll(datos);
             }
             List<ProfundidadSondeo> list = archivoXml.cargarDatosIniciales(file);
-            list.stream()
-                    .peek((profundidadSondeo) -> txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion())))
-                    .peek((profundidadSondeo) -> txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima())))
-                    .peek((profundidadSondeo) -> txtSondeoNumero.setText(String.valueOf(profundidadSondeo.getSondeoNumero())))
-                    .forEachOrdered((profundidadSondeo) -> txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima())));
+            profundidadSondeo = list.get(0);
+        }
+    }
+
+    public boolean showDatosSondeosDialog(ProfundidadSondeo profundidadSondeo) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Application.class.getResource("view/DatosSondeos.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(btnCargarDatos.getScene().getWindow());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            // Set the person into the controller.
+            DatosSondeosController datosSondeosController = loader.getController();
+            datosSondeosController.setDialogStage(dialogStage);
+            datosSondeosController.setProfundidadSondeo(this.profundidadSondeo);
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+            return datosSondeosController.isOkClicked();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

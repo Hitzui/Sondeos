@@ -3,10 +3,7 @@ package com.dysconcsa.sondeos.util;
 import com.dysconcsa.sondeos.controller.ClienteController;
 import com.dysconcsa.sondeos.dao.DaoSuelos;
 import com.dysconcsa.sondeos.model.*;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -57,6 +54,13 @@ public class Utility {
     }
 
     public void keyPressed(JFXTextField textField1, JFXTextField textField2) {
+        textField1.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                textField2.requestFocus();
+            }
+        });
+    }
+    public void keyPressed(JFXTextField textField1, JFXTextArea textField2) {
         textField1.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 textField2.requestFocus();

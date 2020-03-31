@@ -7,6 +7,7 @@ import com.dysconcsa.sondeos.util.DateUtil;
 import com.dysconcsa.sondeos.util.Utility;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import io.datafx.controller.FXMLController;
 import io.datafx.controller.flow.action.ActionMethod;
@@ -36,22 +37,8 @@ public class FormClienteController {
     private JFXTextField txtCliente;
 
     @FXML
-    private JFXTextField txtProyecto;
+    private JFXTextArea txtProyecto;
 
-    @FXML
-    private JFXTextField txtLugar;
-
-    @FXML
-    private JFXTextField txtOperador;
-
-    @FXML
-    private JFXTextField txtNivel;
-
-    @FXML
-    private JFXTextField txtObservaciones;
-
-    @FXML
-    private JFXTextField txtArchivo;
 
     @FXML
     private JFXDatePicker txtFecha;
@@ -79,16 +66,6 @@ public class FormClienteController {
         utility = new Utility();
         txtFecha.setValue(LocalDate.now());
         utility.keyPressed(txtCliente, txtProyecto);
-        utility.keyPressed(txtProyecto, txtLugar);
-        utility.keyPressed(txtLugar, txtOperador);
-        utility.keyPressed(txtOperador, txtNivel);
-        utility.keyPressed(txtNivel, txtObservaciones);
-        utility.keyPressed(txtObservaciones, txtArchivo);
-        txtArchivo.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                txtFecha.requestFocus();
-            }
-        });
     }
 
     @ActionMethod("actionGuardarCliente")
@@ -99,16 +76,12 @@ public class FormClienteController {
         String fecha = DateUtil.format(txtFecha.getValue());
         if (validateText(txtCliente)) return;
         if (validateText(txtProyecto)) return;
-        if (validateText(txtLugar)) return;
-        if (validateText(txtOperador)) return;
         if (fecha.length() <= 0) {
             txtFecha.requestFocus();
             dialog("Fecha", "Debe especificar una fecha del proyecto para poder continuar");
             return;
         }
-        empresaProperty = new EmpresaProperty(txtCliente.getText(), txtProyecto.getText(), txtLugar.getText(),
-                txtOperador.getText(), txtNivel.getText(), txtObservaciones.getText(),
-                txtArchivo.getText(), DateUtil.format(txtFecha.getValue()));
+        empresaProperty = new EmpresaProperty(txtCliente.getText(), txtProyecto.getText(), DateUtil.format(txtFecha.getValue()));
         switch (aux) {
             case 0:
                 //guardar datos
@@ -143,6 +116,15 @@ public class FormClienteController {
         }
     }
 
+    private boolean validateText(JFXTextArea textField) {
+        if (textField.getText().length() <= 0) {
+            textField.requestFocus();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void dialog(String header, String content) {
         Utility.dialog(FormClienteController._guardar, header, content);
     }
@@ -150,21 +132,11 @@ public class FormClienteController {
     private void loadValues(EmpresaProperty empresaProperty) {
         txtCliente.setText(empresaProperty.getCliente());
         txtProyecto.setText(empresaProperty.getProyecto());
-        txtOperador.setText(empresaProperty.getOperador());
-        txtLugar.setText(empresaProperty.getLugar());
-        txtArchivo.setText(empresaProperty.getArchivo());
-        txtObservaciones.setText(empresaProperty.getObservaciones());
-        txtNivel.setText(empresaProperty.getNivel());
         txtFecha.setValue(DateUtil.parse(empresaProperty.getFecha()));
     }
 
     private void clear() {
         txtCliente.clear();
-        txtArchivo.clear();
-        txtLugar.clear();
-        txtNivel.clear();
-        txtObservaciones.clear();
-        txtOperador.clear();
         txtProyecto.clear();
     }
 }

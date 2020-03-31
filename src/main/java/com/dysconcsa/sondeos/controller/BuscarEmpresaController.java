@@ -70,7 +70,6 @@ public class BuscarEmpresaController {
         this.colCodigo.setCellValueFactory((cellData) -> cellData.getValue().idProperty().asObject());
         this.colCliente.setCellValueFactory((value) -> (value.getValue()).clienteProperty());
         this.colProyecto.setCellValueFactory((value) -> (value.getValue()).proyectoProperty());
-        this.colOperador.setCellValueFactory((value) -> value.getValue().operadorProperty());
         this.loadData();
         this.tableClientes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             this.empresaProperty = newValue;

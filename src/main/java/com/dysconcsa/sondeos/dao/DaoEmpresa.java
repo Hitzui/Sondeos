@@ -21,7 +21,7 @@ public class DaoEmpresa {
         connection = new DataConnection();
         try {
             Connection conn = connection.getConnection();
-            String sql = "CREATE TABLE IF NOT EXISTS `empresa` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `cliente` TEXT, `proyecto` INTEGER, `lugar` TEXT, `operador` TEXT, `nivel` TEXT, `observaciones` TEXT, `archivo` TEXT, `fecha` TEXT )";
+            String sql = "CREATE TABLE IF NOT EXISTS `empresa` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `cliente` TEXT, `proyecto` TEXT, `fecha` TEXT )";
             Statement statement = conn.createStatement();
             statement.execute(sql);
         } catch (SQLException ex) {
@@ -31,7 +31,7 @@ public class DaoEmpresa {
 
     public void save(EmpresaProperty empresaProperty) {
         try {
-            String sql = "INSERT INTO `empresa`(`cliente`,`proyecto`,`lugar`,`operador`,`nivel`,`observaciones`,`archivo`,`fecha`) VALUES (?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO `empresa`(`cliente`,`proyecto`,`fecha`) VALUES (?,?,?)";
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             parameters(preparedStatement, empresaProperty);
@@ -53,21 +53,16 @@ public class DaoEmpresa {
     private void parameters(PreparedStatement preparedStatement, EmpresaProperty empresaProperty) throws SQLException {
         preparedStatement.setString(1, empresaProperty.getCliente());
         preparedStatement.setString(2, empresaProperty.getProyecto());
-        preparedStatement.setString(3, empresaProperty.getLugar());
-        preparedStatement.setString(4, empresaProperty.getOperador());
-        preparedStatement.setString(5, empresaProperty.getNivel());
-        preparedStatement.setString(6, empresaProperty.getObservaciones());
-        preparedStatement.setString(7, empresaProperty.getArchivo());
-        preparedStatement.setString(8, empresaProperty.getFecha());
+        preparedStatement.setString(3, empresaProperty.getFecha());
     }
 
     public void update(EmpresaProperty empresaProperty) {
         try {
-            String sql = "UPDATE empresa set cliente = ?, proyecto = ?,lugar = ?,operador = ?,nivel = ?,observaciones = ?,archivo = ?,fecha = ? WHERE id = ?";
+            String sql = "UPDATE empresa set cliente = ?, proyecto = ?,fecha = ? WHERE id = ?";
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql);
             parameters(preparedStatement, empresaProperty);
-            preparedStatement.setInt(9, empresaProperty.getId());
+            preparedStatement.setInt(4, empresaProperty.getId());
             this.idAfterSave = preparedStatement.executeUpdate();
         } catch (Exception ex) {
             _error = ex;
@@ -99,8 +94,6 @@ public class DaoEmpresa {
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 EmpresaProperty empresa = new EmpresaProperty(result.getString("cliente"), result.getString("proyecto"),
-                        result.getString("lugar"), result.getString("operador"),
-                        result.getString("nivel"), result.getString("observaciones"), result.getString("archivo"),
                         result.getString("fecha"));
                 empresa.setId(result.getInt("id"));
                 list.add(empresa);
@@ -121,8 +114,6 @@ public class DaoEmpresa {
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 empresa = new EmpresaProperty(result.getString("cliente"), result.getString("proyecto"),
-                        result.getString("lugar"), result.getString("operador"),
-                        result.getString("nivel"), result.getString("observaciones"), result.getString("archivo"),
                         result.getString("fecha"));
                 empresa.setId(result.getInt("id"));
                 System.out.println("Id: " + result.getInt("id"));

@@ -92,24 +92,39 @@ public class ArchivoXml {
         }
     }
 
-    public void prepararElementosProfundidad(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima, Double elevacion) {
+    public void prepararElementosProfundidad(ProfundidadSondeo profundidadSondeo) {
         try {
             Element valores = document.createElement("valores");
             Element rootProfundidad = document.createElement("estrato");
             rootElement.appendChild(rootProfundidad);
             rootProfundidad.appendChild(valores);
             Element elemntSondeoNumero = document.createElement("sondeoNumero");
-            elemntSondeoNumero.appendChild(document.createTextNode(sondeoNumero));
+            elemntSondeoNumero.appendChild(document.createTextNode(profundidadSondeo.getSondeoNumero()));
             valores.appendChild(elemntSondeoNumero);
             Element elementProfundidadMinima = document.createElement("profundidadMinima");
-            elementProfundidadMinima.appendChild(document.createTextNode(Double.toString(profundidadMinima)));
+            elementProfundidadMinima.appendChild(document.createTextNode(Double.toString(profundidadSondeo.getProfundidadMinima())));
             valores.appendChild(elementProfundidadMinima);
             Element elementProfundidadMaxima = document.createElement("profundidadMaxima");
-            elementProfundidadMaxima.appendChild(document.createTextNode(Double.toString(profundidadMaxima)));
+            elementProfundidadMaxima.appendChild(document.createTextNode(Double.toString(profundidadSondeo.getProfundidadMaxima())));
             valores.appendChild(elementProfundidadMaxima);
             Element elementElevacion = document.createElement("elevacion");
-            elementElevacion.appendChild(document.createTextNode(Double.toString(elevacion)));
+            elementElevacion.appendChild(document.createTextNode(Double.toString(profundidadSondeo.getElevacion())));
             valores.appendChild(elementElevacion);
+            Element elementLugar = document.createElement("lugar");
+            elementLugar.appendChild(document.createTextNode(profundidadSondeo.getLugar()));
+            valores.appendChild(elementLugar);
+            Element elementObservaciones = document.createElement("observaciones");
+            elementObservaciones.appendChild(document.createTextNode(profundidadSondeo.getObservaciones()));
+            valores.appendChild(elementObservaciones);
+            Element elementOperador = document.createElement("operador");
+            elementOperador.appendChild(document.createTextNode(profundidadSondeo.getOperador()));
+            valores.appendChild(elementOperador);
+            Element elementArchivo = document.createElement("archivo");
+            elementArchivo.appendChild(document.createTextNode(profundidadSondeo.getArchivo()));
+            valores.appendChild(elementArchivo);
+            Element elementNivelFreatico = document.createElement("nivelFreatico");
+            elementNivelFreatico.appendChild(document.createTextNode(profundidadSondeo.getNivelFreatico()));
+            valores.appendChild(elementNivelFreatico);
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
@@ -334,8 +349,12 @@ public class ArchivoXml {
                 Double profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
                 Double profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
                 Double elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
-                System.out.println(profundidadMinima);
-                datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, elevacion));
+                String lugar = element.getElementsByTagName("lugar").item(j).getTextContent();
+                String observaciones = element.getElementsByTagName("observaciones").item(j).getTextContent();
+                String operador = element.getElementsByTagName("operador").item(j).getTextContent();
+                String nivelFreatico = element.getElementsByTagName("nivelFreatico").item(j).getTextContent();
+                String archivo = element.getElementsByTagName("archivo").item(j).getTextContent();
+                datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, lugar, observaciones, operador, archivo, nivelFreatico, elevacion));
             }
             return datos;
         } catch (Exception ex) {

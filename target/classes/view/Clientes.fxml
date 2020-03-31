@@ -7,18 +7,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="centerPane" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="centerPane" prefHeight="543.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane style="-fx-background-color: #343a40;" StackPane.alignment="CENTER">
          <children>
             <TableView fx:id="tableClientes" layoutX="29.0" layoutY="81.0" prefHeight="483.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
               <columns>
                 <TableColumn fx:id="colCodigoCliente" prefWidth="100.0" text="Codigo" />
-                <TableColumn fx:id="colNombreCliente" prefWidth="150.0" text="Cliente" />
-                  <TableColumn fx:id="colProyecto" prefWidth="250.0" text="Proyecto" />
-                  <TableColumn fx:id="colLugar" prefWidth="150.0" text="Lugar" />
-                  <TableColumn fx:id="colOperador" prefWidth="200.0" text="Operador" />
-                  <TableColumn fx:id="colFecha" prefWidth="150.0" text="Fecha" />
+                <TableColumn fx:id="colNombreCliente" prefWidth="169.0" text="Cliente" />
+                  <TableColumn fx:id="colProyecto" prefWidth="419.0" text="Proyecto" />
+                  <TableColumn fx:id="colFecha" minWidth="0.0" prefWidth="123.0" text="Fecha" />
               </columns>
             </TableView>
             <HBox alignment="CENTER_LEFT" layoutX="23.0" layoutY="7.0" prefHeight="46.0" prefWidth="382.0" spacing="20.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="5.0">
