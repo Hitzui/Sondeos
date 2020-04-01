@@ -1,7 +1,9 @@
 package com.dysconcsa.sondeos.controller;
 
 import com.dysconcsa.sondeos.model.ProfundidadSondeo;
+import com.dysconcsa.sondeos.util.DateUtil;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import io.datafx.controller.FXMLController;
 import javafx.fxml.FXML;
@@ -41,6 +43,9 @@ public class DatosSondeosController {
     private JFXTextField txtArchivo;
 
     @FXML
+    private JFXDatePicker txtFecha;
+
+    @FXML
     private JFXButton btnGuardar;
 
     @FXML
@@ -60,6 +65,7 @@ public class DatosSondeosController {
             txtObservaciones.setText(profundidadSondeo.getObservaciones());
             txtOperador.setText(profundidadSondeo.getOperador());
             txtNivelFreatico.setText(profundidadSondeo.getNivelFreatico());
+            txtFecha.setValue(DateUtil.parse(profundidadSondeo.getFecha()));
         }
         this.profundidadSondeo = profundidadSondeo;
     }
@@ -102,8 +108,11 @@ public class DatosSondeosController {
         } else {
             elevacion = Double.parseDouble(txtElevacion.getText());
         }
-        this.profundidadSondeo = new ProfundidadSondeo(txtSondeoNumero.getText(), profundidadMinima, profundidadMaxima, txtLugar.getText(),
-                txtObservaciones.getText(), txtOperador.getText(), txtArchivo.getText(), txtNivelFreatico.getText(), elevacion);
+        String fecha = DateUtil.format(txtFecha.getValue());
+        this.profundidadSondeo = new ProfundidadSondeo(txtSondeoNumero.getText(),
+                profundidadMinima, profundidadMaxima, txtLugar.getText(),
+                txtObservaciones.getText(), txtOperador.getText(),
+                txtArchivo.getText(), txtNivelFreatico.getText(), elevacion, fecha);
         okClicked = true;
         dialogStage.close();
     }

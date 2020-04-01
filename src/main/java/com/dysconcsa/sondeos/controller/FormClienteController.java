@@ -39,7 +39,6 @@ public class FormClienteController {
     @FXML
     private JFXTextArea txtProyecto;
 
-
     @FXML
     private JFXDatePicker txtFecha;
 

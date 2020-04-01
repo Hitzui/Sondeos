@@ -72,7 +72,8 @@ public class ArchivoExcel {
         utility = new Utility();
     }
 
-    public void crearArchivo(AnchorPane anchorPane, File file, Integer idEmpresaProperty, ObservableList<AdemeProperty> ademeProperties) {
+    public void crearArchivo(AnchorPane anchorPane, File file, Integer idEmpresaProperty, ProfundidadSondeo profundidadSondeo,
+                             ObservableList<AdemeProperty> ademeProperties) {
         this.ademeProperties = ademeProperties;
         if (idEmpresaProperty == null || idEmpresaProperty == 0) {
             Utility.dialog("Error", "", "No se ha especificado un cliente, por favor especifique un cliente para continuar.");
@@ -139,18 +140,18 @@ public class ArchivoExcel {
             sheet.addMergedRegion(new CellRangeAddress(2, 2, 22, 23));
             cell = row.createCell(24);
             cell.setCellStyle(cellStyleLeft);
-            cell.setCellValue(Utility.sondeoNumero);
+            cell.setCellValue(profundidadSondeo.getSondeoNumero());
             // lugar
             row = sheet.createRow(3);
             cell = row.createCell(6);
             cell.setCellValue("Lugar:");
             cell.setCellStyle(cellStyleRight);
             cell = row.createCell(7);
-            //cell.setCellValue(empresaProperty.getLugar());
+            cell.setCellValue(profundidadSondeo.getLugar());
             cell.setCellStyle(cellStyleLeft);
             sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
 
-            data(sheet, empresaProperty, cellStyle, wb, fontBold);
+            data(sheet, empresaProperty, profundidadSondeo, cellStyle, wb, fontBold);
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
@@ -191,21 +192,18 @@ public class ArchivoExcel {
                     dialog.close();
                     try {
                         Desktop.getDesktop().open(file);
-                    } catch (IOException ex) {
-                        Utility.dialog("Error", "Crear excel",
-                                "No se pudo generar el archivo debido al siguiente error: " + ex.getMessage());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 });
                 dialog.show();
             }
         } catch (Exception ex) {
-            Utility utility = new Utility();
-            Utility.dialog("Error", "Crear excel",
-                    "No se pudo generar el archivo debido al siguiente error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
-    private void data(XSSFSheet sheet, EmpresaProperty empresaProperty, CellStyle cellStyle, XSSFWorkbook wb,
+    private void data(XSSFSheet sheet, EmpresaProperty empresaProperty, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, XSSFWorkbook wb,
                       Font fontBold) {
         cellStyle.setWrapText(true);
         CellStyle cellStyleDatos = wb.createCellStyle();
@@ -225,7 +223,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 20));
         cellLugar = rowVacia.createCell(13);
-        //cellLugar.setCellValue(empresaProperty.getOperador());
+        cellLugar.setCellValue(profundidadSondeo.getOperador());
         cellLugar.setCellStyle(cellStyleLeft);
         // ********************** nivel friatico *************************/
         cellLugar = rowVacia.createCell(21);
@@ -235,7 +233,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 24));
         cellLugar = rowVacia.createCell(23);
-        //cellLugar.setCellValue(empresaProperty.getNivel());
+        cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
         // ***************** observaciones *******************/
         rowVacia = sheet.createRow(7);
@@ -245,7 +243,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, 24));
         cellLugar = rowVacia.createCell(13);
-        //cellLugar.setCellValue(empresaProperty.getObservaciones());
+        cellLugar.setCellValue(profundidadSondeo.getObservaciones());
         cellLugar.setCellStyle(cellStyleLeft);
         // *****************************************************/
         rowVacia = sheet.createRow(8);
@@ -255,7 +253,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 10, 12));
         cellLugar = rowVacia.createCell(13);
-        //cellLugar.setCellValue(empresaProperty.getArchivo());
+        cellLugar.setCellValue(profundidadSondeo.getArchivo());
         cellLugar.setCellStyle(cellStyleLeft);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 19));
         // ************** fecha *******************************/
@@ -264,7 +262,7 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 21, 22));
         cellLugar = rowVacia.createCell(23);
-        cellLugar.setCellValue(empresaProperty.getFecha());
+        cellLugar.setCellValue(profundidadSondeo.getFecha());
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 23, 24));
         cellLugar.setCellStyle(cellStyleLeft);
         // ****************************************************/

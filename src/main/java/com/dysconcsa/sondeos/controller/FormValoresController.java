@@ -433,12 +433,12 @@ public class FormValoresController {
                         archivoExcel.setTrepanoProperties(trepanoProperties);
                         archivoExcel.setTabPane(tabContainer);
                         archivoExcel.setTabToUse(tabCliente);
-                        Utility.sondeoNumero = txtSondeoNumero.getText();
-                        archivoExcel.crearArchivo(anchorPane, file, Utility.idcliente, ademeProperties);
+                        archivoExcel.crearArchivo(anchorPane, file, Utility.idcliente,profundidadSondeo, ademeProperties);
                     }
                     lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
                 } catch (Exception ex) {
-                    Utility.dialog("Error", "Error al generar", "No se pudo generar el archivo de sondeo, intente nuevamente." + ex.getMessage());
+                    ex.printStackTrace();
+                    //Utility.dialog("Error", "Error al generar", "No se pudo generar el archivo de sondeo, intente nuevamente." + ex.getMessage());
                 }
             }
         };

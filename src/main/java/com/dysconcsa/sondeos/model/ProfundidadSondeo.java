@@ -10,6 +10,7 @@ public class ProfundidadSondeo {
     private String archivo;
     private String nivelFreatico;
     private Double elevacion;
+    private String fecha;
 
     public ProfundidadSondeo() {
     }
@@ -27,7 +28,7 @@ public class ProfundidadSondeo {
      */
     public ProfundidadSondeo(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima,
                              String lugar, String observaciones, String operador, String archivo,
-                             String nivelFreatico, Double elevacion) {
+                             String nivelFreatico, Double elevacion,String fecha) {
         this.sondeoNumero = sondeoNumero;
         this.profundidadMinima = profundidadMinima;
         this.profundidadMaxima = profundidadMaxima;
@@ -37,6 +38,7 @@ public class ProfundidadSondeo {
         this.archivo = archivo;
         this.nivelFreatico = nivelFreatico;
         this.elevacion = elevacion;
+        this.fecha = fecha;
     }
 
     public String getSondeoNumero() {
@@ -109,6 +111,14 @@ public class ProfundidadSondeo {
 
     public void setNivelFreatico(String nivelFreatico) {
         this.nivelFreatico = nivelFreatico;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.dysconcsa.sondeos.util;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +127,9 @@ public class ArchivoXml {
             Element elementNivelFreatico = document.createElement("nivelFreatico");
             elementNivelFreatico.appendChild(document.createTextNode(profundidadSondeo.getNivelFreatico()));
             valores.appendChild(elementNivelFreatico);
+            Element elementFecha = document.createElement("fecha");
+            elementFecha.appendChild(document.createTextNode(profundidadSondeo.getFecha()));
+            valores.appendChild(elementFecha);
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
@@ -349,6 +353,7 @@ public class ArchivoXml {
                 double profundidadMinima;
                 double profundidadMaxima;
                 double elevacion;
+                String fecha;
                 try {
                     sondeoNumero = element.getElementsByTagName("sondeoNumero").item(j).getTextContent();
                     lugar = element.getElementsByTagName("lugar").item(j).getTextContent();
@@ -359,6 +364,7 @@ public class ArchivoXml {
                     profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
                     profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
                     elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
+                    fecha = element.getElementsByTagName("fecha").item(j).getTextContent();
                 } catch (Exception ex) {
                     sondeoNumero = "1";
                     lugar = "";
@@ -369,9 +375,10 @@ public class ArchivoXml {
                     profundidadMinima = 0d;
                     profundidadMaxima = 0d;
                     elevacion = 0d;
+                    fecha = LocalDate.now().toString();
                 }
                 datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, lugar,
-                        observaciones, operador, archivo, nivelFreatico, elevacion));
+                        observaciones, operador, archivo, nivelFreatico, elevacion, fecha));
             }
             return datos;
         } catch (Exception ex) {
