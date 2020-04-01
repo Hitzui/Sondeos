@@ -14,7 +14,20 @@ public class ProfundidadSondeo {
     public ProfundidadSondeo() {
     }
 
-    public ProfundidadSondeo(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima, String lugar, String observaciones, String operador, String archivo, String nivelFreatico, Double elevacion) {
+    /*
+    * @param sondeoNumero
+    * @param profundidadMinima profundidad minima del sondeo
+    * @param profundidadMaxima profundidad maxima del sondeo
+    * @param lugar lugar que se realizo el sondeo
+    * @param observaciones observaciones que se encontraron
+    * @param operador operador que realizo el sondeo
+    * @param archivo numero de archivo
+    * @param nivelFreatico nivel freatico
+    * @param elevacion elevacion del sondeo
+     */
+    public ProfundidadSondeo(String sondeoNumero, Double profundidadMinima, Double profundidadMaxima,
+                             String lugar, String observaciones, String operador, String archivo,
+                             String nivelFreatico, Double elevacion) {
         this.sondeoNumero = sondeoNumero;
         this.profundidadMinima = profundidadMinima;
         this.profundidadMaxima = profundidadMaxima;
@@ -96,5 +109,20 @@ public class ProfundidadSondeo {
 
     public void setNivelFreatico(String nivelFreatico) {
         this.nivelFreatico = nivelFreatico;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfundidadSondeo{" +
+                "sondeoNumero='" + sondeoNumero + '\'' +
+                ", profundidadMinima=" + profundidadMinima +
+                ", profundidadMaxima=" + profundidadMaxima +
+                ", lugar='" + lugar + '\'' +
+                ", observaciones='" + observaciones + '\'' +
+                ", operador='" + operador + '\'' +
+                ", archivo='" + archivo + '\'' +
+                ", nivelFreatico='" + nivelFreatico + '\'' +
+                ", elevacion=" + elevacion +
+                '}';
     }
 }

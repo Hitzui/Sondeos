@@ -94,6 +94,7 @@ public class ArchivoXml {
 
     public void prepararElementosProfundidad(ProfundidadSondeo profundidadSondeo) {
         try {
+            System.out.println(profundidadSondeo);
             Element valores = document.createElement("valores");
             Element rootProfundidad = document.createElement("estrato");
             rootElement.appendChild(rootProfundidad);
@@ -340,21 +341,37 @@ public class ArchivoXml {
             NodeList nodeList = element.getElementsByTagName("valores");
             for (int j = 0; j < nodeList.getLength(); j++) {
                 String sondeoNumero;
+                String lugar;
+                String observaciones;
+                String operador;
+                String nivelFreatico;
+                String archivo;
+                double profundidadMinima;
+                double profundidadMaxima;
+                double elevacion;
                 try {
                     sondeoNumero = element.getElementsByTagName("sondeoNumero").item(j).getTextContent();
+                    lugar = element.getElementsByTagName("lugar").item(j).getTextContent();
+                    observaciones = element.getElementsByTagName("observaciones").item(j).getTextContent();
+                    operador = element.getElementsByTagName("operador").item(j).getTextContent();
+                    nivelFreatico = element.getElementsByTagName("nivelFreatico").item(j).getTextContent();
+                    archivo = element.getElementsByTagName("archivo").item(j).getTextContent();
+                    profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
+                    profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
+                    elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
                 } catch (Exception ex) {
                     sondeoNumero = "1";
+                    lugar = "";
+                    observaciones = "";
+                    operador = "";
+                    nivelFreatico = "";
+                    archivo = "";
+                    profundidadMinima = 0d;
+                    profundidadMaxima = 0d;
+                    elevacion = 0d;
                 }
-
-                Double profundidadMinima = Double.parseDouble(element.getElementsByTagName("profundidadMinima").item(j).getTextContent());
-                Double profundidadMaxima = Double.parseDouble(element.getElementsByTagName("profundidadMaxima").item(j).getTextContent());
-                Double elevacion = Double.parseDouble(element.getElementsByTagName("elevacion").item(j).getTextContent());
-                String lugar = element.getElementsByTagName("lugar").item(j).getTextContent();
-                String observaciones = element.getElementsByTagName("observaciones").item(j).getTextContent();
-                String operador = element.getElementsByTagName("operador").item(j).getTextContent();
-                String nivelFreatico = element.getElementsByTagName("nivelFreatico").item(j).getTextContent();
-                String archivo = element.getElementsByTagName("archivo").item(j).getTextContent();
-                datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, lugar, observaciones, operador, archivo, nivelFreatico, elevacion));
+                datos.add(new ProfundidadSondeo(sondeoNumero, profundidadMinima, profundidadMaxima, lugar,
+                        observaciones, operador, archivo, nivelFreatico, elevacion));
             }
             return datos;
         } catch (Exception ex) {

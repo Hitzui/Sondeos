@@ -1,18 +1,66 @@
 package com.dysconcsa.sondeos.controller;
 
 import com.dysconcsa.sondeos.model.ProfundidadSondeo;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import io.datafx.controller.FXMLController;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
-@FXMLController("/view/DatosSondeo.fxml")
+@FXMLController(value = "/view/DatosSondeo.fxml", title = "Datos del sondeo")
 public class DatosSondeosController {
 
     private boolean okClicked = false;
     private Stage dialogStage;
     private ProfundidadSondeo profundidadSondeo;
+    @FXML
+    private JFXTextField txtSondeoNumero;
+
+    @FXML
+    private JFXTextField txtProfundidadMinima;
+
+    @FXML
+    private JFXTextField txtProfundidadMaxima;
+
+    @FXML
+    private JFXTextField txtElevacion;
+
+    @FXML
+    private JFXTextField txtNivelFreatico;
+
+    @FXML
+    private JFXTextField txtLugar;
+
+    @FXML
+    private JFXTextField txtObservaciones;
+
+    @FXML
+    private JFXTextField txtOperador;
+
+    @FXML
+    private JFXTextField txtArchivo;
+
+    @FXML
+    private JFXButton btnGuardar;
+
+    @FXML
+    public void initialize() {
+
+    }
 
     public void setProfundidadSondeo(ProfundidadSondeo profundidadSondeo) {
+        System.out.println("This profundidad sondeo");
+        if (profundidadSondeo != null) {
+            txtSondeoNumero.setText(profundidadSondeo.getSondeoNumero());
+            txtProfundidadMinima.setText(String.valueOf(profundidadSondeo.getProfundidadMinima()));
+            txtProfundidadMaxima.setText(String.valueOf(profundidadSondeo.getProfundidadMaxima()));
+            txtElevacion.setText(String.valueOf(profundidadSondeo.getElevacion()));
+            txtArchivo.setText(profundidadSondeo.getArchivo());
+            txtLugar.setText(profundidadSondeo.getLugar());
+            txtObservaciones.setText(profundidadSondeo.getObservaciones());
+            txtOperador.setText(profundidadSondeo.getOperador());
+            txtNivelFreatico.setText(profundidadSondeo.getNivelFreatico());
+        }
         this.profundidadSondeo = profundidadSondeo;
     }
 
@@ -35,9 +83,29 @@ public class DatosSondeosController {
 
     @FXML
     private void handleOk() {
-        if (isInputValid()) {
+        double profundidadMinima;
 
+        if (txtProfundidadMinima.getText().length() == 0) {
+            profundidadMinima = 0d;
+        } else {
+            profundidadMinima = Double.parseDouble(txtProfundidadMinima.getText());
         }
+        double profundidadMaxima;
+        if (txtProfundidadMaxima.getText().length() == 0) {
+            profundidadMaxima = 0D;
+        } else {
+            profundidadMaxima = Double.parseDouble(txtProfundidadMaxima.getText());
+        }
+        double elevacion;
+        if (txtElevacion.getText().length() == 0) {
+            elevacion = 0d;
+        } else {
+            elevacion = Double.parseDouble(txtElevacion.getText());
+        }
+        this.profundidadSondeo = new ProfundidadSondeo(txtSondeoNumero.getText(), profundidadMinima, profundidadMaxima, txtLugar.getText(),
+                txtObservaciones.getText(), txtOperador.getText(), txtArchivo.getText(), txtNivelFreatico.getText(), elevacion);
+        okClicked = true;
+        dialogStage.close();
     }
 
     /**
@@ -55,6 +123,7 @@ public class DatosSondeosController {
      */
     private boolean isInputValid() {
         String errorMessage = "";
+
         return true;
     }
 }

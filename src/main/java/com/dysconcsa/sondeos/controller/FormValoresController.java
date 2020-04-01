@@ -1,7 +1,6 @@
 package com.dysconcsa.sondeos.controller;
 
 import com.dysconcsa.sondeos.dao.DaoSuelos;
-import com.dysconcsa.sondeos.main.Application;
 import com.dysconcsa.sondeos.model.*;
 import com.dysconcsa.sondeos.util.*;
 import com.jfoenix.controls.JFXButton;
@@ -13,6 +12,9 @@ import io.datafx.controller.flow.FlowException;
 import io.datafx.controller.flow.FlowHandler;
 import io.datafx.controller.flow.action.ActionMethod;
 import io.datafx.controller.flow.action.ActionTrigger;
+import io.datafx.controller.flow.container.DefaultFlowContainer;
+import io.datafx.controller.flow.context.FXMLViewFlowContext;
+import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,7 +39,6 @@ import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
-import javax.xml.ws.Action;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -192,7 +193,9 @@ public class FormValoresController {
 
     @ActionMethod("action_btnDatosSondeos")
     public void action_btnDatosSondeos() {
-        this.showDatosSondeosDialog(profundidadSondeo);
+        if (showDatosSondeosDialog(profundidadSondeo)) {
+            System.out.println("Sondeo numero: " + profundidadSondeo.getSondeoNumero());
+        }
     }
 
     @ActionMethod("action_btnEliminar")
@@ -279,18 +282,7 @@ public class FormValoresController {
     @FXML
     public void initialize() {
         try {
-            profundidadSondeo = new ProfundidadSondeo();
             loadSxml(file);
-            txtProfundidadMaxima.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    txtElevacion.requestFocus();
-                }
-            });
-            txtProfundidadMinima.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    txtProfundidadMaxima.requestFocus();
-                }
-            });
             listSuelosProperties();
             if (trepanoProperties.size() <= 0) {
                 trepanoProperties.add(new TrepanoProperty(0.0, ""));
@@ -900,22 +892,25 @@ public class FormValoresController {
 
     public boolean showDatosSondeosDialog(ProfundidadSondeo profundidadSondeo) {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Application.class.getResource("view/DatosSondeos.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            Flow flow = new Flow(DatosSondeosController.class);
+            FlowHandler flowHandler = flow.createHandler();
             // Create the dialog Stage.
+            StackPane stackPane = flowHandler.start(new DefaultFlowContainer());
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Edit Person");
             dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setResizable(false);
+            dialogStage.getIcons().add(new Image("/image/Sondeos.png"));
+            //dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(btnCargarDatos.getScene().getWindow());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            dialogStage.setScene(new Scene(stackPane));
             // Set the person into the controller.
-            DatosSondeosController datosSondeosController = loader.getController();
+            DatosSondeosController datosSondeosController = (DatosSondeosController) flowHandler.getCurrentView().getViewContext().getController();
             datosSondeosController.setDialogStage(dialogStage);
-            datosSondeosController.setProfundidadSondeo(this.profundidadSondeo);
-            // Show the dialog and wait until the user closes it
+            datosSondeosController.setProfundidadSondeo(profundidadSondeo);
+            //Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
+            this.profundidadSondeo = datosSondeosController.getProfundidadSondeo();
             return datosSondeosController.isOkClicked();
         } catch (Exception ex) {
             ex.printStackTrace();
