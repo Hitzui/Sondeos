@@ -37,7 +37,6 @@ public class Application extends javafx.application.Application {
         } catch (Exception ex) {
             writeParameters(ex.getMessage());
         }
-
         launch(args);
     }
 

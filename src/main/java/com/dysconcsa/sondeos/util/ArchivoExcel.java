@@ -2,6 +2,7 @@ package com.dysconcsa.sondeos.util;
 
 import com.dysconcsa.sondeos.dao.DaoConfiguration;
 import com.dysconcsa.sondeos.dao.DaoEmpresa;
+import com.dysconcsa.sondeos.main.Application;
 import com.dysconcsa.sondeos.model.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -200,6 +201,7 @@ public class ArchivoExcel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            Application.writeParameters(ex.getMessage());
         }
     }
 

@@ -2,6 +2,7 @@ package com.dysconcsa.sondeos.controller;
 
 import com.dysconcsa.sondeos.model.ProfundidadSondeo;
 import com.dysconcsa.sondeos.util.DateUtil;
+import com.dysconcsa.sondeos.util.Utility;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -50,7 +51,16 @@ public class DatosSondeosController {
 
     @FXML
     public void initialize() {
-
+        Utility utility = new Utility();
+        utility.keyPressed(txtSondeoNumero,txtProfundidadMinima);
+        utility.keyPressed(txtProfundidadMinima,txtProfundidadMaxima);
+        utility.keyPressed(txtProfundidadMaxima,txtElevacion);
+        utility.keyPressed(txtElevacion,txtNivelFreatico);
+        utility.keyPressed(txtNivelFreatico,txtLugar);
+        utility.keyPressed(txtLugar,txtObservaciones);
+        utility.keyPressed(txtObservaciones,txtOperador);
+        utility.keyPressed(txtOperador,txtArchivo);
+        utility.keyPressed(txtArchivo,txtFecha);
     }
 
     public void setProfundidadSondeo(ProfundidadSondeo profundidadSondeo) {

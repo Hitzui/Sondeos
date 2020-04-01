@@ -68,6 +68,14 @@ public class Utility {
         });
     }
 
+    public void keyPressed(JFXTextField textField, JFXDatePicker fecha) {
+        textField.setOnKeyPressed(e->{
+            if(e.getCode()==KeyCode.ENTER){
+                fecha.requestFocus();
+            }
+        });
+    }
+
     public static void dialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -532,5 +540,6 @@ public class Utility {
         }
         return listaConstante;
     }
+
 
 }

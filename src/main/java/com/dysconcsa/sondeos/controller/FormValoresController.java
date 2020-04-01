@@ -13,15 +13,12 @@ import io.datafx.controller.flow.FlowHandler;
 import io.datafx.controller.flow.action.ActionMethod;
 import io.datafx.controller.flow.action.ActionTrigger;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
-import io.datafx.controller.flow.context.FXMLViewFlowContext;
-import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -47,6 +44,7 @@ import java.util.List;
 @FXMLController("/view/FormValores.fxml")
 public class FormValoresController {
 
+    private File fileExcel;
     private static String lastVisitedDirectory = System.getProperty("user.dir");
     private ProfundidadSondeo profundidadSondeo;
     private final double tabWidth = 90.0;
@@ -269,11 +267,10 @@ public class FormValoresController {
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Sondeos files (*.sxml)", "*.sxml");
             fileChooser.getExtensionFilters().add(extFilter);
             Stage stage = (Stage) anchorPane.getScene().getWindow();
-            File _file;
-            _file = fileChooser.showOpenDialog(stage);
-            loadSxml(_file);
-            ((Stage) btnCargarDatos.getScene().getWindow()).setTitle("Aplicacion de Sondeos - " + _file.getName());
-            lastVisitedDirectory = (_file != null) ? _file.getParent() : System.getProperty("user.home");
+            file = fileChooser.showOpenDialog(stage);
+            loadSxml(file);
+            ((Stage) btnCargarDatos.getScene().getWindow()).setTitle("Aplicacion de Sondeos - " + file.getName());
+            lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
@@ -379,14 +376,10 @@ public class FormValoresController {
                     fileChooser.getExtensionFilters().add(extFilter);
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
-                    File _file;
-                    if (file != null) {
-                        _file = file;
-                    } else {
-                        _file = fileChooser.showSaveDialog(stage);
-                        file = _file;
+                    if (file == null) {
+                        file = fileChooser.showSaveDialog(stage);
                     }
-                    if (_file != null) {
+                    if (file != null) {
                         ArchivoXml archivoXml = new ArchivoXml();
                         archivoXml.setDocument();
                         archivoXml.prepararElementosDatos(datosCampoProperties, anchorPane);
@@ -395,7 +388,7 @@ public class FormValoresController {
                         archivoXml.prepararElementosProfundidad(profundidadSondeo);
                         archivoXml.prepararElementosAdeme(ademeProperties, anchorPane);
                         archivoXml.prepararElementosTrepano(trepanoProperties, anchorPane);
-                        archivoXml.guardarArchivoXml(_file);
+                        archivoXml.guardarArchivoXml(file);
                         Utility.dialog("Guardar", "Guardar Archivo sondeo", "Se ha guardado el archivo de forma correcta.");
                     }
                 } catch (NumberFormatException ex) {
@@ -421,8 +414,8 @@ public class FormValoresController {
                     fileChooser.getExtensionFilters().add(extFilter);
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
-                    file = fileChooser.showSaveDialog(stage);
-                    if (file != null) {
+                    fileExcel = fileChooser.showSaveDialog(stage);
+                    if (fileExcel != null) {
                         prepararDatos();
                         archivoExcel.setClasificacionSucsProperties(clasificacionSucsProperties);
                         archivoExcel.setDatosCampoProperties(datosCampoProperties);
@@ -433,9 +426,9 @@ public class FormValoresController {
                         archivoExcel.setTrepanoProperties(trepanoProperties);
                         archivoExcel.setTabPane(tabContainer);
                         archivoExcel.setTabToUse(tabCliente);
-                        archivoExcel.crearArchivo(anchorPane, file, Utility.idcliente,profundidadSondeo, ademeProperties);
+                        archivoExcel.crearArchivo(anchorPane, fileExcel, Utility.idcliente, profundidadSondeo, ademeProperties);
                     }
-                    lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
+                    lastVisitedDirectory = (file != null) ? fileExcel.getParent() : System.getProperty("user.home");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     //Utility.dialog("Error", "Error al generar", "No se pudo generar el archivo de sondeo, intente nuevamente." + ex.getMessage());
