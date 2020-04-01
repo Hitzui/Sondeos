@@ -26,21 +26,23 @@
 }
 
 .root {
-    /*-fx-background-color: -fx-success;*/
-    -fx-border-color: -fx-gray-dark;
+    /*-fx-background-color: -fx-success;
+    -fx-border-color: -fx-gray-dark;*/
 }
 .button{
-    -fx-text-fill: -fx-white;
-    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-dark;
+    -fx-background-color: -fx-light;
     -fx-border-color: -fx-secondary;
-    /*-fx-border-radius: 4.0px;
+    -fx-border-radius: 4.0px;
     -fx-background-border-radius: 4.0px;
-    -fx-background-border:4px;*/
+    -fx-background-border:4px;
     -fx-font-size: 10.0pt;
 }
 .button:hover,button:focused{
     -fx-border-color: -fx-secondary;
     -fx-background-color: -fx-secondary;
+    -fx-border-radius: 4.0px;
+    -fx-background-border-radius: 4.0px;
     -fx-text-fill: -fx-white;
 }
 .button-hamburger {

@@ -55,7 +55,7 @@ public class Application extends javafx.application.Application {
             Flow flow = new Flow(MainController.class);
             FlowHandler flowHandler = flow.createHandler();
             StackPane pane = flowHandler.start(new DefaultFlowContainer());
-            //pane.getStylesheets().add("/css/application.css");
+            pane.getStylesheets().add("/css/application.css");
             Scene scene = new Scene(pane);
             primaryStage.setScene(scene);
             primaryStage.centerOnScreen();

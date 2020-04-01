@@ -2,21 +2,24 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import java.net.URL?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="formValores" prefHeight="687.0" prefWidth="926.0" stylesheets="@../css/tab.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="formValores" prefHeight="687.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane fx:id="anchorPane" prefHeight="505.0" prefWidth="689.0" style="-fx-border-color: #343a40;">
             <children>
                 <JFXTabPane fx:id="tabContainer" layoutX="3.0" layoutY="-1.0" prefHeight="685.0" prefWidth="920.0" side="LEFT" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
                     <Tab fx:id="tabValores" text="Valores de campo">
-                        <AnchorPane prefHeight="478.0" prefWidth="797.0">
+                        <AnchorPane prefHeight="478.0" prefWidth="797.0" style="-fx-background-color: -fx-secondary;">
                             <children>
-                                <TableView fx:id="tableDatos" editable="true" layoutX="28.0" layoutY="62.0" prefHeight="377.0" prefWidth="502.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="62.0">
+                                <TableView fx:id="tableDatos" editable="true" layoutX="28.0" layoutY="62.0" prefHeight="377.0" prefWidth="502.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="62.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadInicial" prefWidth="75.0" text="Pof. Ini." />
                                         <TableColumn fx:id="colProfundidadFinal" prefWidth="75.0" sortable="false" text="Prof. Fin." />
@@ -32,7 +35,7 @@
                                 <AnchorPane layoutX="-1.0" layoutY="305.0" />
                                 <JFXButton fx:id="btnEliminar" buttonType="RAISED" layoutX="409.0" layoutY="14.0" text="Eliminar" />
                                 <JFXButton fx:id="btnCargarDatos" buttonType="RAISED" layoutX="28.0" layoutY="14.0" text="Cargar Datos" />
-                                <TableView fx:id="tableTrepano" layoutX="539.0" layoutY="62.0" prefHeight="581.0" prefWidth="238.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="62.0">
+                                <TableView fx:id="tableTrepano" layoutX="539.0" layoutY="62.0" prefHeight="581.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="62.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadTrepano" prefWidth="75.0" text="Profundidad" />
                                         <TableColumn fx:id="colTrepano" prefWidth="75.0" text="Trepano" />
@@ -44,11 +47,18 @@
                                 <JFXButton fx:id="btnLimpiarDatos" buttonType="RAISED" layoutX="177.0" layoutY="14.0" text="Limpiar Datos" />
                         <JFXButton fx:id="btnInsertar" buttonType="RAISED" layoutX="317.0" layoutY="14.0" text="Insertar" />
                         <JFXButton fx:id="btnDatosSondeos" buttonType="RAISED" layoutX="507.0" layoutY="14.0" text="Datos Sondeos" />
+                                <JFXButton fx:id="btnConfig" buttonType="RAISED" layoutX="799.0" layoutY="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="12.0">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@../image/icons8-services-48.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
                             </children>
                         </AnchorPane>
                     </Tab>
                     <Tab fx:id="tabEstratigrafia" text="Estratigrafia">
-                        <AnchorPane>
+                        <AnchorPane style="-fx-background-color: -fx-secondary;">
                             <children>
                                 <TableView fx:id="tableClasificacion" editable="true" layoutX="14.0" layoutY="7.0" prefHeight="165.0" prefWidth="673.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="50.0">
                                     <columns>
@@ -79,7 +89,7 @@
                         </AnchorPane>
                     </Tab>
                     <Tab fx:id="tabCliente" text="Datos Cliente">
-                        <AnchorPane fx:id="anchorPaneCliente">
+                        <AnchorPane fx:id="anchorPaneCliente" style="-fx-background-color: -fx-secondary;">
                             <!--<fx:include source="FormCliente.fxml" />-->
                         </AnchorPane>
                     </Tab>
@@ -96,4 +106,8 @@
             </children>
         </AnchorPane>
     </children>
+   <stylesheets>
+      <URL value="@../css/tab.css" />
+      <URL value="@../css/application.css" />
+   </stylesheets>
 </StackPane>

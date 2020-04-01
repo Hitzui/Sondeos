@@ -185,9 +185,33 @@ public class FormValoresController {
     private JFXButton btnInsertar;
 
     @FXML
+    @ActionTrigger("action_btnConfig")
+    private JFXButton btnConfig;
+
+    @FXML
     @ActionTrigger("action_btnDatosSondeos")
     private JFXButton btnDatosSondeos;
     public static File file = null;
+
+    @ActionMethod("action_btnConfig")
+    public void action_btnConfig() {
+        // Load the fxml file and create a new stage for the popup dialog.
+        Flow flow = new Flow(ConfigurationController.class);
+        FlowHandler flowHandler = flow.createHandler();
+        try {
+            StackPane pane = flowHandler.start();
+            Utility utility = new Utility();
+            Stage dialogStage = utility.showDialogStage((Stage) btnConfig.getScene().getWindow(), pane, "Establecer configuracion");
+            ConfigurationController configurationController = (ConfigurationController) flowHandler.getCurrentView().getViewContext().getController();
+            configurationController.setStage(dialogStage);
+            dialogStage.showAndWait();
+            /*if (!configurationController.isCancel) {
+                imagenEmpresa.setImage(new Image(String.valueOf(new File(configurationController.getPathImagen()).toURI())));
+            }*/
+        } catch (FlowException e) {
+            e.printStackTrace();
+        }
+    }
 
     @ActionMethod("action_btnDatosSondeos")
     public void action_btnDatosSondeos() {
@@ -268,9 +292,11 @@ public class FormValoresController {
             fileChooser.getExtensionFilters().add(extFilter);
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             file = fileChooser.showOpenDialog(stage);
-            loadSxml(file);
-            ((Stage) btnCargarDatos.getScene().getWindow()).setTitle("Aplicacion de Sondeos - " + file.getName());
-            lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
+            if (file != null) {
+                loadSxml(file);
+                ((Stage) btnCargarDatos.getScene().getWindow()).setTitle("Aplicacion de Sondeos - " + file.getName());
+                lastVisitedDirectory = (file != null) ? file.getParent() : System.getProperty("user.home");
+            }
         } catch (Exception ex) {
             AlertError.showAlert(ex);
         }
