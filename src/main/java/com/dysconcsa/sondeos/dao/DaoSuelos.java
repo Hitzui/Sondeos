@@ -68,6 +68,23 @@ public class DaoSuelos {
         }
     }
 
+    public SuelosProperty findBYSimbolo(String simbolo) {
+        SuelosProperty suelosProperty = null;
+        try {
+            String sql = "select * from suelos where simbolo= ?";
+            Connection cnn = connection.getConnection();
+            PreparedStatement preparedStatement = cnn.prepareStatement(sql);
+            preparedStatement.setString(1, simbolo);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                suelosProperty = new SuelosProperty(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("simbolo"), resultSet.getString("imagen"));
+            }
+        } catch (Exception ex) {
+            _error = ex;
+        }
+        return suelosProperty;
+    }
+
     public void save(SuelosProperty suelosProperty) {
         try {
             String sql = "INSERT INTO suelos(nombre,simbolo,imagen) VALUES (?,?,?)";

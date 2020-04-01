@@ -569,8 +569,10 @@ public class FormValoresController {
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
+            System.out.println(event.getNewValue());
+            DaoSuelos daoSuelos = new DaoSuelos();
             ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
-            SuelosProperty suelos = event.getNewValue();
+            SuelosProperty suelos = daoSuelos.findBYSimbolo(String.valueOf(event.getNewValue()));
             //TablePosition<ClasificacionSucsProperty, ?> pos = tableClasificacion.getFocusModel().getFocusedCell();
             //clasificacionSucsProperties.get(pos.getRow()).setDescripcion(suelos.getNombre().toUpperCase());
             clasificacionSucsProperty.setTipoSuelo(suelos.getID());
