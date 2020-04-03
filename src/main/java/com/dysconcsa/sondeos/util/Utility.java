@@ -4,7 +4,6 @@ import com.dysconcsa.sondeos.controller.ClienteController;
 import com.dysconcsa.sondeos.dao.DaoSuelos;
 import com.dysconcsa.sondeos.model.*;
 import com.jfoenix.controls.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Parent;
@@ -23,11 +22,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.codec.DecoderException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.model.StylesTable;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -44,8 +44,8 @@ public class Utility {
     public static int idcliente;
     public static String sondeoNumero;
 
-    void setWb(XSSFWorkbook wb) {
-        this.wb = wb;
+    void setWb(Workbook wb) {
+        this.wb = (XSSFWorkbook) wb;
     }
 
     public Utility() {
@@ -60,6 +60,7 @@ public class Utility {
             }
         });
     }
+
     public void keyPressed(JFXTextField textField1, JFXTextArea textField2) {
         textField1.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
@@ -69,8 +70,8 @@ public class Utility {
     }
 
     public void keyPressed(JFXTextField textField, JFXDatePicker fecha) {
-        textField.setOnKeyPressed(e->{
-            if(e.getCode()==KeyCode.ENTER){
+        textField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
                 fecha.requestFocus();
             }
         });
@@ -254,19 +255,21 @@ public class Utility {
     }
 
     void clasificacion(XSSFSheet sheet, ObservableList<ClasificacionSucsProperty> clasificacionSucsProperties,
-            Double elevacion) {
+                       Double elevacion) throws DecoderException {
         if (clasificacionSucsProperties.size() <= 0) {
             return;
         }
+        IndexedColorMap map = wb.getStylesSource().getIndexedColors();
         double acumProf = 0.0;
         double acum_espesor = 0d;
         CellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
+        CellStyle style;
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
         int valorAnterior = 11;
         double espesor;
         for (int index = 0; index < clasificacionSucsProperties.size(); index++) {
-            Row row = sheet.getRow(valorAnterior);
+            XSSFRow row = sheet.getRow(valorAnterior);
             if (row == null) {
                 row = sheet.createRow(valorAnterior);
             }
@@ -287,9 +290,9 @@ public class Utility {
             cell.setCellValue(espesor);
             cell.setCellStyle(cellStyle);
             SuelosProperty suelo = daoSuelos.findById(dato.getTipoSuelo());
-            cell = row.createCell(5);
+            /*cell = row.createCell(5);
             cell.setCellValue(suelo.getSimbolo());
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyle);*/
             int valorActual = (int) (dato.getProfundidad() * 2) + 10;
             if (index == 0) {
                 valorAnterior = 11;
@@ -298,13 +301,17 @@ public class Utility {
             }
             int size = Math.abs(valorActual - valorAnterior);
             // ingreso de las imagenes del tipo de suelo
+            XSSFCell cellSucs = row.createCell(5);
+            style = createBackgroundColorXSSFCellStyle(wb, new XSSFColor(IndexedColors.GREEN, null), FillPatternType.ALT_BARS);
+            cellSucs.setCellStyle(style);
+            cellSucs.setCellValue(suelo.getSimbolo().toUpperCase());
             for (int i = 0; i < size; i++) {
-                insertImage(sheet.getWorkbook(), sheet, valorAnterior + i, suelo.getImagen());
+                //insertImage(sheet.getWorkbook(), sheet, valorAnterior + i, suelo.getImagen());
                 i += 2;
             }
             cell = row.createCell(6);
             cell.setCellStyle(cellStyle);
-            cell.setCellValue(dato.getDescripcion());
+            cell.setCellValue(dato.getDescripcion() + "\n(" + suelo.getSimbolo().toUpperCase() + ")");
             cellStyle.setWrapText(true);
             cell.setCellStyle(cellStyle);
             cell = row.createCell(7);
@@ -401,7 +408,7 @@ public class Utility {
         }
     }
 
-    private CellStyle customCellStyle(XSSFWorkbook wb, HorizontalAlignment horizontal, short fontSize) {
+    private CellStyle customCellStyle(Workbook wb, HorizontalAlignment horizontal, short fontSize) {
         CellStyle cellStyle = wb.createCellStyle();
         Font font = wb.createFont();
         font.setBold(true);
@@ -413,7 +420,7 @@ public class Utility {
     }
 
     private void insertImage(XSSFWorkbook wb, XSSFSheet sheet, int setRow,
-            String path) {
+                             String path) {
         try {
             CreationHelper helper = wb.getCreationHelper();
             // add a picture in this workbook.
@@ -486,7 +493,7 @@ public class Utility {
                 } else {
                     System.out.println("Val: " + val + " - Size: " + yLista.size());
                     if (val >= yLista.size()) {
-                        y.add(yLista.get(yLista.size()-1));
+                        y.add(yLista.get(yLista.size() - 1));
                     } else {
                         y.add(yLista.get(val));
                     }
@@ -541,5 +548,23 @@ public class Utility {
         return listaConstante;
     }
 
-
+    /**
+     * @param wb
+     * @param color
+     * @param foreGround
+     * @return
+     */
+    public static XSSFCellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, XSSFColor color, FillPatternType foreGround) {
+        String message = "XSSFWorkbook must not be null!";
+        Objects.requireNonNull(wb, () -> message);
+        XSSFCellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setWrapText(true);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setFillPattern(foreGround);
+        color.setAuto(true);
+        color.setIndexed(80);
+        cellStyle.setFillForegroundColor(color);
+        return cellStyle;
+    }
 }

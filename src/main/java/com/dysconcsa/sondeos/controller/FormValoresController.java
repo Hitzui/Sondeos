@@ -14,6 +14,8 @@ import io.datafx.controller.flow.action.ActionMethod;
 import io.datafx.controller.flow.action.ActionTrigger;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -28,6 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -35,6 +38,8 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -52,6 +57,7 @@ public class FormValoresController {
     private static int lastSelectedTabIndex = 0;
     private final ObservableList<TrepanoProperty> trepanoProperties = FXCollections.observableArrayList();
     private final ObservableList<SuelosProperty> suelosProperties = FXCollections.observableArrayList();
+    private final ObservableList<Item> itemsColorPoperties = FXCollections.observableArrayList();
     private final ObservableList<DatosCampoProperty> datosCampoProperties = FXCollections.observableArrayList();
     private final ObservableList<ClasificacionSucsProperty> clasificacionSucsProperties = FXCollections.observableArrayList();
     private final ObservableList<HumedadProperty> humedadProperties = FXCollections.observableArrayList();
@@ -125,6 +131,8 @@ public class FormValoresController {
 
     @FXML
     private TableColumn<ClasificacionSucsProperty, String> colDescipcion;
+    @FXML
+    private TableColumn<ClasificacionSucsProperty, Item> colColor;
 
     @FXML
     private TableView<HumedadProperty> tableHumedad;
@@ -306,6 +314,7 @@ public class FormValoresController {
     public void initialize() {
         try {
             loadSxml(file);
+            loadColors();
             listSuelosProperties();
             if (trepanoProperties.size() <= 0) {
                 trepanoProperties.add(new TrepanoProperty(0.0, ""));
@@ -437,7 +446,7 @@ public class FormValoresController {
                     fileChooser.setTitle("Generar Gráfico");
                     fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
                     FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
-                    fileChooser.getExtensionFilters().add(extFilter);
+                    fileChooser.getExtensionFilters().addAll(extFilter, new FileChooser.ExtensionFilter("Excel files 2007 (*.xls)", "*.xls"));
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
                     fileExcel = fileChooser.showSaveDialog(stage);
@@ -604,6 +613,39 @@ public class FormValoresController {
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setDescripcion(value.toUpperCase());
             event.consume();
         });
+        colColor.setCellFactory(param -> {
+            ComboBoxTableCell<ClasificacionSucsProperty, Item> comboBoxTableCell = new ComboBoxTableCell<>();
+            comboBoxTableCell.getItems().addAll(itemsColorPoperties);
+            comboBoxTableCell.updateSelected(true);
+            ComboBox comboBox = comboBoxTableCell.getComboBox();
+            comboBoxTableCell.getComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
+                XSSFColor color = new XSSFColor(IndexedColors.valueOf(newValue.getValue()), null);
+                byte r = (byte) (color.getRGB()[0] * 255);
+                byte g = (byte) (color.getRGB()[1] * 255);
+                byte b = (byte) (color.getRGB()[2] * 255);
+                if (r <= 0) r *= -1;
+                if (b <= 0) b *= -1;
+                if (g <= 0) g *= -1;
+                String colorHex = r + "," + g + "," + b;
+                System.out.println(colorHex);
+                comboBoxTableCell.setStyle(" -fx-background-color: rgb(" + colorHex + ")");
+            });
+            return comboBoxTableCell;
+        });
+        colColor.setCellValueFactory(value -> {
+            Item item;
+            try {
+                XSSFColor color = new XSSFColor(value.getValue().getColor(), null);
+                String colorHex = color.getARGBHex();
+                item = new Item(value.getValue().getColor().name(), Color.valueOf("#" + colorHex));
+            } catch (Exception ex) {
+                XSSFColor color = new XSSFColor(IndexedColors.GREEN, null);
+                String colorHex = color.getARGBHex();
+                item = new Item(IndexedColors.GREEN.name(), Color.valueOf("#" + colorHex));
+            }
+            return new SimpleObjectProperty<>(item);
+        });
+        colColor.setOnEditCommit(event -> System.out.println(event.getNewValue().getValue()));
         setTableEditableClasificacionSucs();
     }
 
@@ -938,4 +980,19 @@ public class FormValoresController {
             return false;
         }
     }
+
+    private void loadColors() {
+        for (IndexedColors val : IndexedColors.values()) {
+            System.out.println(val.index + " - " + val.name());
+            XSSFColor color = new XSSFColor(val, null);
+            String colorHex = color.getARGBHex();
+            try {
+                System.out.println("#" + colorHex);
+                itemsColorPoperties.add(new Item(val.name(), Color.web("#" + colorHex)));
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+
 }

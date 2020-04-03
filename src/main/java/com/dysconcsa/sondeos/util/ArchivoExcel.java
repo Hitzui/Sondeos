@@ -94,7 +94,7 @@ public class ArchivoExcel {
             } else {
                 pathImage = configurationProperty.getImagen();
             }
-            XSSFSheet sheet = wb.createSheet();
+            XSSFSheet sheet = (XSSFSheet) wb.createSheet();
             XSSFPrintSetup ps = sheet.getPrintSetup();
             ps.setLandscape(true);
             sheet.setAutobreaks(true);
@@ -180,7 +180,9 @@ public class ArchivoExcel {
             sheet.setMargin(Sheet.BottomMargin, 0.5);
             // aca repetimos el encabezado por cada hoja a imprimir
             sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, 25));
-            try (OutputStream fileOut = new FileOutputStream(file)) {
+            try {
+                FileOutputStream fileOut;
+                fileOut = new FileOutputStream(file);
                 wb.write(fileOut);
                 wb.close();
                 JFXButton btnAceptar = new JFXButton("Aceptar");
@@ -198,6 +200,8 @@ public class ArchivoExcel {
                     }
                 });
                 dialog.show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -205,7 +209,7 @@ public class ArchivoExcel {
         }
     }
 
-    private void data(XSSFSheet sheet, EmpresaProperty empresaProperty, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, XSSFWorkbook wb,
+    private void data(XSSFSheet sheet, EmpresaProperty empresaProperty, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, Workbook wb,
                       Font fontBold) {
         cellStyle.setWrapText(true);
         CellStyle cellStyleDatos = wb.createCellStyle();
@@ -290,7 +294,7 @@ public class ArchivoExcel {
         cell.setCellValue("Clasificacion \nS.U.C.S");
         borderCellRotate(cell, wb, fontBold);
         cell = rowVacia.createCell(6);
-        cell.setCellValue("Descipcion Geologica y Clasificacion Del Material Encontrado");
+        cell.setCellValue("Descripcion Geologica y Clasificacion Del Material Encontrado");
         cell.setCellStyle(cellStyle);
         sheet.addMergedRegion(new CellRangeAddress(cell.getRowIndex(), cell.getRowIndex() + 4, cell.getColumnIndex(),
                 cell.getColumnIndex()));
@@ -300,10 +304,10 @@ public class ArchivoExcel {
         cell.setCellValue("Limite \nLiquido");
         borderCellRotate(cell, wb, fontBold);
         cell = rowVacia.createCell(8);
-        cell.setCellValue("Indice \nPlasticidad");
+        cell.setCellValue("Indice de \nPlasticidad");
         borderCellRotate(cell, wb, fontBold);
         cell = rowVacia.createCell(9);
-        cell.setCellValue("Indice \nHumedad");
+        cell.setCellValue("Humedad \nnatural");
         borderCellRotate(cell, wb, fontBold);
         // *************** DATOS ********************************************/
         CellStyle _cellStyle = wb.createCellStyle();
@@ -386,10 +390,10 @@ public class ArchivoExcel {
         }
     }
 
-    private void valoresGrafico(ObservableList<DatosCampoProperty> datosCampoProperties, XSSFWorkbook wb) {
+    private void valoresGrafico(ObservableList<DatosCampoProperty> datosCampoProperties, Workbook wb) {
         try {
             Utility utility = new Utility();
-            XSSFSheet sheet = wb.createSheet("Datos");
+            XSSFSheet sheet = (XSSFSheet) wb.createSheet("Datos");
             List<Integer> xValues = utility.xValues(datosCampoProperties);
             List<Double> yValues = utility.yValues(datosCampoProperties);
             for (int i = 0; i < xValues.size(); i++) {
@@ -433,7 +437,7 @@ public class ArchivoExcel {
             cell.setCellValue(0d);
             cell = row.createCell(1);
             cell.setCellValue(yValues.get(yValues.size() - 1));
-            chart(wb.getSheetAt(0), sheet, datosCampoProperties, utility);
+            chart((XSSFSheet) wb.getSheetAt(0), sheet, datosCampoProperties, utility);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -492,7 +496,10 @@ public class ArchivoExcel {
         // bottomAxis.setTitle("N = Golpes / Pie"); //
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);
-        // bottomAxis.getOrAddMajorGridProperties();
+        bottomAxis.setMajorUnit(10);
+        bottomAxis.setMaximum(100.0);
+        bottomAxis.setMinorUnit(0.0);
+        //bottomAxis.getOrAddMajorGridProperties();
         bottomAxis.setVisible(true);
         XDDFValueAxis leftAxis = chart.createValueAxis(AxisPosition.LEFT);
         // leftAxis.setTitle("f(x)");
@@ -542,7 +549,7 @@ public class ArchivoExcel {
         });
     }
 
-    private void insertImage(XSSFWorkbook wb, XSSFSheet sheet, int setCol, int setRow, boolean row2, int scaleX,
+    private void insertImage(Workbook wb, XSSFSheet sheet, int setCol, int setRow, boolean row2, int scaleX,
                              int scaleY, String path) {
         try {
             CreationHelper helper = wb.getCreationHelper();
@@ -574,7 +581,7 @@ public class ArchivoExcel {
         XDDFFillProperties fillProperties = new XDDFSolidFillProperties(XDDFColor.from(PresetColor.RED));
         XDDFLineProperties line = new XDDFLineProperties();
         line.setFillProperties(fill);
-        line.setWidth(Units.pixelToEMU(3));
+        line.setWidth(Units.pixelToEMU(4));
         XDDFChartData.Series series = data.getSeries().get(index);
         XDDFShapeProperties properties = series.getShapeProperties();
         if (properties == null) {

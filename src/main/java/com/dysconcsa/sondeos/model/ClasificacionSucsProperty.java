@@ -1,6 +1,8 @@
 package com.dysconcsa.sondeos.model;
 
 import javafx.beans.property.*;
+import javafx.scene.paint.Color;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 public class ClasificacionSucsProperty {
 
@@ -9,8 +11,9 @@ public class ClasificacionSucsProperty {
     private IntegerProperty indicePlasticidad;
     private IntegerProperty tipoSuelo;
     private StringProperty descripcion;
+    private IndexedColors color;
 
-    public ClasificacionSucsProperty(Double profundidad, Integer limiteLiquido, Integer indicePlasticidad, Integer tipoSuelo,String descripcion) {
+    public ClasificacionSucsProperty(Double profundidad, Integer limiteLiquido, Integer indicePlasticidad, Integer tipoSuelo, String descripcion) {
         this.profundidad = new SimpleDoubleProperty(profundidad);
         this.limiteLiquido = new SimpleIntegerProperty(limiteLiquido);
         this.indicePlasticidad = new SimpleIntegerProperty(indicePlasticidad);
@@ -76,5 +79,13 @@ public class ClasificacionSucsProperty {
 
     public void setTipoSuelo(int tipoSuelo) {
         this.tipoSuelo.set(tipoSuelo);
+    }
+
+    public IndexedColors getColor() {
+        return color;
+    }
+
+    public void setColor(IndexedColors color) {
+        this.color = color;
     }
 }
