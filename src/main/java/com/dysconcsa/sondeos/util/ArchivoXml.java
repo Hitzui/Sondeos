@@ -1,9 +1,16 @@
 package com.dysconcsa.sondeos.util;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import com.dysconcsa.sondeos.model.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.layout.AnchorPane;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,19 +20,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import com.dysconcsa.sondeos.model.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.layout.AnchorPane;
+import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArchivoXml {
 
@@ -167,6 +165,9 @@ public class ArchivoXml {
                 Element descripcion = document.createElement("descripcion");
                 descripcion.appendChild(document.createTextNode(datos.getDescripcion().toUpperCase()));
                 valores.appendChild(descripcion);
+                Element color = document.createElement("colorSucs");
+                color.appendChild(document.createTextNode(datos.getColor().name()));
+                valores.appendChild(color);
                 linea += 1;
             }
         } catch (Exception ex) {
@@ -311,7 +312,13 @@ public class ArchivoXml {
                 Integer indicePlasticidad = Integer.parseInt(element.getElementsByTagName("indicePlasticidad").item(j).getTextContent());
                 Integer tipoSuelo = Integer.parseInt(element.getElementsByTagName("tipoSuelo").item(j).getTextContent());
                 String descripcion = element.getElementsByTagName("descripcion").item(j).getTextContent();
-                datos.add(new ClasificacionSucsProperty(profundidad, limiteLiquido, indicePlasticidad, tipoSuelo, descripcion));
+                String color;
+                try {
+                    color = element.getElementsByTagName("colorSucs").item(j).getTextContent();
+                } catch (Exception ex) {
+                    color = IndexedColors.WHITE.name();
+                }
+                datos.add(new ClasificacionSucsProperty(profundidad, limiteLiquido, indicePlasticidad, tipoSuelo, descripcion, IndexedColors.valueOf(color)));
             }
             return datos;
         } catch (Exception ex) {

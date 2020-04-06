@@ -57,7 +57,7 @@ public class FormValoresController {
     private static int lastSelectedTabIndex = 0;
     private final ObservableList<TrepanoProperty> trepanoProperties = FXCollections.observableArrayList();
     private final ObservableList<SuelosProperty> suelosProperties = FXCollections.observableArrayList();
-    private final ObservableList<Item> itemsColorPoperties = FXCollections.observableArrayList();
+    private final ObservableList<IndexedColors> itemsColorPoperties = FXCollections.observableArrayList();
     private final ObservableList<DatosCampoProperty> datosCampoProperties = FXCollections.observableArrayList();
     private final ObservableList<ClasificacionSucsProperty> clasificacionSucsProperties = FXCollections.observableArrayList();
     private final ObservableList<HumedadProperty> humedadProperties = FXCollections.observableArrayList();
@@ -132,7 +132,7 @@ public class FormValoresController {
     @FXML
     private TableColumn<ClasificacionSucsProperty, String> colDescipcion;
     @FXML
-    private TableColumn<ClasificacionSucsProperty, Item> colColor;
+    private TableColumn<ClasificacionSucsProperty, IndexedColors> colColor;
 
     @FXML
     private TableView<HumedadProperty> tableHumedad;
@@ -269,9 +269,9 @@ public class FormValoresController {
             datosCampoProperties.add(new DatosCampoProperty());
             clasificacionSucsProperties.clear();
             if (suelosProperties.size() <= 0) {
-                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, ""));
+                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE));
             } else {
-                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre()));
+                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
             }
             humedadProperties.clear();
             humedadProperties.add(new HumedadProperty());
@@ -324,9 +324,9 @@ public class FormValoresController {
             }
             if (clasificacionSucsProperties.size() <= 0) {
                 if (suelosProperties.size() <= 0) {
-                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, ""));
+                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE));
                 } else {
-                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre()));
+                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
                 }
             }
             if (humedadProperties.size() <= 0) {
@@ -560,7 +560,6 @@ public class FormValoresController {
         colProfundidadSucs.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colProfundidadSucs.setOnEditCommit(event -> {
             final Double value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-            System.out.println("Old value: " + event.getOldValue() + " - New value: " + event.getNewValue());
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setProfundidad(value);
             tableClasificacion.getSelectionModel().select(event.getTablePosition().getRow(), colLimiteLiquido);
             event.consume();
@@ -593,7 +592,6 @@ public class FormValoresController {
         colTipoSuelo.setCellValueFactory(value -> {
             DaoSuelos daoSuelos = new DaoSuelos();
             SuelosProperty suelosProperty = daoSuelos.findById(value.getValue().getTipoSuelo());
-            System.out.println(value.getValue().getDescripcion());
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
@@ -613,39 +611,8 @@ public class FormValoresController {
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setDescripcion(value.toUpperCase());
             event.consume();
         });
-        colColor.setCellFactory(param -> {
-            ComboBoxTableCell<ClasificacionSucsProperty, Item> comboBoxTableCell = new ComboBoxTableCell<>();
-            comboBoxTableCell.getItems().addAll(itemsColorPoperties);
-            comboBoxTableCell.updateSelected(true);
-            ComboBox comboBox = comboBoxTableCell.getComboBox();
-            comboBoxTableCell.getComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
-                XSSFColor color = new XSSFColor(IndexedColors.valueOf(newValue.getValue()), null);
-                byte r = (byte) (color.getRGB()[0] * 255);
-                byte g = (byte) (color.getRGB()[1] * 255);
-                byte b = (byte) (color.getRGB()[2] * 255);
-                if (r <= 0) r *= -1;
-                if (b <= 0) b *= -1;
-                if (g <= 0) g *= -1;
-                String colorHex = r + "," + g + "," + b;
-                System.out.println(colorHex);
-                comboBoxTableCell.setStyle(" -fx-background-color: rgb(" + colorHex + ")");
-            });
-            return comboBoxTableCell;
-        });
-        colColor.setCellValueFactory(value -> {
-            Item item;
-            try {
-                XSSFColor color = new XSSFColor(value.getValue().getColor(), null);
-                String colorHex = color.getARGBHex();
-                item = new Item(value.getValue().getColor().name(), Color.valueOf("#" + colorHex));
-            } catch (Exception ex) {
-                XSSFColor color = new XSSFColor(IndexedColors.GREEN, null);
-                String colorHex = color.getARGBHex();
-                item = new Item(IndexedColors.GREEN.name(), Color.valueOf("#" + colorHex));
-            }
-            return new SimpleObjectProperty<>(item);
-        });
-        colColor.setOnEditCommit(event -> System.out.println(event.getNewValue().getValue()));
+        colColor.setCellFactory(param -> comboBoxColors());
+        colColor.setCellValueFactory(value -> value.getValue().colorProperty());
         setTableEditableClasificacionSucs();
     }
 
@@ -853,7 +820,7 @@ public class FormValoresController {
                 if (pos.getColumn() == 4) {
                     if (pos.getRow() == (tableClasificacion.getItems().size() - 1)) {
                         clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0,
-                                suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre()));
+                                suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
                         tableClasificacion.getSelectionModel().select(pos.getRow() + 1, colProfundidadSucs);
                         event.consume();
                     } else {
@@ -982,17 +949,26 @@ public class FormValoresController {
     }
 
     private void loadColors() {
-        for (IndexedColors val : IndexedColors.values()) {
-            System.out.println(val.index + " - " + val.name());
-            XSSFColor color = new XSSFColor(val, null);
-            String colorHex = color.getARGBHex();
+        for (IndexedColors colors : IndexedColors.values()) {
             try {
-                System.out.println("#" + colorHex);
-                itemsColorPoperties.add(new Item(val.name(), Color.web("#" + colorHex)));
-            } catch (Exception ex) {
-
+                XSSFColor color = new XSSFColor(colors, null);
+                if (!color.getARGBHex().equals("null")) {
+                    itemsColorPoperties.add(colors);
+                }
+            } catch (Exception ignored) {
             }
         }
-    }
 
+    }
+    private ComboBoxTableCell comboBoxColors(){
+        ComboBoxTableCell<ClasificacionSucsProperty, IndexedColors> comboBoxTableCell = new ComboBoxTableCell<>();
+        comboBoxTableCell.getItems().addAll(itemsColorPoperties);
+        comboBoxTableCell.updateSelected(true);
+        comboBoxTableCell.getComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
+            XSSFColor color = new XSSFColor(newValue, null);
+            comboBoxTableCell.setStyle(" -fx-background-color: #" + color.getARGBHex().substring(2));
+        });
+        comboBoxTableCell.updateSelected(true);
+        return comboBoxTableCell;
+    }
 }

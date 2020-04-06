@@ -26,8 +26,10 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -259,13 +261,15 @@ public class Utility {
         if (clasificacionSucsProperties.size() <= 0) {
             return;
         }
-        IndexedColorMap map = wb.getStylesSource().getIndexedColors();
         double acumProf = 0.0;
         double acum_espesor = 0d;
         CellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
         CellStyle style;
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
+        for (FillPatternType value : FillPatternType.values()) {
+            System.out.println("Fill pattern type: "+value.name());
+        }
         int valorAnterior = 11;
         double espesor;
         for (int index = 0; index < clasificacionSucsProperties.size(); index++) {
@@ -302,7 +306,7 @@ public class Utility {
             int size = Math.abs(valorActual - valorAnterior);
             // ingreso de las imagenes del tipo de suelo
             XSSFCell cellSucs = row.createCell(5);
-            style = createBackgroundColorXSSFCellStyle(wb, new XSSFColor(IndexedColors.GREEN, null), FillPatternType.ALT_BARS);
+            style = createBackgroundColorXSSFCellStyle(wb, dato.getColor(), FillPatternType.ALT_BARS);
             cellSucs.setCellStyle(style);
             cellSucs.setCellValue(suelo.getSimbolo().toUpperCase());
             for (int i = 0; i < size; i++) {
@@ -554,17 +558,14 @@ public class Utility {
      * @param foreGround
      * @return
      */
-    public static XSSFCellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, XSSFColor color, FillPatternType foreGround) {
-        String message = "XSSFWorkbook must not be null!";
-        Objects.requireNonNull(wb, () -> message);
-        XSSFCellStyle cellStyle = wb.createCellStyle();
+    public static CellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, IndexedColors color, FillPatternType foreGround) {
+        CellStyle cellStyle = wb.createCellStyle();
         cellStyle.setWrapText(true);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setFillPattern(foreGround);
-        color.setAuto(true);
-        color.setIndexed(80);
-        cellStyle.setFillForegroundColor(color);
+        System.out.println("Color: " + color.name());
+        cellStyle.setFillForegroundColor(color.index);
         return cellStyle;
     }
 }
