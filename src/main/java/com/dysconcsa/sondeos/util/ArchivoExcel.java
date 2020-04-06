@@ -20,9 +20,10 @@ import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
 import org.apache.poi.xddf.usermodel.chart.*;
+import org.apache.poi.xddf.usermodel.text.XDDFTextBody;
 import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
+import org.openxmlformats.schemas.drawingml.x2006.chart.*;
+import org.openxmlformats.schemas.drawingml.x2006.main.*;
 
 import java.awt.*;
 import java.io.*;
@@ -105,7 +106,7 @@ public class ArchivoExcel {
             insertImage(wb, sheet, 0, 0, false, 5, 4, pathImage);
             // datos del cliente
             Font fontBold = wb.createFont();
-            fontBold.setFontHeightInPoints((short) 12);
+            fontBold.setFontHeightInPoints((short) 14);
             fontBold.setBold(true);
             CellStyle cellStyleRight = wb.createCellStyle();
             CellStyle cellStyleLeft = wb.createCellStyle();
@@ -328,7 +329,7 @@ public class ArchivoExcel {
         _cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         Font font = wb.createFont();
         font.setBold(true);
-        font.setFontHeightInPoints((short) 9);
+        font.setFontHeightInPoints((short) 11);
         _cellStyle.setFont(font);
         Row rowDatos = sheet.createRow(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
@@ -350,10 +351,11 @@ public class ArchivoExcel {
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(12);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 12, 12));
-        cell.setCellValue("Golpes/Pie");
+        cell.setCellValue("Golpes\n/Pie");
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(13);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
+        _cellStyle.setShrinkToFit(true);
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, 25));
@@ -468,7 +470,7 @@ public class ArchivoExcel {
         CellStyle cellStyleDatos = wb.createCellStyle();
         cellStyleDatos.setWrapText(true);
         cellStyleDatos.setRotation((short) 90);
-        fontBold.setFontHeightInPoints((short) 13);
+        fontBold.setFontHeightInPoints((short) 14);
         borderCell(cell, cellStyleDatos, fontBold);
         Sheet sheet = cell.getSheet();
         int rowIndex = cell.getRowIndex();
@@ -488,6 +490,24 @@ public class ArchivoExcel {
         cell.setCellStyle(cellStyleDatos);
     }
 
+
+    public void setAxisTitle(XSSFChart chart, int axisIdx, String title) {
+        CTTextCharacterProperties ctTextCharacterProperties;
+        CTChart ctChart = chart.getCTChart();
+        CTTitle ctTitle = ctChart.addNewTitle();
+        ctTitle.addNewOverlay().setVal(false);
+        CTTx tx = ctTitle.addNewTx();
+        CTTextBody rich = tx.addNewRich();
+        rich.addNewBodyPr();  // body properties must exist, but can be empty
+        CTTextParagraph para = rich.addNewP();
+        CTRegularTextRun r = para.addNewR();
+        ctTextCharacterProperties = ctChart.getTitle().getTx().getRich().addNewP().addNewPPr().addNewDefRPr();
+        ctTextCharacterProperties.setSz(1500);
+        ctTextCharacterProperties.setB(true);
+        r.setRPr(ctTextCharacterProperties);
+        r.setT(title);
+    }
+
     private void chart(XSSFSheet sheet, XSSFSheet sheet2, ObservableList<DatosCampoProperty> datosCampoProperties,
                        Utility utility) {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
@@ -497,6 +517,8 @@ public class ArchivoExcel {
         Map<Integer, List<Integer>> mapRotadoX = utility.mapRotadosX;
         int aux = 0;
         XSSFChart chart = drawing.createChart(anchor);
+        //chart.setTitleText("N = Golpes / Pie");
+
         chart.getCTChartSpace().addNewRoundedCorners();
         chart.getCTChartSpace().getRoundedCorners().setVal(false);
         chart.getCTChartSpace().addNewSpPr();
@@ -514,7 +536,8 @@ public class ArchivoExcel {
         }
         ctPlotArea.getSpPr().addNewNoFill();
         XDDFValueAxis bottomAxis = chart.createValueAxis(AxisPosition.BOTTOM);
-        bottomAxis.setTitle("N = Golpes / Pie");
+        //bottomAxis.setTitle("N = Golpes / Pie");
+        setAxisTitle(chart, ((int) bottomAxis.getId()), "N = Golpes / Pie");
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);
         bottomAxis.setMajorUnit(10);
