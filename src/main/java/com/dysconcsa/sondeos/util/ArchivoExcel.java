@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.PropertyTemplate;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
@@ -94,7 +95,7 @@ public class ArchivoExcel {
             } else {
                 pathImage = configurationProperty.getImagen();
             }
-            XSSFSheet sheet = (XSSFSheet) wb.createSheet();
+            XSSFSheet sheet = wb.createSheet();
             XSSFPrintSetup ps = sheet.getPrintSetup();
             ps.setLandscape(true);
             sheet.setAutobreaks(true);
@@ -110,6 +111,7 @@ public class ArchivoExcel {
             CellStyle cellStyleLeft = wb.createCellStyle();
             cellStyleLeft.setFont(fontBold);
             cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
+            cellStyleLeft.setWrapText(true);
             CellStyle cellStyle = wb.createCellStyle();
             cellStyle.setFont(fontBold);
             cellStyleRight.setFont(fontBold);
@@ -131,7 +133,7 @@ public class ArchivoExcel {
             cell = row.createCell(7);
             cell.setCellStyle(cellStyleLeft);
             cell.setCellValue(empresaProperty.getProyecto());
-            sheet.addMergedRegion(new CellRangeAddress(1, 1, 7, 25));
+            sheet.addMergedRegion(new CellRangeAddress(1, 2, 7, 21));
             // sondeo numero
             row = sheet.createRow(2);
             cell = row.createCell(22);
@@ -157,10 +159,20 @@ public class ArchivoExcel {
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
             pt.drawBorders(new CellRangeAddress(5, 9, 10, 25), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //Recobro
+            pt.drawBorders(new CellRangeAddress(10, 11, 10, 10), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //Golpes
+            pt.drawBorders(new CellRangeAddress(10, 11, 11, 11), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //Golpes pie
+            pt.drawBorders(new CellRangeAddress(10, 11, 12, 12), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //profundidad
+            pt.drawBorders(new CellRangeAddress(10, 11, 13, 13), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //grafico
+            pt.drawBorders(new CellRangeAddress(10, 11, 14, 25), BorderStyle.THIN, BorderExtent.OUTSIDE);
+
             pt.drawBorders(new CellRangeAddress(5, 9, 0, 9), BorderStyle.THIN, BorderExtent.ALL);
             int size = datosCampoProperties.size() * 3;
-            pt.drawBorders(new CellRangeAddress(11, size + 10, 0, 25), BorderStyle.THIN,
-                    BorderExtent.ALL);
+            pt.drawBorders(new CellRangeAddress(12, size + 11, 0, 25), BorderStyle.THIN, BorderExtent.ALL);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -173,7 +185,7 @@ public class ArchivoExcel {
             Footer footer = sheet.getFooter();
             String footerText = "\"Clave: AW - Nw EX, AX, BX, nx - Diametro Standard. T = Tungsteno, D = Diamante, Do = Doble, CP = Cola de Pescado, CN = Cuchara Normal, PD = Tubo de Pared Delgada.\"";
             footer.setLeft(HeaderFooter.startBold() + HeaderFooter.fontSize((short) 14) + footerText.toUpperCase());
-            footer.setRight(org.apache.poi.hssf.usermodel.HeaderFooter.page().toUpperCase() + " De " + org.apache.poi.hssf.usermodel.HeaderFooter.numPages().toUpperCase());
+            footer.setRight(HeaderFooter.fontSize((short) 14) + HeaderFooter.page().toUpperCase() + " De " + HeaderFooter.numPages().toUpperCase());
             sheet.setMargin(Sheet.LeftMargin, 0.25);
             sheet.setMargin(Sheet.RightMargin, 0.25);
             sheet.setMargin(Sheet.TopMargin, 0.25);
@@ -319,23 +331,32 @@ public class ArchivoExcel {
         font.setFontHeightInPoints((short) 9);
         _cellStyle.setFont(font);
         Row rowDatos = sheet.createRow(10);
-        sheet.addMergedRegion(new CellRangeAddress(10, 10, 0, 9));
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
+        RegionUtil.setBorderBottom(BorderStyle.MEDIUM, new CellRangeAddress(10, 11, 0, 9), sheet);
         cell = rowDatos.createCell(0);
         cell.setCellValue("Elevacion en metros: " + profundidadSondeos.get(0).getElevacion());
         cell.setCellStyle(cellStyleLeft);
         rowDatos.setHeight((short) 500);
+        Row xRow = sheet.getRow(11);
+        if (xRow == null) xRow = sheet.createRow(11);
+        xRow.setHeight((short) 500);
         cell = rowDatos.createCell(10);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(11);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 11, 11));
         cell.setCellValue("Golpes");
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(12);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 12, 12));
         cell.setCellValue("Golpes/Pie");
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(13);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, 25));
         try {
             int _initRow;
             int size = datosCampoProperties.size() * 3;
@@ -347,11 +368,11 @@ public class ArchivoExcel {
             utility.datosTrepano(sheet, trepanoProperties, size);
             valoresGrafico(datosCampoProperties, wb);
             // Ingreso del ademe
-            _initRow = 11;
+            _initRow = 12;
             double _auxAdeme = 0d;
             for (AdemeProperty ademeProperty : this.ademeProperties) {
                 if (ademeProperty.getProfundidad() == 0d) {
-                    sheet.addMergedRegion(new CellRangeAddress(11, size + 10, 3, 3));
+                    sheet.addMergedRegion(new CellRangeAddress(12, size + 11, 3, 3));
                     _auxAdeme = size;
                     break;
                 } else {
@@ -371,7 +392,7 @@ public class ArchivoExcel {
                     double merged = (ademeProperty.getProfundidad() * 2);
                     int mergedAdeme = (int) Math.abs(_auxAdeme - merged) - 1;
                     if (merged > size) {
-                        sheet.addMergedRegion(new CellRangeAddress(_initRow, size + 10, 3, 3));
+                        sheet.addMergedRegion(new CellRangeAddress(_initRow, size + 11, 3, 3));
                     } else {
                         sheet.addMergedRegion(new CellRangeAddress(_initRow, mergedAdeme + _initRow, 3, 3));
                     }
@@ -470,7 +491,7 @@ public class ArchivoExcel {
     private void chart(XSSFSheet sheet, XSSFSheet sheet2, ObservableList<DatosCampoProperty> datosCampoProperties,
                        Utility utility) {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
-        int num_rows = (datosCampoProperties.size() * 3) + 12;
+        int num_rows = (datosCampoProperties.size() * 3) + 13;
         List<Double> yList = utility.yValues(datosCampoProperties);
         XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 14, 10, 26, num_rows);
         Map<Integer, List<Integer>> mapRotadoX = utility.mapRotadosX;
@@ -493,7 +514,7 @@ public class ArchivoExcel {
         }
         ctPlotArea.getSpPr().addNewNoFill();
         XDDFValueAxis bottomAxis = chart.createValueAxis(AxisPosition.BOTTOM);
-        // bottomAxis.setTitle("N = Golpes / Pie"); //
+        bottomAxis.setTitle("N = Golpes / Pie");
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);
         bottomAxis.setMajorUnit(10);
@@ -600,7 +621,7 @@ public class ArchivoExcel {
             row.setHeightInPoints(25);
         }
         int size = datosCampoProperties.size() * 3;
-        for (int i = 11; i < size + 11; i++) {
+        for (int i = 12; i < size + 12; i++) {
             Row row = sheet.getRow(i);
             if (row == null)
                 row = sheet.createRow(i);

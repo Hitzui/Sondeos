@@ -30,7 +30,6 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.presentationml.x2006.main.CTBackground;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -46,6 +45,7 @@ public class Utility {
     Map<Integer, List<Double>> mapRotadosY;
     public static int idcliente;
     public static String sondeoNumero;
+    int initRow = 12;
 
     void setWb(Workbook wb) {
         this.wb = (XSSFWorkbook) wb;
@@ -167,7 +167,6 @@ public class Utility {
         CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 12);
         CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 12);
         CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 18);
-        int initRow = 11;
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
             if (row == null) {
@@ -238,7 +237,7 @@ public class Utility {
             initRow += 1;
         }
         // establecer datos de la celda profundidad
-        initRow = 11;
+        initRow = 12;
         int count = 1;
         int size = datosCampoProperties.size() * 3;
         for (int j = 1; j <= size; j++) {
@@ -248,31 +247,33 @@ public class Utility {
             }
             Cell cell = row.createCell(13);
             if (j % 2 == 0) {
-                cell.setCellValue(count);
+                cell.setCellValue(count + "\'");
                 count++;
             }
 
             cell.setCellStyle(cellStyleCenter);
             initRow += 1;
         }
+        initRow = 12;
     }
 
     void clasificacion(XSSFSheet sheet, ObservableList<ClasificacionSucsProperty> clasificacionSucsProperties,
-                       Double elevacion) throws DecoderException {
+                       Double elevacion) {
         if (clasificacionSucsProperties.size() <= 0) {
             return;
         }
+        DataFormat format = wb.createDataFormat();
         double acumProf = 0.0;
         double acum_espesor = 0d;
+        CellStyle cellStyleBottom = customCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM, (short) 12);
         CellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
         CellStyle style;
+        cellStyleBottom.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
-        for (FillPatternType value : FillPatternType.values()) {
-            System.out.println("Fill pattern type: " + value.name());
-        }
-        int valorAnterior = 11;
+        int valorAnterior = initRow;
         double espesor;
+        CellStyle styleFormat = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
         for (int index = 0; index < clasificacionSucsProperties.size(); index++) {
             XSSFRow row = sheet.getRow(valorAnterior);
             if (row == null) {
@@ -285,11 +286,11 @@ public class Utility {
             // cota
             Cell cell = row.createCell(0);
             cell.setCellValue(elevacion);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleBottom);
             // profundidad
             cell = row.createCell(1);
             cell.setCellValue(acum_espesor);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleBottom);
             // estrato
             cell = row.createCell(2);
             cell.setCellValue(espesor);
@@ -298,16 +299,16 @@ public class Utility {
             /*cell = row.createCell(5);
             cell.setCellValue(suelo.getSimbolo());
             cell.setCellStyle(cellStyle);*/
-            int valorActual = (int) (dato.getProfundidad() * 2) + 10;
+            int valorActual = (int) (dato.getProfundidad() * 2) + 11;
             if (index == 0) {
-                valorAnterior = 11;
+                valorAnterior = 12;
             } else {
-                valorAnterior = (int) (clasificacionSucsProperties.get(index - 1).getProfundidad() * 2) + +11;
+                valorAnterior = (int) (clasificacionSucsProperties.get(index - 1).getProfundidad() * 2) + 12;
             }
             int size = Math.abs(valorActual - valorAnterior);
             // ingreso de las imagenes del tipo de suelo
             XSSFCell cellSucs = row.createCell(5);
-            style = createBackgroundColorXSSFCellStyle(wb, dato.getColor(), FillPatternType.LEAST_DOTS);
+            style = createBackgroundColorXSSFCellStyle(wb, dato.getColor(), dato.getPattern());
             cellSucs.setCellStyle(style);
             cellSucs.setCellValue(suelo.getSimbolo().toUpperCase());
             for (int i = 0; i < size; i++) {
@@ -319,20 +320,21 @@ public class Utility {
             cell.setCellValue(dato.getDescripcion() + "\n(" + suelo.getSimbolo().toUpperCase() + ")");
             cellStyle.setWrapText(true);
             cell.setCellStyle(cellStyle);
-            cell = row.createCell(7);
-            if (dato.getLimiteLiquido() == 0d) {
-                cell.setCellValue("NP");
+            Cell cellLimite = row.createCell(7);
+            if (dato.getLimiteLiquido() == 0) {
+                cellLimite.setCellValue("NP");
             } else {
-                cell.setCellValue(dato.getLimiteLiquido());
+                styleFormat.setDataFormat(format.getFormat("0"));
+                cellLimite.setCellValue(dato.getLimiteLiquido());
             }
-            cell.setCellStyle(cellStyle);
-            cell = row.createCell(8);
+            cellLimite.setCellStyle(styleFormat);
+            Cell cellIndice = row.createCell(8);
             if (dato.getIndicePlasticidad() == 0) {
-                cell.setCellValue("NP");
+                cellIndice.setCellValue("NP");
             } else {
-                cell.setCellValue(dato.getIndicePlasticidad());
+                cellIndice.setCellValue(dato.getIndicePlasticidad());
             }
-            cell.setCellStyle(cellStyle);
+            cellIndice.setCellStyle(styleFormat);
             sheet.addMergedRegion(new CellRangeAddress(valorAnterior, valorActual, 0, 0));
             sheet.addMergedRegion(new CellRangeAddress(valorAnterior, valorActual, 1, 1));
             sheet.addMergedRegion(new CellRangeAddress(valorAnterior, valorActual, 2, 2));
@@ -356,29 +358,29 @@ public class Utility {
         for (HumedadProperty dato : humedadProperties) {
             int firstRow = (int) (dato.getProfundidadInicial() * 2);
             int lastRow = (int) (dato.getProfundidadFinal() * 2);
-            System.out.println(firstRow + " " + auxProfundidadInicial + " " + lastRow);
-            Row row = sheet.getRow(firstRow + 11);
+            System.out.println("Last row " + lastRow);
+            Row row = sheet.getRow(firstRow + 12);
             if (row == null) {
-                row = sheet.createRow(firstRow + 11);
+                row = sheet.createRow(firstRow + 12);
             }
             if (init == 0) {
                 if (auxProfundidadInicial != firstRow) {
-                    sheet.addMergedRegion(new CellRangeAddress(11, firstRow + 10, 9, 9));
+                    sheet.addMergedRegion(new CellRangeAddress(12, firstRow + 11, 9, 9));
                 }
             } else {
                 if ((auxProfundidadInicial + 1) != firstRow) {
-                    sheet.addMergedRegion(new CellRangeAddress(auxProfundidadInicial + 11, firstRow + 10, 9, 9));
+                    sheet.addMergedRegion(new CellRangeAddress(auxProfundidadInicial + 12, firstRow + 11, 9, 9));
                 }
             }
             Cell cell = row.createCell(9);
             cell.setCellValue(dato.getHumedad());
             cell.setCellStyle(cellStyle);
-            sheet.addMergedRegion(new CellRangeAddress(firstRow + 11, lastRow + 10, 9, 9));
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 12, lastRow + 11, 9, 9));
             auxProfundidadInicial = lastRow;
             init += 1;
         }
         if (auxProfundidadInicial < size) {
-            sheet.addMergedRegion(new CellRangeAddress(auxProfundidadInicial + 11, size + 10, 9, 9));
+            sheet.addMergedRegion(new CellRangeAddress(auxProfundidadInicial + 12, size + 11, 9, 9));
         }
     }
 
@@ -386,7 +388,7 @@ public class Utility {
         if (trepanoProperties.size() <= 0) {
             return;
         }
-        int _initRow = 11;
+        int _initRow = 12;
         double _auxAdeme = 0d;
         CellStyle cellStyle = customCellStyle(sheet.getWorkbook(), HorizontalAlignment.CENTER, (short) 12);
         for (TrepanoProperty dato : trepanoProperties) {
@@ -421,6 +423,17 @@ public class Utility {
         cellStyle.setFont(font);
         cellStyle.setAlignment(horizontal);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+
+    private CellStyle customCellStyle(Workbook wb, HorizontalAlignment horizontal, VerticalAlignment verticalAlignment, short fontSize) {
+        CellStyle cellStyle = wb.createCellStyle();
+        Font font = wb.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints(fontSize);
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(horizontal);
+        cellStyle.setVerticalAlignment(verticalAlignment);
         return cellStyle;
     }
 
@@ -496,7 +509,6 @@ public class Utility {
                 if (i == 0) {
                     y.add(0d);
                 } else {
-                    System.out.println("Val: " + val + " - Size: " + yLista.size());
                     if (val >= yLista.size()) {
                         y.add(yLista.get(yLista.size() - 1));
                     } else {
@@ -561,13 +573,18 @@ public class Utility {
      */
     private CellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, IndexedColors color, FillPatternType foreGround) {
         CellStyle cellStyle = wb.createCellStyle();
+        Font font = wb.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 18);
         cellStyle.setWrapText(true);
+        cellStyle.setFont(font);
+        cellStyle.setRotation((short) 90);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        System.out.println(foreGround.name());
         cellStyle.setFillPattern(foreGround);
-        System.out.println("Color: " + color.name());
-        cellStyle.setFillBackgroundColor(color.index);
-        cellStyle.setFillForegroundColor(IndexedColors.WHITE.index);
+        cellStyle.setFillBackgroundColor(IndexedColors.WHITE.index);
+        cellStyle.setFillForegroundColor(color.index);
         return cellStyle;
     }
 }

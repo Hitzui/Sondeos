@@ -5,7 +5,6 @@ import com.dysconcsa.sondeos.model.*;
 import com.dysconcsa.sondeos.util.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.controls.JFXTextField;
 import io.datafx.controller.FXMLController;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowException;
@@ -14,8 +13,6 @@ import io.datafx.controller.flow.action.ActionMethod;
 import io.datafx.controller.flow.action.ActionTrigger;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -30,7 +27,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -38,6 +34,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
@@ -58,6 +55,7 @@ public class FormValoresController {
     private final ObservableList<TrepanoProperty> trepanoProperties = FXCollections.observableArrayList();
     private final ObservableList<SuelosProperty> suelosProperties = FXCollections.observableArrayList();
     private final ObservableList<IndexedColors> itemsColorPoperties = FXCollections.observableArrayList();
+    private final ObservableList<FillPatternType> patternTypesProperties = FXCollections.observableArrayList();
     private final ObservableList<DatosCampoProperty> datosCampoProperties = FXCollections.observableArrayList();
     private final ObservableList<ClasificacionSucsProperty> clasificacionSucsProperties = FXCollections.observableArrayList();
     private final ObservableList<HumedadProperty> humedadProperties = FXCollections.observableArrayList();
@@ -133,6 +131,8 @@ public class FormValoresController {
     private TableColumn<ClasificacionSucsProperty, String> colDescipcion;
     @FXML
     private TableColumn<ClasificacionSucsProperty, IndexedColors> colColor;
+    @FXML
+    private TableColumn<ClasificacionSucsProperty, FillPatternType> colPattern;
 
     @FXML
     private TableView<HumedadProperty> tableHumedad;
@@ -163,18 +163,6 @@ public class FormValoresController {
 
     @FXML
     private TableColumn<TrepanoProperty, String> colTrepano;
-
-    @FXML
-    private JFXTextField txtSondeoNumero;
-
-    @FXML
-    private JFXTextField txtElevacion;
-
-    @FXML
-    private JFXTextField txtProfundidadMaxima;
-
-    @FXML
-    private JFXTextField txtProfundidadMinima;
 
     @FXML
     @ActionTrigger("action_btnEliminar")
@@ -269,9 +257,9 @@ public class FormValoresController {
             datosCampoProperties.add(new DatosCampoProperty());
             clasificacionSucsProperties.clear();
             if (suelosProperties.size() <= 0) {
-                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE));
+                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE, FillPatternType.NO_FILL));
             } else {
-                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
+                clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE, FillPatternType.NO_FILL));
             }
             humedadProperties.clear();
             humedadProperties.add(new HumedadProperty());
@@ -279,10 +267,6 @@ public class FormValoresController {
             ademeProperties.add(new AdemeProperty());
             trepanoProperties.clear();
             trepanoProperties.add(new TrepanoProperty());
-            txtElevacion.setText("0.0");
-            txtProfundidadMaxima.setText("0.0");
-            txtProfundidadMinima.setText("0.0");
-            txtSondeoNumero.setText("");
             file = null;
         } catch (Exception ex) {
             AlertError.showAlert(ex);
@@ -315,6 +299,7 @@ public class FormValoresController {
         try {
             loadSxml(file);
             loadColors();
+            loadPattern();
             listSuelosProperties();
             if (trepanoProperties.size() <= 0) {
                 trepanoProperties.add(new TrepanoProperty(0.0, ""));
@@ -324,9 +309,9 @@ public class FormValoresController {
             }
             if (clasificacionSucsProperties.size() <= 0) {
                 if (suelosProperties.size() <= 0) {
-                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE));
+                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, 0, "", IndexedColors.WHITE, FillPatternType.NO_FILL));
                 } else {
-                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
+                    clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0, suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE, FillPatternType.NO_FILL));
                 }
             }
             if (humedadProperties.size() <= 0) {
@@ -613,6 +598,8 @@ public class FormValoresController {
         });
         colColor.setCellFactory(param -> comboBoxColors());
         colColor.setCellValueFactory(value -> value.getValue().colorProperty());
+        colPattern.setCellFactory(param -> comboBoxPattern());
+        colPattern.setCellValueFactory(value -> value.getValue().patternProperty());
         setTableEditableClasificacionSucs();
     }
 
@@ -820,7 +807,7 @@ public class FormValoresController {
                 if (pos.getColumn() == 4) {
                     if (pos.getRow() == (tableClasificacion.getItems().size() - 1)) {
                         clasificacionSucsProperties.add(new ClasificacionSucsProperty(0.0, 0, 0,
-                                suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE));
+                                suelosProperties.get(0).getID(), suelosProperties.get(0).getNombre(), IndexedColors.WHITE, FillPatternType.NO_FILL));
                         tableClasificacion.getSelectionModel().select(pos.getRow() + 1, colProfundidadSucs);
                         event.consume();
                     } else {
@@ -960,7 +947,12 @@ public class FormValoresController {
         }
 
     }
-    private ComboBoxTableCell comboBoxColors(){
+
+    private void loadPattern() {
+        patternTypesProperties.addAll(FillPatternType.values());
+    }
+
+    private ComboBoxTableCell comboBoxColors() {
         ComboBoxTableCell<ClasificacionSucsProperty, IndexedColors> comboBoxTableCell = new ComboBoxTableCell<>();
         comboBoxTableCell.getItems().addAll(itemsColorPoperties);
         comboBoxTableCell.updateSelected(true);
@@ -968,6 +960,14 @@ public class FormValoresController {
             XSSFColor color = new XSSFColor(newValue, null);
             comboBoxTableCell.setStyle(" -fx-background-color: #" + color.getARGBHex().substring(2));
         });
+        comboBoxTableCell.updateSelected(true);
+        return comboBoxTableCell;
+    }
+
+    private ComboBoxTableCell comboBoxPattern() {
+        ComboBoxTableCell<ClasificacionSucsProperty, FillPatternType> comboBoxTableCell = new ComboBoxTableCell<>();
+        comboBoxTableCell.getItems().addAll(patternTypesProperties);
+        comboBoxTableCell.updateSelected(true);
         comboBoxTableCell.updateSelected(true);
         return comboBoxTableCell;
     }

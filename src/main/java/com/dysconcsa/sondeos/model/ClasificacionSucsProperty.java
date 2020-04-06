@@ -1,6 +1,7 @@
 package com.dysconcsa.sondeos.model;
 
 import javafx.beans.property.*;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 public class ClasificacionSucsProperty {
@@ -11,14 +12,18 @@ public class ClasificacionSucsProperty {
     private IntegerProperty tipoSuelo;
     private StringProperty descripcion;
     private ObjectProperty<IndexedColors> color;
+    private ObjectProperty<FillPatternType> pattern;
 
-    public ClasificacionSucsProperty(Double profundidad, Integer limiteLiquido, Integer indicePlasticidad, Integer tipoSuelo, String descripcion, IndexedColors color) {
+    public ClasificacionSucsProperty(Double profundidad, Integer limiteLiquido,
+                                     Integer indicePlasticidad, Integer tipoSuelo,
+                                     String descripcion, IndexedColors color,FillPatternType patternType) {
         this.profundidad = new SimpleDoubleProperty(profundidad);
         this.limiteLiquido = new SimpleIntegerProperty(limiteLiquido);
         this.indicePlasticidad = new SimpleIntegerProperty(indicePlasticidad);
         this.tipoSuelo = new SimpleIntegerProperty(tipoSuelo);
         this.descripcion = new SimpleStringProperty(descripcion);
         this.color = new SimpleObjectProperty<>(color);
+        this.pattern = new SimpleObjectProperty<>(patternType);
     }
 
     public String getDescripcion() {
@@ -91,5 +96,27 @@ public class ClasificacionSucsProperty {
 
     public void setColor(IndexedColors color) {
         this.color.set(color);
+    }
+
+    public FillPatternType getPattern() {
+        return pattern.get();
+    }
+
+    public ObjectProperty<FillPatternType> patternProperty() {
+        return pattern;
+    }
+
+    public void setPattern(FillPatternType pattern) {
+        this.pattern.set(pattern);
+    }
+
+    @Override
+    public String toString() {
+        return "ClasificacionSucsProperty{" +
+                "profundidad=" + profundidad +
+                ", limiteLiquido=" + limiteLiquido +
+                ", indicePlasticidad=" + indicePlasticidad +
+                ", descripcion=" + descripcion +
+                '}';
     }
 }

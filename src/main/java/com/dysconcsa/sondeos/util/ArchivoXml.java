@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -168,6 +169,9 @@ public class ArchivoXml {
                 Element color = document.createElement("colorSucs");
                 color.appendChild(document.createTextNode(datos.getColor().name()));
                 valores.appendChild(color);
+                Element pattern = document.createElement("pattern");
+                pattern.appendChild(document.createTextNode(datos.getPattern().name()));
+                valores.appendChild(pattern);
                 linea += 1;
             }
         } catch (Exception ex) {
@@ -313,12 +317,16 @@ public class ArchivoXml {
                 Integer tipoSuelo = Integer.parseInt(element.getElementsByTagName("tipoSuelo").item(j).getTextContent());
                 String descripcion = element.getElementsByTagName("descripcion").item(j).getTextContent();
                 String color;
+                String pattern;
                 try {
                     color = element.getElementsByTagName("colorSucs").item(j).getTextContent();
+                    pattern = element.getElementsByTagName("pattern").item(j).getTextContent();
                 } catch (Exception ex) {
                     color = IndexedColors.WHITE.name();
+                    pattern = FillPatternType.NO_FILL.name();
                 }
-                datos.add(new ClasificacionSucsProperty(profundidad, limiteLiquido, indicePlasticidad, tipoSuelo, descripcion, IndexedColors.valueOf(color)));
+                datos.add(new ClasificacionSucsProperty(profundidad, limiteLiquido, indicePlasticidad, tipoSuelo,
+                        descripcion, IndexedColors.valueOf(color), FillPatternType.valueOf(pattern)));
             }
             return datos;
         } catch (Exception ex) {
