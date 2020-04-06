@@ -30,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.presentationml.x2006.main.CTBackground;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -268,7 +269,7 @@ public class Utility {
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
         for (FillPatternType value : FillPatternType.values()) {
-            System.out.println("Fill pattern type: "+value.name());
+            System.out.println("Fill pattern type: " + value.name());
         }
         int valorAnterior = 11;
         double espesor;
@@ -306,7 +307,7 @@ public class Utility {
             int size = Math.abs(valorActual - valorAnterior);
             // ingreso de las imagenes del tipo de suelo
             XSSFCell cellSucs = row.createCell(5);
-            style = createBackgroundColorXSSFCellStyle(wb, dato.getColor(), FillPatternType.ALT_BARS);
+            style = createBackgroundColorXSSFCellStyle(wb, dato.getColor(), FillPatternType.LEAST_DOTS);
             cellSucs.setCellStyle(style);
             cellSucs.setCellValue(suelo.getSimbolo().toUpperCase());
             for (int i = 0; i < size; i++) {
@@ -558,14 +559,15 @@ public class Utility {
      * @param foreGround
      * @return
      */
-    public static CellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, IndexedColors color, FillPatternType foreGround) {
+    private CellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, IndexedColors color, FillPatternType foreGround) {
         CellStyle cellStyle = wb.createCellStyle();
         cellStyle.setWrapText(true);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setFillPattern(foreGround);
         System.out.println("Color: " + color.name());
-        cellStyle.setFillForegroundColor(color.index);
+        cellStyle.setFillBackgroundColor(color.index);
+        cellStyle.setFillForegroundColor(IndexedColors.WHITE.index);
         return cellStyle;
     }
 }
