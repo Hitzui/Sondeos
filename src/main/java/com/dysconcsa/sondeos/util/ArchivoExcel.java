@@ -345,10 +345,10 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(0);
         cell.setCellValue("Elevacion en metros: " + profundidadSondeos.get(0).getElevacion());
         cell.setCellStyle(cellStyleLeft);
-        rowDatos.setHeight((short) 500);
+        rowDatos.setHeight((short) 700);
         Row xRow = sheet.getRow(11);
         if (xRow == null) xRow = sheet.createRow(11);
-        xRow.setHeight((short) 500);
+        xRow.setHeight((short) 700);
         cell = rowDatos.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
@@ -366,7 +366,7 @@ public class ArchivoExcel {
         _cellStyle.setShrinkToFit(true);
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
-        sheet.setColumnWidth(cell.getColumnIndex(),3200);
+        sheet.setColumnWidth(cell.getColumnIndex(), 3200);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, 25));
         try {
             int _initRow;
