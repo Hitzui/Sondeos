@@ -11,7 +11,7 @@ public class ConfigurationProperty {
     private StringProperty imagen;
     private StringProperty nombreEmpresa;
 
-    public ConfigurationProperty(Integer id,String nombreEmpresa, String imagen) {
+    public ConfigurationProperty(Integer id, String nombreEmpresa, String imagen) {
         this.id = new SimpleIntegerProperty(id);
         this.imagen = new SimpleStringProperty(imagen);
         this.nombreEmpresa = new SimpleStringProperty(nombreEmpresa);
@@ -51,5 +51,10 @@ public class ConfigurationProperty {
 
     public void setNombreEmpresa(String nombreEmpresa) {
         this.nombreEmpresa.set(nombreEmpresa);
+    }
+
+    @Override
+    public String toString() {
+        return nombreEmpresa.get();
     }
 }

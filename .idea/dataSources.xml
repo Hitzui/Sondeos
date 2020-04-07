@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Sondeos" uuid="9fc83d89-e0a2-4f1a-975f-7a8bbbe95f0c">
+    <data-source source="LOCAL" name="sondeo.db" uuid="a9e2019a-535f-4881-9acc-dcc958dd18b8">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

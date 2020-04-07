@@ -20,10 +20,15 @@ import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
 import org.apache.poi.xddf.usermodel.chart.*;
-import org.apache.poi.xddf.usermodel.text.XDDFTextBody;
 import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.chart.*;
-import org.openxmlformats.schemas.drawingml.x2006.main.*;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTTitle;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTTx;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTextBody;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTextCharacterProperties;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
 
 import java.awt.*;
 import java.io.*;
@@ -88,7 +93,10 @@ public class ArchivoExcel {
             DaoEmpresa daoEmpresa = new DaoEmpresa();
             EmpresaProperty empresaProperty = daoEmpresa.find(idEmpresaProperty);
             DaoConfiguration daoConfiguration = new DaoConfiguration();
-            ConfigurationProperty configurationProperty = daoConfiguration.findOne();
+            if (Utility.selectedConfiguration == null) {
+                Utility.selectedConfiguration = daoConfiguration.findOne();
+            }
+            ConfigurationProperty configurationProperty = Utility.selectedConfiguration;
             Utility utility = new Utility();
             String pathImage = "";
             if (configurationProperty == null) {
@@ -491,7 +499,7 @@ public class ArchivoExcel {
     }
 
 
-    public void setAxisTitle(XSSFChart chart, int axisIdx, String title) {
+    public void setAxisTitle(XSSFChart chart, String title) {
         CTTextCharacterProperties ctTextCharacterProperties;
         CTChart ctChart = chart.getCTChart();
         CTTitle ctTitle = ctChart.addNewTitle();
@@ -537,7 +545,7 @@ public class ArchivoExcel {
         ctPlotArea.getSpPr().addNewNoFill();
         XDDFValueAxis bottomAxis = chart.createValueAxis(AxisPosition.BOTTOM);
         //bottomAxis.setTitle("N = Golpes / Pie");
-        setAxisTitle(chart, ((int) bottomAxis.getId()), "N = Golpes / Pie");
+        setAxisTitle(chart, "N = Golpes / Pie");
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);
         bottomAxis.setMajorUnit(10);

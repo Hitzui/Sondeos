@@ -47,6 +47,7 @@ public class Application extends javafx.application.Application {
         try {
             daoConfiguration = new DaoConfiguration();
             configurationProperty = daoConfiguration.findOne();
+            Utility.selectedConfiguration = configurationProperty;
         } catch (Exception ex) {
             configurationProperty = new ConfigurationProperty(0, "EMPRESA", "/image/company_name.png");
         }

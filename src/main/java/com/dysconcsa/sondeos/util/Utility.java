@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.codec.DecoderException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
@@ -44,6 +43,7 @@ public class Utility {
     Map<Integer, List<Integer>> mapRotadosX;
     Map<Integer, List<Double>> mapRotadosY;
     public static int idcliente;
+    public static ConfigurationProperty selectedConfiguration;
     public static String sondeoNumero;
     int initRow = 12;
 
