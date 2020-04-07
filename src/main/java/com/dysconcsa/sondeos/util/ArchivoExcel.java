@@ -366,6 +366,7 @@ public class ArchivoExcel {
         _cellStyle.setShrinkToFit(true);
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
+        sheet.setColumnWidth(cell.getColumnIndex(),3200);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, 25));
         try {
             int _initRow;
