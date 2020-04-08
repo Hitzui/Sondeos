@@ -431,7 +431,7 @@ public class FormValoresController {
                     fileChooser.setTitle("Generar Gráfico");
                     fileChooser.setInitialDirectory(new File(lastVisitedDirectory));
                     FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
-                    fileChooser.getExtensionFilters().addAll(extFilter, new FileChooser.ExtensionFilter("Excel files 2007 (*.xls)", "*.xls"));
+                    fileChooser.getExtensionFilters().addAll(extFilter);
                     Stage stage = (Stage) anchorPane.getScene().getWindow();
                     // Show save file dialog
                     fileExcel = fileChooser.showSaveDialog(stage);

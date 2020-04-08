@@ -25,10 +25,7 @@ import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -163,10 +160,10 @@ public class Utility {
     }
 
     void crearDatosCampo(XSSFSheet sheet, ObservableList<DatosCampoProperty> datosCampoProperties) {
-        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
-        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 12);
-        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 12);
-        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 18);
+        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
+        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 16);
+        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 16);
+        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 20);
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
             if (row == null) {
@@ -265,15 +262,15 @@ public class Utility {
         DataFormat format = wb.createDataFormat();
         double acumProf = 0.0;
         double acum_espesor = 0d;
-        CellStyle cellStyleBottom = customCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM, (short) 12);
-        CellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
+        XSSFCellStyle cellStyleBottom = customCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM, (short) 16);
+        XSSFCellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
         CellStyle style;
         cellStyleBottom.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
         int valorAnterior = initRow;
         double espesor;
-        CellStyle styleFormat = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 12);
+        CellStyle styleFormat = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
         for (int index = 0; index < clasificacionSucsProperties.size(); index++) {
             XSSFRow row = sheet.getRow(valorAnterior);
             if (row == null) {
@@ -285,6 +282,7 @@ public class Utility {
             elevacion = elevacion - espesor;
             // cota
             Cell cell = row.createCell(0);
+            sheet.setColumnWidth(cell.getColumnIndex(), 3000);
             cell.setCellValue(elevacion);
             cell.setCellStyle(cellStyleBottom);
             // profundidad
@@ -358,7 +356,6 @@ public class Utility {
         for (HumedadProperty dato : humedadProperties) {
             int firstRow = (int) (dato.getProfundidadInicial() * 2);
             int lastRow = (int) (dato.getProfundidadFinal() * 2);
-            System.out.println("Last row " + lastRow);
             Row row = sheet.getRow(firstRow + 12);
             if (row == null) {
                 row = sheet.createRow(firstRow + 12);
@@ -415,23 +412,26 @@ public class Utility {
         }
     }
 
-    private CellStyle customCellStyle(Workbook wb, HorizontalAlignment horizontal, short fontSize) {
-        CellStyle cellStyle = wb.createCellStyle();
+    private XSSFCellStyle customCellStyle(XSSFWorkbook wb, HorizontalAlignment horizontal, short fontSize) {
+        XSSFCellStyle cellStyle = wb.createCellStyle();
         Font font = wb.createFont();
         font.setBold(true);
         font.setFontHeightInPoints(fontSize);
         cellStyle.setFont(font);
         cellStyle.setAlignment(horizontal);
+        cellStyle.setWrapText(true);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }
 
-    private CellStyle customCellStyle(Workbook wb, HorizontalAlignment horizontal, VerticalAlignment verticalAlignment, short fontSize) {
-        CellStyle cellStyle = wb.createCellStyle();
+    private XSSFCellStyle customCellStyle(XSSFWorkbook wb, HorizontalAlignment horizontal, VerticalAlignment verticalAlignment, short fontSize) {
+        XSSFCellStyle cellStyle = wb.createCellStyle();
         Font font = wb.createFont();
         font.setBold(true);
         font.setFontHeightInPoints(fontSize);
         cellStyle.setFont(font);
+        cellStyle.setWrapText(true);
+        cellStyle.setShrinkToFit(true);
         cellStyle.setAlignment(horizontal);
         cellStyle.setVerticalAlignment(verticalAlignment);
         return cellStyle;
@@ -571,7 +571,7 @@ public class Utility {
      * @param foreGround
      * @return
      */
-    private CellStyle createBackgroundColorXSSFCellStyle(XSSFWorkbook wb, IndexedColors color, FillPatternType foreGround) {
+    private CellStyle createBackgroundColorXSSFCellStyle(Workbook wb, IndexedColors color, FillPatternType foreGround) {
         CellStyle cellStyle = wb.createCellStyle();
         Font font = wb.createFont();
         font.setBold(true);
@@ -581,7 +581,6 @@ public class Utility {
         cellStyle.setRotation((short) 90);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        System.out.println(foreGround.name());
         cellStyle.setFillPattern(foreGround);
         cellStyle.setFillBackgroundColor(IndexedColors.WHITE.index);
         cellStyle.setFillForegroundColor(color.index);

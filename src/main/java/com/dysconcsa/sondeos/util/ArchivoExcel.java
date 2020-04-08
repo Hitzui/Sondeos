@@ -44,6 +44,7 @@ public class ArchivoExcel {
     private List<ProfundidadSondeo> profundidadSondeos;
     private ObservableList<TrepanoProperty> trepanoProperties;
     private Utility utility;
+    private int lasRow = 26;
 
     private JFXTabPane tabPane;
     private Tab tabToUse;
@@ -113,18 +114,21 @@ public class ArchivoExcel {
             ps.setFitWidth((short) 1);
             insertImage(wb, sheet, 0, 0, false, 5, 4, pathImage);
             // datos del cliente
-            Font fontBold = wb.createFont();
-            fontBold.setFontHeightInPoints((short) 14);
+            XSSFFont fontBold = wb.createFont();
+            fontBold.setFontHeight((short) 18);
+            fontBold.setFontName("Calibri");
             fontBold.setBold(true);
             CellStyle cellStyleRight = wb.createCellStyle();
             CellStyle cellStyleLeft = wb.createCellStyle();
             cellStyleLeft.setFont(fontBold);
             cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
             cellStyleLeft.setWrapText(true);
+            cellStyleLeft.setVerticalAlignment(VerticalAlignment.TOP);
             CellStyle cellStyle = wb.createCellStyle();
             cellStyle.setFont(fontBold);
             cellStyleRight.setFont(fontBold);
             cellStyleRight.setAlignment(HorizontalAlignment.RIGHT);
+            cellStyleRight.setVerticalAlignment(VerticalAlignment.TOP);
             // datos del cliente
             Row row = sheet.createRow(0);
             Cell cell = row.createCell(6);
@@ -133,7 +137,7 @@ public class ArchivoExcel {
             cell = row.createCell(7);
             cell.setCellStyle(cellStyleLeft);
             cell.setCellValue(empresaProperty.getCliente());
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, 25));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, lasRow));
             // proyecto
             row = sheet.createRow(1);
             cell = row.createCell(6);
@@ -145,12 +149,12 @@ public class ArchivoExcel {
             sheet.addMergedRegion(new CellRangeAddress(1, 2, 7, 21));
             // sondeo numero
             row = sheet.createRow(2);
-            cell = row.createCell(22);
+            cell = row.createCell(23);
             cell.setCellStyle(cellStyleRight);
             cell.setCellValue("Sondeo No:");
             cell.setCellStyle(cellStyleRight);
-            sheet.addMergedRegion(new CellRangeAddress(2, 2, 22, 23));
-            cell = row.createCell(24);
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 23, 24));
+            cell = row.createCell(25);
             cell.setCellStyle(cellStyleLeft);
             cell.setCellValue(profundidadSondeo.getSondeoNumero());
             // lugar
@@ -167,7 +171,7 @@ public class ArchivoExcel {
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
-            pt.drawBorders(new CellRangeAddress(5, 9, 10, 25), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(5, 9, 10, lasRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Recobro
             pt.drawBorders(new CellRangeAddress(10, 11, 10, 10), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Golpes
@@ -177,11 +181,11 @@ public class ArchivoExcel {
             //profundidad
             pt.drawBorders(new CellRangeAddress(10, 11, 13, 13), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //grafico
-            pt.drawBorders(new CellRangeAddress(10, 11, 14, 25), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(10, 11, 14, lasRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
 
             pt.drawBorders(new CellRangeAddress(5, 9, 0, 9), BorderStyle.THIN, BorderExtent.ALL);
             int size = datosCampoProperties.size() * 3;
-            pt.drawBorders(new CellRangeAddress(12, size + 11, 0, 25), BorderStyle.THIN, BorderExtent.ALL);
+            pt.drawBorders(new CellRangeAddress(12, size + 11, 0, lasRow), BorderStyle.THIN, BorderExtent.ALL);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -193,17 +197,15 @@ public class ArchivoExcel {
             // printSetup.setFooterMargin(0.25);
             Footer footer = sheet.getFooter();
             String footerText = "\"Clave: AW - Nw EX, AX, BX, nx - Diametro Standard. T = Tungsteno, D = Diamante, Do = Doble, CP = Cola de Pescado, CN = Cuchara Normal, PD = Tubo de Pared Delgada.\"";
-            footer.setLeft(HeaderFooter.startBold() + HeaderFooter.fontSize((short) 14) + footerText.toUpperCase());
-            footer.setRight(HeaderFooter.fontSize((short) 14) + HeaderFooter.page().toUpperCase() + " De " + HeaderFooter.numPages().toUpperCase());
+            footer.setLeft(HeaderFooter.startBold() + HeaderFooter.fontSize((short) 16) + footerText.toUpperCase());
+            footer.setRight(HeaderFooter.fontSize((short) 16) + HeaderFooter.page().toUpperCase() + " De " + HeaderFooter.numPages().toUpperCase());
             sheet.setMargin(Sheet.LeftMargin, 0.25);
             sheet.setMargin(Sheet.RightMargin, 0.25);
             sheet.setMargin(Sheet.TopMargin, 0.25);
             sheet.setMargin(Sheet.BottomMargin, 0.5);
             // aca repetimos el encabezado por cada hoja a imprimir
-            sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, 25));
-            try {
-                FileOutputStream fileOut;
-                fileOut = new FileOutputStream(file);
+            sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, lasRow));
+            try (OutputStream fileOut = new FileOutputStream(file)) {
                 wb.write(fileOut);
                 wb.close();
                 JFXButton btnAceptar = new JFXButton("Aceptar");
@@ -221,7 +223,7 @@ public class ArchivoExcel {
                     }
                 });
                 dialog.show();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (Exception ex) {
@@ -254,12 +256,12 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleLeft);
         // ********************** nivel friatico *************************/
         cellLugar = rowVacia.createCell(21);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 21, 22));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 21, 23));
         //sheet.setColumnWidth(21, 3500);
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 24));
-        cellLugar = rowVacia.createCell(23);
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 24, lasRow));
+        cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
         // ***************** observaciones *******************/
@@ -268,7 +270,7 @@ public class ArchivoExcel {
         cellLugar.setCellValue("Observaciones:");
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 10, 12));
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, 24));
+        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, lasRow));
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getObservaciones());
         cellLugar.setCellStyle(cellStyleLeft);
@@ -284,16 +286,17 @@ public class ArchivoExcel {
         cellLugar.setCellStyle(cellStyleLeft);
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 19));
         // ************** fecha *******************************/
-        cellLugar = rowVacia.createCell(21);
+        cellLugar = rowVacia.createCell(22);
         cellLugar.setCellValue("Fecha: ");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 21, 22));
-        cellLugar = rowVacia.createCell(23);
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 22, 23));
+        cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue(profundidadSondeo.getFecha());
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 23, 24));
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 24, lasRow));
         cellLugar.setCellStyle(cellStyleLeft);
         // ****************************************************/
         rowVacia = sheet.createRow(5);
+        rowVacia.setHeight((short) 600);
         // **********************************/
         // rowVacia.setHeight((short) 1500);
         Cell cell = rowVacia.createCell(0);
@@ -335,9 +338,9 @@ public class ArchivoExcel {
         _cellStyle.setWrapText(true);
         _cellStyle.setAlignment(HorizontalAlignment.CENTER);
         _cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        Font font = wb.createFont();
+        XSSFFont font = (XSSFFont) wb.createFont();
         font.setBold(true);
-        font.setFontHeightInPoints((short) 11);
+        font.setFontHeightInPoints((short) 14);
         _cellStyle.setFont(font);
         Row rowDatos = sheet.createRow(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
@@ -367,7 +370,7 @@ public class ArchivoExcel {
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
         sheet.setColumnWidth(cell.getColumnIndex(), 3200);
-        sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, 25));
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lasRow));
         try {
             int _initRow;
             int size = datosCampoProperties.size() * 3;
@@ -479,7 +482,7 @@ public class ArchivoExcel {
         CellStyle cellStyleDatos = wb.createCellStyle();
         cellStyleDatos.setWrapText(true);
         cellStyleDatos.setRotation((short) 90);
-        fontBold.setFontHeightInPoints((short) 14);
+        fontBold.setFontHeightInPoints((short) 18);
         borderCell(cell, cellStyleDatos, fontBold);
         Sheet sheet = cell.getSheet();
         int rowIndex = cell.getRowIndex();
