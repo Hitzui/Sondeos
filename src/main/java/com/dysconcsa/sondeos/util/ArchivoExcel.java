@@ -355,6 +355,7 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
+        sheet.setColumnWidth(cell.getColumnIndex(),3000);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(11);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 11, 11));
@@ -363,13 +364,14 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(12);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 12, 12));
         cell.setCellValue("Golpes\n/Pie");
+        sheet.setColumnWidth(cell.getColumnIndex(),3000);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(13);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
         _cellStyle.setShrinkToFit(true);
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
-        sheet.setColumnWidth(cell.getColumnIndex(), 3200);
+        sheet.setColumnWidth(cell.getColumnIndex(), 4000);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lasRow));
         try {
             int _initRow;
