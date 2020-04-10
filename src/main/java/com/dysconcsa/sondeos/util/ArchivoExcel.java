@@ -355,7 +355,7 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
-        sheet.setColumnWidth(cell.getColumnIndex(),3000);
+        sheet.setColumnWidth(cell.getColumnIndex(), 3000);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(11);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 11, 11));
@@ -364,7 +364,7 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(12);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 12, 12));
         cell.setCellValue("Golpes\n/Pie");
-        sheet.setColumnWidth(cell.getColumnIndex(),3000);
+        sheet.setColumnWidth(cell.getColumnIndex(), 3000);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(13);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
@@ -527,7 +527,7 @@ public class ArchivoExcel {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
         int num_rows = (datosCampoProperties.size() * 3) + 13;
         List<Double> yList = utility.yValues(datosCampoProperties);
-        XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 14, 10, 26, num_rows);
+        XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 14, 10, 27, num_rows);
         Map<Integer, List<Integer>> mapRotadoX = utility.mapRotadosX;
         int aux = 0;
         XSSFChart chart = drawing.createChart(anchor);
