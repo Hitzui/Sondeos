@@ -7,7 +7,6 @@ import com.dysconcsa.sondeos.model.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTabPane;
-import com.microsoft.schemas.office.office.CTR;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
@@ -22,7 +21,6 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
 import org.apache.poi.xddf.usermodel.chart.*;
 import org.apache.poi.xssf.usermodel.*;
-import org.apache.xmlbeans.SchemaType;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTTitle;
@@ -31,8 +29,6 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextBody;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextCharacterProperties;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRow;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTRowImpl;
 
 import java.awt.*;
 import java.io.*;
@@ -116,11 +112,11 @@ public class ArchivoExcel {
             sheet.setHorizontallyCenter(true);
             ps.setFitHeight((short) 0);
             ps.setFitWidth((short) 1);
-            insertImage(wb, sheet, 0, 0, false, 5, 4, pathImage);
+            insertImage(wb, sheet, pathImage);
             // datos del cliente
             Font fontBold = wb.createFont();
             fontBold.setFontHeight((short) 22);
-            fontBold.setFontName("Calibri");
+            //fontBold.setFontName("Bahnschrift Condensed");
             fontBold.setBold(true);
             CellStyle cellStyleRight = wb.createCellStyle();
             CellStyle cellStyleLeft = wb.createCellStyle();
@@ -138,8 +134,6 @@ public class ArchivoExcel {
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
-            //borde a la imagen
-            pt.drawBorders(new CellRangeAddress(0, 3, 0, 4), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //nombre del cliente
             pt.drawBorders(new CellRangeAddress(0, 0, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
             //proyecto
@@ -232,7 +226,7 @@ public class ArchivoExcel {
         CellStyle cellStyleLeft = wb.createCellStyle();
         CellStyle cellStyle = wb.createCellStyle();
         Font fontBold = wb.createFont();
-        fontBold.setBold(true);
+        fontBold.setBold(false);
         fontBold.setFontHeightInPoints((short) 22);
         cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
         cellStyleLeft.setFont(fontBold);
@@ -240,10 +234,11 @@ public class ArchivoExcel {
         cellStyleRight.setFont(fontBold);
         // datos del cliente
         XSSFRow row = sheet.createRow(0);
-        row.setHeight((short) 600);
+        row.setHeight((short) 800);
         Cell cell = row.createCell(6);
         cell.setCellStyle(cellStyleRight);
         cell.setCellValue("Cliente:");
+        sheet.setColumnWidth(cell.getColumnIndex(), 700);
         cell = row.createCell(7);
         cell.setCellStyle(cellStyleLeft);
         cell.setCellValue(empresaProperty.getCliente());
@@ -300,7 +295,7 @@ public class ArchivoExcel {
         sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
     }
 
-    private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, Workbook wb,
+    private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, XSSFWorkbook wb,
                       Font fontBold) {
         cellStyle.setWrapText(true);
         CellStyle cellStyleDatos = wb.createCellStyle();
@@ -403,12 +398,14 @@ public class ArchivoExcel {
         borderCellRotate(cell, wb, fontBold);
         // *************** DATOS ********************************************/
         CellStyle _cellStyle = wb.createCellStyle();
+        _cellStyle.setShrinkToFit(true);
         _cellStyle.setWrapText(true);
         _cellStyle.setAlignment(HorizontalAlignment.CENTER);
         _cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        XSSFFont font = (XSSFFont) wb.createFont();
+        XSSFFont font = wb.createFont();
         font.setBold(true);
-        font.setFontHeightInPoints((short) 18);
+        //font.setFontName("Bahnschrift Condensed");
+        font.setFontHeightInPoints((short) 16);
         _cellStyle.setFont(font);
         Row rowDatos = sheet.createRow(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
@@ -436,15 +433,16 @@ public class ArchivoExcel {
         sheet.setColumnWidth(cell.getColumnIndex(), 3200);
         cell.setCellStyle(_cellStyle);
         Cell cellProfundidad = rowDatos.createCell(13);
-        sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
-        _cellStyle.setShrinkToFit(true);
-        cellProfundidad.setCellValue("Profundidad");
-        CellStyle cellStyleProfundidad = wb.createCellStyle();
+        XSSFCellStyle cellStyleProfundidad = wb.createCellStyle();
+        XSSFFont fontProfundidad = wb.createFont();
+        fontProfundidad.setFontHeightInPoints((short) 16);
+        fontProfundidad.setBold(true);
+        fontProfundidad.setFontName("Bahnschrift Condensed");
+        cellStyleProfundidad.setFont(fontProfundidad);
         cellStyleProfundidad.setAlignment(HorizontalAlignment.CENTER);
         cellStyleProfundidad.setVerticalAlignment(VerticalAlignment.CENTER);
-        Font fontProfundidad = wb.createFont();
-        font.setFontHeightInPoints((short) 14);
-        cellStyleProfundidad.setFont(font);
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
+        cellProfundidad.setCellValue("Profundidad");
         cellProfundidad.setCellStyle(cellStyleProfundidad);
         sheet.setColumnWidth(cellProfundidad.getColumnIndex(), 4000);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lastRow));
@@ -686,8 +684,8 @@ public class ArchivoExcel {
         });
     }
 
-    private void insertImage(Workbook wb, XSSFSheet sheet, int setCol, int setRow, boolean row2, int scaleX,
-                             int scaleY, String path) {
+    private void insertImage(Workbook wb, XSSFSheet sheet,
+                             String path) {
         try {
             CreationHelper helper = wb.getCreationHelper();
             // add a picture in this workbook.
@@ -700,14 +698,11 @@ public class ArchivoExcel {
             Drawing<?> drawing = sheet.createDrawingPatriarch();
             // add a picture shape
             ClientAnchor anchor = helper.createClientAnchor();
-            anchor.setCol1(setCol);
-            anchor.setRow1(setRow);
-            if (row2) {
-                anchor.setRow2(setRow + 3);
-            }
+            anchor.setCol1(0);
+            anchor.setRow1(0);
             Picture pict = drawing.createPicture(anchor, pictureIdx);
             // auto-size picture
-            pict.resize(scaleX, scaleY);
+            pict.resize(6, 3);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -729,12 +724,17 @@ public class ArchivoExcel {
         series.setShapeProperties(properties);
     }
 
+    /***
+     * Alto de las filas
+     * @param sheet
+     * @param datosCampoProperties
+     */
     private void heightCell(XSSFSheet sheet, ObservableList<DatosCampoProperty> datosCampoProperties) {
         for (int i = 0; i < 4; i++) {
             Row row = sheet.getRow(i);
             if (row == null)
                 row = sheet.createRow(i);
-            row.setHeightInPoints(25);
+            row.setHeightInPoints(50);
         }
         int size = datosCampoProperties.size() * 3;
         for (int i = 12; i < size + 12; i++) {
