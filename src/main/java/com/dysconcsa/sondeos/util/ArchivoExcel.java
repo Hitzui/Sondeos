@@ -44,7 +44,7 @@ public class ArchivoExcel {
     private List<ProfundidadSondeo> profundidadSondeos;
     private ObservableList<TrepanoProperty> trepanoProperties;
     private Utility utility;
-    private int lasRow = 26;
+    private int lastRow = 26;
 
     private JFXTabPane tabPane;
     private Tab tabToUse;
@@ -137,7 +137,7 @@ public class ArchivoExcel {
             cell = row.createCell(7);
             cell.setCellStyle(cellStyleLeft);
             cell.setCellValue(empresaProperty.getCliente());
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, lasRow));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, lastRow));
             // proyecto
             row = sheet.createRow(1);
             cell = row.createCell(6);
@@ -167,11 +167,12 @@ public class ArchivoExcel {
             cell.setCellStyle(cellStyleLeft);
             sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
 
-            data(sheet, empresaProperty, profundidadSondeo, cellStyle, wb, fontBold);
+            data(sheet, profundidadSondeo, cellStyle, wb, fontBold);
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
-            pt.drawBorders(new CellRangeAddress(5, 9, 10, lasRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(10, 11, 0, 9), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(5, 9, 10, lastRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Recobro
             pt.drawBorders(new CellRangeAddress(10, 11, 10, 10), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Golpes
@@ -181,11 +182,11 @@ public class ArchivoExcel {
             //profundidad
             pt.drawBorders(new CellRangeAddress(10, 11, 13, 13), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //grafico
-            pt.drawBorders(new CellRangeAddress(10, 11, 14, lasRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(10, 11, 14, lastRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
 
             pt.drawBorders(new CellRangeAddress(5, 9, 0, 9), BorderStyle.THIN, BorderExtent.ALL);
             int size = datosCampoProperties.size() * 3;
-            pt.drawBorders(new CellRangeAddress(12, size + 11, 0, lasRow), BorderStyle.THIN, BorderExtent.ALL);
+            pt.drawBorders(new CellRangeAddress(12, size + 11, 0, lastRow), BorderStyle.THIN, BorderExtent.ALL);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -204,7 +205,17 @@ public class ArchivoExcel {
             sheet.setMargin(Sheet.TopMargin, 0.25);
             sheet.setMargin(Sheet.BottomMargin, 0.5);
             // aca repetimos el encabezado por cada hoja a imprimir
-            sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, lasRow));
+            sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, lastRow));
+            //LINEA DEL FIN DE SONDEO
+            Row endRow = sheet.createRow(size + 13);
+            Cell endCell = endRow.createCell(0);
+            CellStyle endStyle = wb.createCellStyle();
+            endStyle.setFont(fontBold);
+            endStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            endStyle.setAlignment(HorizontalAlignment.CENTER);
+            endCell.setCellValue("Fin del Sondeo No. " + profundidadSondeo.getSondeoNumero());
+            endCell.setCellStyle(endStyle);
+            sheet.addMergedRegion(new CellRangeAddress(size + 13, size + 13, 0, lastRow));
             try (OutputStream fileOut = new FileOutputStream(file)) {
                 wb.write(fileOut);
                 wb.close();
@@ -232,7 +243,7 @@ public class ArchivoExcel {
         }
     }
 
-    private void data(XSSFSheet sheet, EmpresaProperty empresaProperty, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, Workbook wb,
+    private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, Workbook wb,
                       Font fontBold) {
         cellStyle.setWrapText(true);
         CellStyle cellStyleDatos = wb.createCellStyle();
@@ -260,7 +271,7 @@ public class ArchivoExcel {
         //sheet.setColumnWidth(21, 3500);
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 24, lasRow));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 24, lastRow));
         cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
@@ -270,7 +281,7 @@ public class ArchivoExcel {
         cellLugar.setCellValue("Observaciones:");
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 10, 12));
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, lasRow));
+        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, lastRow));
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getObservaciones());
         cellLugar.setCellStyle(cellStyleLeft);
@@ -292,7 +303,7 @@ public class ArchivoExcel {
         sheet.addMergedRegion(new CellRangeAddress(8, 8, 22, 23));
         cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue(profundidadSondeo.getFecha());
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 24, lasRow));
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 24, lastRow));
         cellLugar.setCellStyle(cellStyleLeft);
         // ****************************************************/
         rowVacia = sheet.createRow(5);
@@ -372,7 +383,7 @@ public class ArchivoExcel {
         cell.setCellValue("Profundidad");
         cell.setCellStyle(_cellStyle);
         sheet.setColumnWidth(cell.getColumnIndex(), 4000);
-        sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lasRow));
+        sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lastRow));
         try {
             int _initRow;
             int size = datosCampoProperties.size() * 3;

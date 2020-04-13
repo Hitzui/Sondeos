@@ -1,0 +1,3 @@
+--Start line--
+Cannot add merged region A23:AA23 to sheet because it overlaps with an existing merged region (K22:K24).
+--End line--
