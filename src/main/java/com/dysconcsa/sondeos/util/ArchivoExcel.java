@@ -7,6 +7,7 @@ import com.dysconcsa.sondeos.model.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTabPane;
+import com.microsoft.schemas.office.office.CTR;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +22,7 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
 import org.apache.poi.xddf.usermodel.chart.*;
 import org.apache.poi.xssf.usermodel.*;
+import org.apache.xmlbeans.SchemaType;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTTitle;
@@ -29,6 +31,8 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextBody;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextCharacterProperties;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRow;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTRowImpl;
 
 import java.awt.*;
 import java.io.*;
@@ -108,71 +112,47 @@ public class ArchivoExcel {
             XSSFSheet sheet = wb.createSheet();
             XSSFPrintSetup ps = sheet.getPrintSetup();
             ps.setLandscape(true);
-            sheet.setAutobreaks(true);
+            //sheet.setAutobreaks(true);
             sheet.setHorizontallyCenter(true);
             ps.setFitHeight((short) 0);
             ps.setFitWidth((short) 1);
             insertImage(wb, sheet, 0, 0, false, 5, 4, pathImage);
             // datos del cliente
-            XSSFFont fontBold = wb.createFont();
-            fontBold.setFontHeight((short) 18);
+            Font fontBold = wb.createFont();
+            fontBold.setFontHeight((short) 22);
             fontBold.setFontName("Calibri");
             fontBold.setBold(true);
             CellStyle cellStyleRight = wb.createCellStyle();
             CellStyle cellStyleLeft = wb.createCellStyle();
             cellStyleLeft.setFont(fontBold);
             cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
-            cellStyleLeft.setWrapText(true);
+            //cellStyleLeft.setWrapText(true);
             cellStyleLeft.setVerticalAlignment(VerticalAlignment.TOP);
             CellStyle cellStyle = wb.createCellStyle();
             cellStyle.setFont(fontBold);
             cellStyleRight.setFont(fontBold);
             cellStyleRight.setAlignment(HorizontalAlignment.RIGHT);
             cellStyleRight.setVerticalAlignment(VerticalAlignment.TOP);
-            // datos del cliente
-            Row row = sheet.createRow(0);
-            Cell cell = row.createCell(6);
-            cell.setCellStyle(cellStyleRight);
-            cell.setCellValue("Cliente:");
-            cell = row.createCell(7);
-            cell.setCellStyle(cellStyleLeft);
-            cell.setCellValue(empresaProperty.getCliente());
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, lastRow));
-            // proyecto
-            row = sheet.createRow(1);
-            cell = row.createCell(6);
-            cell.setCellStyle(cellStyleRight);
-            cell.setCellValue("Proyecto:");
-            cell = row.createCell(7);
-            cell.setCellStyle(cellStyleLeft);
-            cell.setCellValue(empresaProperty.getProyecto());
-            sheet.addMergedRegion(new CellRangeAddress(1, 2, 7, 21));
-            // sondeo numero
-            row = sheet.createRow(2);
-            cell = row.createCell(23);
-            cell.setCellStyle(cellStyleRight);
-            cell.setCellValue("Sondeo No:");
-            cell.setCellStyle(cellStyleRight);
-            sheet.addMergedRegion(new CellRangeAddress(2, 2, 23, 24));
-            cell = row.createCell(25);
-            cell.setCellStyle(cellStyleLeft);
-            cell.setCellValue(profundidadSondeo.getSondeoNumero());
-            // lugar
-            row = sheet.createRow(3);
-            cell = row.createCell(6);
-            cell.setCellValue("Lugar:");
-            cell.setCellStyle(cellStyleRight);
-            cell = row.createCell(7);
-            cell.setCellValue(profundidadSondeo.getLugar());
-            cell.setCellStyle(cellStyleLeft);
-            sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
-
+            datosCliente(sheet, empresaProperty, profundidadSondeo);
             data(sheet, profundidadSondeo, cellStyle, wb, fontBold);
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
-            pt.drawBorders(new CellRangeAddress(10, 11, 0, 9), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //borde a la imagen
+            pt.drawBorders(new CellRangeAddress(0, 3, 0, 4), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //nombre del cliente
+            pt.drawBorders(new CellRangeAddress(0, 0, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //proyecto
+            pt.drawBorders(new CellRangeAddress(1, 1, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(2, 2, 7, 22), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //sondeo numero
+            pt.drawBorders(new CellRangeAddress(2, 2, 25, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //lugar
+            pt.drawBorders(new CellRangeAddress(3, 3, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //cuadro de datos del sondeo
             pt.drawBorders(new CellRangeAddress(5, 9, 10, lastRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
+            //elevacion
+            pt.drawBorders(new CellRangeAddress(10, 11, 0, 9), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Recobro
             pt.drawBorders(new CellRangeAddress(10, 11, 10, 10), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //Golpes
@@ -183,10 +163,12 @@ public class ArchivoExcel {
             pt.drawBorders(new CellRangeAddress(10, 11, 13, 13), BorderStyle.THIN, BorderExtent.OUTSIDE);
             //grafico
             pt.drawBorders(new CellRangeAddress(10, 11, 14, lastRow), BorderStyle.THIN, BorderExtent.OUTSIDE);
-
+            //cuadro de titulos
             pt.drawBorders(new CellRangeAddress(5, 9, 0, 9), BorderStyle.THIN, BorderExtent.ALL);
             int size = datosCampoProperties.size() * 3;
             pt.drawBorders(new CellRangeAddress(12, size + 11, 0, lastRow), BorderStyle.THIN, BorderExtent.ALL);
+            //borde exterior completo
+            pt.drawBorders(new CellRangeAddress(5, size + 11, 0, lastRow), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -194,7 +176,7 @@ public class ArchivoExcel {
             printSetup.setPaperSize(PrintSetup.LETTER_PAPERSIZE);
             // sheet.createFreezePane(0, 4);
             sheet.setFitToPage(true);
-            sheet.setAutobreaks(true);
+            //sheet.setAutobreaks(true);
             // printSetup.setFooterMargin(0.25);
             Footer footer = sheet.getFooter();
             String footerText = "\"Clave: AW - Nw EX, AX, BX, nx - Diametro Standard. T = Tungsteno, D = Diamante, Do = Doble, CP = Cola de Pescado, CN = Cuchara Normal, PD = Tubo de Pared Delgada.\"";
@@ -205,7 +187,7 @@ public class ArchivoExcel {
             sheet.setMargin(Sheet.TopMargin, 0.25);
             sheet.setMargin(Sheet.BottomMargin, 0.5);
             // aca repetimos el encabezado por cada hoja a imprimir
-            sheet.setRepeatingRows(new CellRangeAddress(0, 10, 0, lastRow));
+            sheet.setRepeatingRows(new CellRangeAddress(0, 11, 0, lastRow));
             //LINEA DEL FIN DE SONDEO
             Row endRow = sheet.createRow(size + 13);
             Cell endCell = endRow.createCell(0);
@@ -235,12 +217,87 @@ public class ArchivoExcel {
                 });
                 dialog.show();
             } catch (Exception e) {
+                Utility.dialog("Error", "Generar Archivo", "No se pudo generar el archivo del grafico, revise si esta abierto o los datos ingresados.");
                 e.printStackTrace();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             Application.writeParameters(ex.getMessage());
         }
+    }
+
+    private void datosCliente(XSSFSheet sheet, EmpresaProperty empresaProperty, ProfundidadSondeo profundidadSondeo) {
+        XSSFWorkbook wb = sheet.getWorkbook();
+        CellStyle cellStyleRight = wb.createCellStyle();
+        CellStyle cellStyleLeft = wb.createCellStyle();
+        CellStyle cellStyle = wb.createCellStyle();
+        Font fontBold = wb.createFont();
+        fontBold.setBold(true);
+        fontBold.setFontHeightInPoints((short) 22);
+        cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
+        cellStyleLeft.setFont(fontBold);
+        cellStyleRight.setAlignment(HorizontalAlignment.RIGHT);
+        cellStyleRight.setFont(fontBold);
+        // datos del cliente
+        XSSFRow row = sheet.createRow(0);
+        row.setHeight((short) 600);
+        Cell cell = row.createCell(6);
+        cell.setCellStyle(cellStyleRight);
+        cell.setCellValue("Cliente:");
+        cell = row.createCell(7);
+        cell.setCellStyle(cellStyleLeft);
+        cell.setCellValue(empresaProperty.getCliente());
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 7, lastRow));
+        // proyecto
+        int lengthProyecto = empresaProperty.getProyecto().length();
+        row = sheet.createRow(1);
+        Cell cellProyecto = row.createCell(6);
+        cellProyecto.setCellStyle(cellStyleRight);
+        cellProyecto.setCellValue("Proyecto:");
+        cellProyecto = row.createCell(7);
+        cellProyecto.setCellStyle(cellStyleLeft);
+        String cortarProyecto1;
+        String cortarProyecto2 = "";
+        if (lengthProyecto > 100) {
+            cortarProyecto1 = utility.truncate(empresaProperty.getProyecto(), 0, 100);
+            cortarProyecto2 = utility.truncate(empresaProperty.getProyecto(), cortarProyecto1.length(), lengthProyecto - 1);
+        } else {
+            cortarProyecto1 = empresaProperty.getProyecto();
+        }
+
+        cellProyecto.setCellValue(cortarProyecto1);
+        //sheet.addMergedRegion(new CellRangeAddress(1, 2, 7, 21));
+        // sondeo numero
+        row = sheet.createRow(2);
+        if (cortarProyecto2.length() > 0) {
+            cellProyecto = row.createCell(7);
+            cellProyecto.setCellValue(cortarProyecto2);
+            cellProyecto.setCellStyle(cellStyleLeft);
+        }
+        Cell cellSondeo = row.createCell(23);
+        CellStyle cellStyleSondeoNumero = wb.createCellStyle();
+        Font fontSondeo = wb.createFont();
+        fontSondeo.setFontHeightInPoints((short) 18);
+        fontSondeo.setBold(true);
+        cellStyleSondeoNumero.setFont(fontSondeo);
+        cellStyleSondeoNumero.setAlignment(HorizontalAlignment.LEFT);
+        cellSondeo.setCellStyle(cellStyleSondeoNumero);
+        cellSondeo.setCellValue("Sondeo No:");
+        cellSondeo.setCellStyle(cellStyleSondeoNumero);
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 23, 24));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 25, 26));
+        cell = row.createCell(25);
+        cell.setCellStyle(cellStyleLeft);
+        cell.setCellValue(profundidadSondeo.getSondeoNumero());
+        // lugar
+        row = sheet.createRow(3);
+        cell = row.createCell(6);
+        cell.setCellValue("Lugar:");
+        cell.setCellStyle(cellStyleRight);
+        cell = row.createCell(7);
+        cell.setCellValue(profundidadSondeo.getLugar());
+        cell.setCellStyle(cellStyleLeft);
+        sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
     }
 
     private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, Workbook wb,
@@ -351,7 +408,7 @@ public class ArchivoExcel {
         _cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         XSSFFont font = (XSSFFont) wb.createFont();
         font.setBold(true);
-        font.setFontHeightInPoints((short) 14);
+        font.setFontHeightInPoints((short) 18);
         _cellStyle.setFont(font);
         Row rowDatos = sheet.createRow(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
@@ -359,30 +416,37 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(0);
         cell.setCellValue("Elevacion en metros: " + profundidadSondeos.get(0).getElevacion());
         cell.setCellStyle(cellStyleLeft);
-        rowDatos.setHeight((short) 700);
+        rowDatos.setHeight((short) 850);
         Row xRow = sheet.getRow(11);
         if (xRow == null) xRow = sheet.createRow(11);
-        xRow.setHeight((short) 700);
+        xRow.setHeight((short) 850);
         cell = rowDatos.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
-        sheet.setColumnWidth(cell.getColumnIndex(), 3000);
+        sheet.setColumnWidth(cell.getColumnIndex(), 3500);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(11);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 11, 11));
         cell.setCellValue("Golpes");
+        sheet.setColumnWidth(cell.getColumnIndex(), 3500);
         cell.setCellStyle(_cellStyle);
         cell = rowDatos.createCell(12);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 12, 12));
-        cell.setCellValue("Golpes\n/Pie");
-        sheet.setColumnWidth(cell.getColumnIndex(), 3000);
+        cell.setCellValue("Golpes\n Por Pie");
+        sheet.setColumnWidth(cell.getColumnIndex(), 3200);
         cell.setCellStyle(_cellStyle);
-        cell = rowDatos.createCell(13);
+        Cell cellProfundidad = rowDatos.createCell(13);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
         _cellStyle.setShrinkToFit(true);
-        cell.setCellValue("Profundidad");
-        cell.setCellStyle(_cellStyle);
-        sheet.setColumnWidth(cell.getColumnIndex(), 4000);
+        cellProfundidad.setCellValue("Profundidad");
+        CellStyle cellStyleProfundidad = wb.createCellStyle();
+        cellStyleProfundidad.setAlignment(HorizontalAlignment.CENTER);
+        cellStyleProfundidad.setVerticalAlignment(VerticalAlignment.CENTER);
+        Font fontProfundidad = wb.createFont();
+        font.setFontHeightInPoints((short) 14);
+        cellStyleProfundidad.setFont(font);
+        cellProfundidad.setCellStyle(cellStyleProfundidad);
+        sheet.setColumnWidth(cellProfundidad.getColumnIndex(), 4000);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lastRow));
         try {
             int _initRow;
@@ -495,7 +559,7 @@ public class ArchivoExcel {
         CellStyle cellStyleDatos = wb.createCellStyle();
         cellStyleDatos.setWrapText(true);
         cellStyleDatos.setRotation((short) 90);
-        fontBold.setFontHeightInPoints((short) 18);
+        fontBold.setFontHeightInPoints((short) 19);
         borderCell(cell, cellStyleDatos, fontBold);
         Sheet sheet = cell.getSheet();
         int rowIndex = cell.getRowIndex();
@@ -527,7 +591,7 @@ public class ArchivoExcel {
         CTTextParagraph para = rich.addNewP();
         CTRegularTextRun r = para.addNewR();
         ctTextCharacterProperties = ctChart.getTitle().getTx().getRich().addNewP().addNewPPr().addNewDefRPr();
-        ctTextCharacterProperties.setSz(1500);
+        ctTextCharacterProperties.setSz(1800);
         ctTextCharacterProperties.setB(true);
         r.setRPr(ctTextCharacterProperties);
         r.setT(title);
@@ -562,6 +626,10 @@ public class ArchivoExcel {
         ctPlotArea.getSpPr().addNewNoFill();
         XDDFValueAxis bottomAxis = chart.createValueAxis(AxisPosition.BOTTOM);
         //bottomAxis.setTitle("N = Golpes / Pie");
+        CTTextBody ctTextBody = ctPlotArea.getValAxArray((int) bottomAxis.getId()).addNewTxPr();
+        ctTextBody.addNewBodyPr(); //body properties
+        CTTextCharacterProperties ctTextCharacterProperties = ctTextBody.addNewP().addNewPPr().addNewDefRPr(); //character properties
+        ctTextCharacterProperties.setSz(15 * 100); //size in 100th of a point
         setAxisTitle(chart, "N = Golpes / Pie");
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);
@@ -650,7 +718,7 @@ public class ArchivoExcel {
         XDDFFillProperties fillProperties = new XDDFSolidFillProperties(XDDFColor.from(PresetColor.RED));
         XDDFLineProperties line = new XDDFLineProperties();
         line.setFillProperties(fill);
-        line.setWidth(Units.pixelToEMU(4));
+        line.setWidth(Units.pixelToEMU(6));
         XDDFChartData.Series series = data.getSeries().get(index);
         XDDFShapeProperties properties = series.getShapeProperties();
         if (properties == null) {

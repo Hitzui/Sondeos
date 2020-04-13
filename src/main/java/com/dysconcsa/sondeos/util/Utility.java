@@ -159,11 +159,19 @@ public class Utility {
         }
     }
 
+    public String truncate(final String content, final int beginIndex, final int lastIndex) {
+        String result = content.substring(beginIndex, lastIndex);
+        if (content.charAt(lastIndex) != ' ') {
+            result = result.substring(0, result.lastIndexOf(" "));
+        }
+        return result;
+    }
+
     void crearDatosCampo(XSSFSheet sheet, ObservableList<DatosCampoProperty> datosCampoProperties) {
         CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
         CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 16);
         CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 16);
-        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 20);
+        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 28);
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
             if (row == null) {
