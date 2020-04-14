@@ -365,7 +365,7 @@ public class ArchivoExcel {
         // ****************************************************/
         rowVacia = sheet.createRow(5);
         rowVacia.setHeight((short) 600);
-        // **********************************/
+        // **************************************************/
         // rowVacia.setHeight((short) 1500);
         XSSFCell cellCota = rowVacia.createCell(0);
         cellCota.setCellValue("Cota en \nMetros");
