@@ -41,7 +41,7 @@ public class ArchivoExcel {
     private List<ProfundidadSondeo> profundidadSondeos;
     private ObservableList<TrepanoProperty> trepanoProperties;
     private Utility utility;
-    private int lastRow = 26;
+    private int lastRow = 29;
 
     private JFXTabPane tabPane;
     private Tab tabToUse;
@@ -161,15 +161,15 @@ public class ArchivoExcel {
             //borde exterior completo
             pt.drawBorders(new CellRangeAddress(5, size + 11, 0, lastRow), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
             //operador
-            pt.drawBorders(new CellRangeAddress(6, 6, 13, 20), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(6, 6, 13, 22), BorderStyle.THIN, BorderExtent.BOTTOM);
             //nivel freatico
-            pt.drawBorders(new CellRangeAddress(6, 6, 24, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(6, 6, 26, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
             //observaciones
-            pt.drawBorders(new CellRangeAddress(7, 7, 13, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(7, 7, 13, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
             //archivo
-            pt.drawBorders(new CellRangeAddress(8, 8, 13, 21), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(8, 8, 13, 23), BorderStyle.THIN, BorderExtent.BOTTOM);
             //fecha
-            pt.drawBorders(new CellRangeAddress(8, 8, 24, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(8, 8, 26, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -241,7 +241,6 @@ public class ArchivoExcel {
         cellStyleRight.setFont(fontBold);
         // datos del cliente
         XSSFRow row = sheet.createRow(0);
-        row.setHeight((short) 800);
         Cell cell = row.createCell(6);
         cell.setCellStyle(cellStyleRight);
         cell.setCellValue("Cliente:");
@@ -286,8 +285,8 @@ public class ArchivoExcel {
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
         cellSondeo.setCellValue("Sondeo No:");
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 23, 24));
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 25, 26));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 26, 27));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 28, lastRow));
         cell = row.createCell(25);
         cell.setCellStyle(cellStyleLeft);
         cell.setCellValue(profundidadSondeo.getSondeoNumero());
@@ -304,7 +303,6 @@ public class ArchivoExcel {
 
     private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, XSSFWorkbook wb,
                       Font fontBold) {
-        cellStyle.setWrapText(true);
         CellStyle cellStyleDatos = wb.createCellStyle();
         CellStyle cellStyleLeft = wb.createCellStyle();
         cellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
@@ -315,22 +313,22 @@ public class ArchivoExcel {
         cellStyleRight.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyleRight.setFont(fontBold);
         // ********************* operador **********************************/
-        Row rowVacia = sheet.createRow(6);
+        XSSFRow rowVacia = sheet.createRow(6);
         Cell cellLugar = rowVacia.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 10, 12));
         cellLugar.setCellValue("Operador: ");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 20));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 22));
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getOperador());
         cellLugar.setCellStyle(cellStyleLeft);
         // ********************** nivel friatico *************************/
-        cellLugar = rowVacia.createCell(21);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 21, 23));
+        cellLugar = rowVacia.createCell(23);
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 25));
         //sheet.setColumnWidth(21, 3500);
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 24, lastRow));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 26, lastRow - 1));
         cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
@@ -340,7 +338,7 @@ public class ArchivoExcel {
         cellLugar.setCellValue("Observaciones:");
         sheet.addMergedRegion(new CellRangeAddress(7, 7, 10, 12));
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, lastRow));
+        sheet.addMergedRegion(new CellRangeAddress(7, 7, 13, lastRow - 1));
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getObservaciones());
         cellLugar.setCellStyle(cellStyleLeft);
@@ -354,55 +352,55 @@ public class ArchivoExcel {
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getArchivo());
         cellLugar.setCellStyle(cellStyleLeft);
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 21));
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 23));
         // ************** fecha *******************************/
-        cellLugar = rowVacia.createCell(22);
+        cellLugar = rowVacia.createCell(24);
         cellLugar.setCellValue("Fecha: ");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 22, 23));
-        cellLugar = rowVacia.createCell(24);
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 24, 25));
+        cellLugar = rowVacia.createCell(26);
         cellLugar.setCellValue(profundidadSondeo.getFecha());
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 24, lastRow));
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 26, lastRow - 1));
         cellLugar.setCellStyle(cellStyleLeft);
         // ****************************************************/
         rowVacia = sheet.createRow(5);
         rowVacia.setHeight((short) 600);
         // **********************************/
         // rowVacia.setHeight((short) 1500);
-        Cell cell = rowVacia.createCell(0);
-        cell.setCellValue("Cota en \nMetros");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(1);
-        cell.setCellValue("Profundidad \nen metros");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(2);
-        cell.setCellValue("Espesor \nEstratos \nen metros");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(3);
-        cell.setCellValue("Ademe");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(4);
-        cell.setCellValue("Trepano");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(5);
-        cell.setCellValue("Clasificacion \nS.U.C.S");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(6);
-        cell.setCellValue("Descripcion Geologica y Clasificacion Del Material Encontrado");
-        cell.setCellStyle(cellStyle);
-        sheet.addMergedRegion(new CellRangeAddress(cell.getRowIndex(), cell.getRowIndex() + 4, cell.getColumnIndex(),
-                cell.getColumnIndex()));
-        sheet.autoSizeColumn(cell.getColumnIndex(), true);
-        borderCell(cell, cellStyleDatos, fontBold);
-        cell = rowVacia.createCell(7);
-        cell.setCellValue("Limite \nLiquido");
-        borderCellRotate(cell, wb, fontBold);
-        cell = rowVacia.createCell(8);
+        XSSFCell cellCota = rowVacia.createCell(0);
+        cellCota.setCellValue("Cota en \nMetros");
+        borderCellRotate(cellCota, wb, fontBold, (short) 90);
+        XSSFCell cellProfundidadM = rowVacia.createCell(1);
+        cellProfundidadM.setCellValue("Profundidad \nen metros");
+        borderCellRotate(cellProfundidadM, wb, fontBold, (short) 90);
+        XSSFCell cellEspesor = rowVacia.createCell(2);
+        cellEspesor.setCellValue("Espesor \nEstratos \nen metros");
+        borderCellRotate(cellEspesor, wb, fontBold, (short) 90);
+        XSSFCell cellAdeme = rowVacia.createCell(3);
+        cellAdeme.setCellValue("Ademe");
+        borderCellRotate(cellAdeme, wb, fontBold, (short) 90);
+        XSSFCell cellTrepano = rowVacia.createCell(4);
+        cellTrepano.setCellValue("Trepano");
+        borderCellRotate(cellTrepano, wb, fontBold, (short) 90);
+        XSSFCell cellSucs = rowVacia.createCell(5);
+        cellSucs.setCellValue("Clasificacion \nS.U.C.S");
+        borderCellRotate(cellSucs, wb, fontBold, (short) 90);
+        XSSFCell cellDescripcion = rowVacia.createCell(6);
+        XSSFRichTextString richTextString = new XSSFRichTextString("Descripcion Geologica y Clasificacion\n Del Material Encontrado");
+        cellDescripcion.setCellValue(richTextString);
+        borderCellRotate(cellDescripcion, wb, fontBold, (short) 0);
+        //sheet.addMergedRegion(new CellRangeAddress(5, 9, 6, 6));
+        sheet.autoSizeColumn(6, true);
+        //borderCell(cell, cellStyleDatos, fontBold);
+        XSSFCell cellLimite = rowVacia.createCell(7);
+        cellLimite.setCellValue("Limite \nLiquido");
+        borderCellRotate(cellLimite, wb, fontBold, (short) 90);
+        XSSFCell cell = rowVacia.createCell(8);
         cell.setCellValue("Indice de \nPlasticidad");
-        borderCellRotate(cell, wb, fontBold);
+        borderCellRotate(cell, wb, fontBold, (short) 90);
         cell = rowVacia.createCell(9);
         cell.setCellValue("Humedad \nnatural");
-        borderCellRotate(cell, wb, fontBold);
+        borderCellRotate(cell, wb, fontBold, (short) 90);
         // *************** DATOS ********************************************/
         CellStyle _cellStyle = wb.createCellStyle();
         _cellStyle.setShrinkToFit(true);
@@ -414,7 +412,7 @@ public class ArchivoExcel {
         //font.setFontName("Bahnschrift Condensed");
         font.setFontHeightInPoints((short) 16);
         _cellStyle.setFont(font);
-        Row rowDatos = sheet.createRow(10);
+        XSSFRow rowDatos = sheet.createRow(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 0, 9));
         RegionUtil.setBorderBottom(BorderStyle.MEDIUM, new CellRangeAddress(10, 11, 0, 9), sheet);
         cell = rowDatos.createCell(0);
@@ -560,16 +558,16 @@ public class ArchivoExcel {
         }
     }
 
-    private void borderCellRotate(Cell cell, Workbook wb, Font fontBold) {
+    private void borderCellRotate(Cell cell, Workbook wb, Font fontBold, short rotation) {
         CellStyle cellStyleDatos = wb.createCellStyle();
         cellStyleDatos.setWrapText(true);
-        cellStyleDatos.setRotation((short) 90);
+        cellStyleDatos.setRotation(rotation);
         fontBold.setFontHeightInPoints((short) 19);
         borderCell(cell, cellStyleDatos, fontBold);
         Sheet sheet = cell.getSheet();
         int rowIndex = cell.getRowIndex();
         int columnIndex = cell.getColumnIndex();
-        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 4, columnIndex, columnIndex));
+        sheet.addMergedRegion(new CellRangeAddress(5, 9, columnIndex, columnIndex));
     }
 
     private void borderCell(Cell cell, CellStyle cellStyleDatos, Font fontBold) {
@@ -607,7 +605,7 @@ public class ArchivoExcel {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
         int num_rows = (datosCampoProperties.size() * 3) + 13;
         List<Double> yList = utility.yValues(datosCampoProperties);
-        XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 14, 10, 27, num_rows);
+        XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 14, 10, lastRow + 1, num_rows);
         Map<Integer, List<Integer>> mapRotadoX = utility.mapRotadosX;
         int aux = 0;
         XSSFChart chart = drawing.createChart(anchor);
