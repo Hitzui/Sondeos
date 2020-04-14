@@ -135,9 +135,9 @@ public class ArchivoExcel {
             pt.drawBorders(new CellRangeAddress(0, 0, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
             //proyecto
             pt.drawBorders(new CellRangeAddress(1, 1, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
-            pt.drawBorders(new CellRangeAddress(2, 2, 7, 22), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(2, 2, 7, 23), BorderStyle.THIN, BorderExtent.BOTTOM);
             //sondeo numero
-            pt.drawBorders(new CellRangeAddress(2, 2, 25, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(2, 2, 27, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
             //lugar
             pt.drawBorders(new CellRangeAddress(3, 3, 7, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
             //cuadro de datos del sondeo
@@ -275,20 +275,19 @@ public class ArchivoExcel {
             cellProyecto.setCellValue(cortarProyecto2);
             cellProyecto.setCellStyle(cellStyleLeft);
         }
-        Cell cellSondeo = row.createCell(23);
+        Cell cellSondeo = row.createCell(24);
         CellStyle cellStyleSondeoNumero = wb.createCellStyle();
         Font fontSondeo = wb.createFont();
-        fontSondeo.setFontHeightInPoints((short) 18);
-        fontSondeo.setBold(true);
+        fontSondeo.setFontHeightInPoints((short) 22);
         cellStyleSondeoNumero.setFont(fontSondeo);
         cellStyleSondeoNumero.setAlignment(HorizontalAlignment.CENTER);
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
         cellSondeo.setCellValue("Sondeo No:");
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 26, 27));
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 28, lastRow));
-        cell = row.createCell(25);
-        cell.setCellStyle(cellStyleLeft);
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 24, 26));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 27, lastRow));
+        cell = row.createCell(27);
+        cell.setCellStyle(cellStyleSondeoNumero);
         cell.setCellValue(profundidadSondeo.getSondeoNumero());
         // lugar
         row = sheet.createRow(3);
