@@ -168,9 +168,9 @@ public class Utility {
     }
 
     void crearDatosCampo(XSSFSheet sheet, ObservableList<DatosCampoProperty> datosCampoProperties) {
-        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
-        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 16);
-        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 16);
+        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 18);
+        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 18);
+        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 18);
         CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 28);
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
@@ -359,7 +359,7 @@ public class Utility {
         }
         int auxProfundidadInicial = 0;
         CellStyle cellStyle = customCellStyle(sheet.getWorkbook(), HorizontalAlignment.CENTER,
-                (short) 12);
+                (short) 18);
         int init = 0;
         for (HumedadProperty dato : humedadProperties) {
             int firstRow = (int) (dato.getProfundidadInicial() * 2);

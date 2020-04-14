@@ -21,10 +21,7 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.*;
 import org.apache.poi.xddf.usermodel.chart.*;
 import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTTitle;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTTx;
+import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextBody;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextCharacterProperties;
@@ -163,6 +160,16 @@ public class ArchivoExcel {
             pt.drawBorders(new CellRangeAddress(12, size + 11, 0, lastRow), BorderStyle.THIN, BorderExtent.ALL);
             //borde exterior completo
             pt.drawBorders(new CellRangeAddress(5, size + 11, 0, lastRow), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+            //operador
+            pt.drawBorders(new CellRangeAddress(6, 6, 13, 20), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //nivel freatico
+            pt.drawBorders(new CellRangeAddress(6, 6, 24, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //observaciones
+            pt.drawBorders(new CellRangeAddress(7, 7, 13, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //archivo
+            pt.drawBorders(new CellRangeAddress(8, 8, 13, 21), BorderStyle.THIN, BorderExtent.BOTTOM);
+            //fecha
+            pt.drawBorders(new CellRangeAddress(8, 8, 24, lastRow), BorderStyle.THIN, BorderExtent.BOTTOM);
             pt.applyBorders(sheet);
             // String archivo = "sondeos.xlsx";
             XSSFPrintSetup printSetup = sheet.getPrintSetup();
@@ -292,7 +299,7 @@ public class ArchivoExcel {
         cell = row.createCell(7);
         cell.setCellValue(profundidadSondeo.getLugar());
         cell.setCellStyle(cellStyleLeft);
-        sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 20));
+        sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, lastRow));
     }
 
     private void data(XSSFSheet sheet, ProfundidadSondeo profundidadSondeo, CellStyle cellStyle, XSSFWorkbook wb,
@@ -347,7 +354,7 @@ public class ArchivoExcel {
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getArchivo());
         cellLugar.setCellStyle(cellStyleLeft);
-        sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 19));
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 13, 21));
         // ************** fecha *******************************/
         cellLugar = rowVacia.createCell(22);
         cellLugar.setCellValue("Fecha: ");
@@ -605,7 +612,6 @@ public class ArchivoExcel {
         int aux = 0;
         XSSFChart chart = drawing.createChart(anchor);
         //chart.setTitleText("N = Golpes / Pie");
-
         chart.getCTChartSpace().addNewRoundedCorners();
         chart.getCTChartSpace().getRoundedCorners().setVal(false);
         chart.getCTChartSpace().addNewSpPr();
@@ -624,7 +630,8 @@ public class ArchivoExcel {
         ctPlotArea.getSpPr().addNewNoFill();
         XDDFValueAxis bottomAxis = chart.createValueAxis(AxisPosition.BOTTOM);
         //bottomAxis.setTitle("N = Golpes / Pie");
-        CTTextBody ctTextBody = ctPlotArea.getValAxArray((int) bottomAxis.getId()).addNewTxPr();
+        CTValAx ctValAx = ctPlotArea.getValAxArray((int) bottomAxis.getId());
+        CTTextBody ctTextBody = ctValAx.addNewTxPr();
         ctTextBody.addNewBodyPr(); //body properties
         CTTextCharacterProperties ctTextCharacterProperties = ctTextBody.addNewP().addNewPPr().addNewDefRPr(); //character properties
         ctTextCharacterProperties.setSz(15 * 100); //size in 100th of a point
