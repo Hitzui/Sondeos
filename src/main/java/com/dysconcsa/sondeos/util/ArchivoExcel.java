@@ -181,7 +181,7 @@ public class ArchivoExcel {
             // printSetup.setFooterMargin(0.25);
             Footer footer = sheet.getFooter();
             String footerText = "\"Clave: AW - Nw EX, AX, BX, nx - Diametro Standard. T = Tungsteno, D = Diamante, Do = Doble, CP = Cola de Pescado, CN = Cuchara Normal, PD = Tubo de Pared Delgada.\"";
-            footer.setLeft(HeaderFooter.startBold() + HeaderFooter.fontSize((short) 16) + footerText.toUpperCase());
+            footer.setLeft(HeaderFooter.startBold() + HeaderFooter.fontSize((short) 20) + footerText.toUpperCase());
             footer.setRight(HeaderFooter.fontSize((short) 20) + HeaderFooter.page().toUpperCase() + " De " + HeaderFooter.numPages().toUpperCase());
             sheet.setMargin(Sheet.LeftMargin, 0.25);
             sheet.setMargin(Sheet.RightMargin, 0.25);
@@ -282,7 +282,7 @@ public class ArchivoExcel {
         fontSondeo.setFontHeightInPoints((short) 18);
         fontSondeo.setBold(true);
         cellStyleSondeoNumero.setFont(fontSondeo);
-        cellStyleSondeoNumero.setAlignment(HorizontalAlignment.LEFT);
+        cellStyleSondeoNumero.setAlignment(HorizontalAlignment.CENTER);
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
         cellSondeo.setCellValue("Sondeo No:");
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
