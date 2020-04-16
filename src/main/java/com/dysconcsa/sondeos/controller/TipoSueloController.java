@@ -21,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import javax.annotation.PostConstruct;
 import java.net.URL;
@@ -34,7 +36,8 @@ public class TipoSueloController extends AbstractController implements Initializ
     private static final String _eliminar = "Eliminar";
 
     private ObservableList<SuelosProperty> suelosProperties = FXCollections.observableArrayList();
-
+    private final ObservableList<IndexedColors> itemsColorPoperties = FXCollections.observableArrayList();
+    private final ObservableList<FillPatternType> patternTypesProperties = FXCollections.observableArrayList();
     static SuelosProperty suelosProperty;
 
     @FXML
@@ -50,7 +53,9 @@ public class TipoSueloController extends AbstractController implements Initializ
     private TableColumn<SuelosProperty, String> colSimbolo;
 
     @FXML
-    private TableColumn<SuelosProperty, String> colImagen;
+    private TableColumn<SuelosProperty, IndexedColors> colColor;
+    @FXML
+    private TableColumn<SuelosProperty, FillPatternType> colPattern;
 
     @FXML
     @ActionTrigger("nuevoRegistroSuelos")
@@ -83,10 +88,12 @@ public class TipoSueloController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Utility utility = new Utility();
         loadDatas();
+        loadColors();
+        loadPattern();
         colDescripcion.setCellValueFactory(cellData -> cellData.getValue().nombreProperty());
         colSimbolo.setCellValueFactory(cellData -> cellData.getValue().simboloProperty());
-        colImagen.setCellValueFactory(cellData -> cellData.getValue().imagenProperty());
         tableSuelos.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> suelosProperty = newValue));
         tableSuelos.setRowFactory(event -> {
             final TableRow<SuelosProperty> row = new TableRow<>();
@@ -97,6 +104,10 @@ public class TipoSueloController extends AbstractController implements Initializ
             });
             return row;
         });
+        colColor.setCellFactory(param -> utility.comboBoxColors(itemsColorPoperties));
+        colColor.setCellValueFactory(value -> value.getValue().colorProperty());
+        colPattern.setCellFactory(param -> utility.comboBoxPattern(patternTypesProperties));
+        colPattern.setCellValueFactory(value -> value.getValue().patternProperty());
     }
 
     @ActionMethod("nuevoRegistroSuelos")
@@ -180,5 +191,13 @@ public class TipoSueloController extends AbstractController implements Initializ
         }));
         popup = new JFXPopup(list);
         popup.show(tableRow, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT, x, y);
+    }
+    private void loadColors() {
+        Utility utility = new Utility();
+        utility.loadColors(itemsColorPoperties);
+    }
+
+    private void loadPattern() {
+        patternTypesProperties.addAll(FillPatternType.values());
     }
 }

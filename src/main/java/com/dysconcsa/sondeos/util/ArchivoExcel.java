@@ -259,8 +259,8 @@ public class ArchivoExcel {
         cellProyecto.setCellStyle(cellStyleLeft);
         String cortarProyecto1;
         String cortarProyecto2 = "";
-        if (lengthProyecto > 100) {
-            cortarProyecto1 = utility.truncate(empresaProperty.getProyecto(), 0, 100);
+        if (lengthProyecto > 130) {
+            cortarProyecto1 = utility.truncate(empresaProperty.getProyecto(), 0, 130);
             cortarProyecto2 = utility.truncate(empresaProperty.getProyecto(), cortarProyecto1.length(), lengthProyecto - 1);
         } else {
             cortarProyecto1 = empresaProperty.getProyecto();
@@ -328,7 +328,7 @@ public class ArchivoExcel {
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 26, lastRow - 1));
-        cellLugar = rowVacia.createCell(24);
+        cellLugar = rowVacia.createCell(26);
         cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
         // ***************** observaciones *******************/
@@ -441,14 +441,14 @@ public class ArchivoExcel {
         XSSFFont fontProfundidad = wb.createFont();
         fontProfundidad.setFontHeightInPoints((short) 16);
         fontProfundidad.setBold(true);
-        fontProfundidad.setFontName("Bahnschrift Condensed");
+        //fontProfundidad.setFontName("Bahnschrift Condensed");
         cellStyleProfundidad.setFont(fontProfundidad);
         cellStyleProfundidad.setAlignment(HorizontalAlignment.CENTER);
         cellStyleProfundidad.setVerticalAlignment(VerticalAlignment.CENTER);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 13, 13));
         cellProfundidad.setCellValue("Profundidad");
         cellProfundidad.setCellStyle(cellStyleProfundidad);
-        sheet.setColumnWidth(cellProfundidad.getColumnIndex(), 4000);
+        sheet.setColumnWidth(cellProfundidad.getColumnIndex(), 4200);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 14, lastRow));
         try {
             int _initRow;

@@ -936,39 +936,21 @@ public class FormValoresController {
     }
 
     private void loadColors() {
-        for (IndexedColors colors : IndexedColors.values()) {
-            try {
-                XSSFColor color = new XSSFColor(colors, null);
-                if (!color.getARGBHex().equals("null")) {
-                    itemsColorPoperties.add(colors);
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
+        Utility utility = new Utility();
+        utility.loadColors(itemsColorPoperties);
     }
 
     private void loadPattern() {
         patternTypesProperties.addAll(FillPatternType.values());
     }
 
-    private ComboBoxTableCell comboBoxColors() {
-        ComboBoxTableCell<ClasificacionSucsProperty, IndexedColors> comboBoxTableCell = new ComboBoxTableCell<>();
-        comboBoxTableCell.getItems().addAll(itemsColorPoperties);
-        comboBoxTableCell.updateSelected(true);
-        comboBoxTableCell.getComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
-            XSSFColor color = new XSSFColor(newValue, null);
-            comboBoxTableCell.setStyle(" -fx-background-color: #" + color.getARGBHex().substring(2));
-        });
-        comboBoxTableCell.updateSelected(true);
-        return comboBoxTableCell;
+    private ComboBoxTableCell<ClasificacionSucsProperty,IndexedColors> comboBoxColors() {
+        Utility utility = new Utility();
+        return utility.comboBoxColors(itemsColorPoperties);
     }
 
-    private ComboBoxTableCell comboBoxPattern() {
-        ComboBoxTableCell<ClasificacionSucsProperty, FillPatternType> comboBoxTableCell = new ComboBoxTableCell<>();
-        comboBoxTableCell.getItems().addAll(patternTypesProperties);
-        comboBoxTableCell.updateSelected(true);
-        comboBoxTableCell.updateSelected(true);
-        return comboBoxTableCell;
+    private ComboBoxTableCell<ClasificacionSucsProperty,FillPatternType> comboBoxPattern() {
+        Utility utility = new Utility();
+        return utility.comboBoxPattern(patternTypesProperties);
     }
 }

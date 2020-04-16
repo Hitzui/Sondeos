@@ -594,4 +594,36 @@ public class Utility {
         cellStyle.setFillForegroundColor(color.index);
         return cellStyle;
     }
+    public void loadColors(ObservableList<IndexedColors> itemsColorPoperties) {
+        for (IndexedColors colors : IndexedColors.values()) {
+            try {
+                XSSFColor color = new XSSFColor(colors, null);
+                if (!color.getARGBHex().equals("null")) {
+                    itemsColorPoperties.add(colors);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+    }
+    public<T> ComboBoxTableCell<T,IndexedColors> comboBoxColors(ObservableList<IndexedColors> itemsColorPoperties) {
+        ComboBoxTableCell<T, IndexedColors> comboBoxTableCell = new ComboBoxTableCell<>();
+        comboBoxTableCell.getItems().addAll(itemsColorPoperties);
+        comboBoxTableCell.updateSelected(true);
+        comboBoxTableCell.getComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
+            XSSFColor color = new XSSFColor(newValue, null);
+            comboBoxTableCell.setStyle(" -fx-background-color: #" + color.getARGBHex().substring(2));
+        });
+        comboBoxTableCell.updateSelected(true);
+        return comboBoxTableCell;
+    }
+
+    public<T> ComboBoxTableCell<T, FillPatternType> comboBoxPattern(ObservableList<FillPatternType> patternTypesProperties ) {
+        ComboBoxTableCell<T, FillPatternType> comboBoxTableCell = new ComboBoxTableCell<>();
+        comboBoxTableCell.getItems().addAll(patternTypesProperties);
+        comboBoxTableCell.updateSelected(true);
+        comboBoxTableCell.updateSelected(true);
+        return comboBoxTableCell;
+    }
+
 }

@@ -5,10 +5,9 @@
  */
 package com.dysconcsa.sondeos.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.util.Objects;
 
@@ -19,22 +18,23 @@ public class SuelosProperty {
     private IntegerProperty ID;
     private StringProperty nombre;
     private StringProperty simbolo;
-    private StringProperty imagen;
+    private ObjectProperty<IndexedColors> color;
+    private ObjectProperty<FillPatternType> pattern;
 
     /**
      * tipo de suelos en la base de datos, se guarda la imagne como texto
      *
      * @param ID     Llave primaria
      * @param name   Nombre del tipo de suelo
-     * @param symbol Simbologia a usar
-     * @param image  Ruta de la imgaen
+     * @param symbol Simbologia a usa
      * @return SuelosProperty
      */
-    public SuelosProperty(Integer ID, String name, String symbol, String image) {
+    public SuelosProperty(Integer ID, String name, String symbol,IndexedColors colors,FillPatternType patternType) {
         this.ID = new SimpleIntegerProperty(ID);
         this.nombre = new SimpleStringProperty(name);
         this.simbolo = new SimpleStringProperty(symbol);
-        this.imagen = new SimpleStringProperty(image);
+        this.color = new SimpleObjectProperty<>(colors);
+        this.pattern = new SimpleObjectProperty<>(patternType);
     }
 
     public int getID() {
@@ -73,16 +73,28 @@ public class SuelosProperty {
         this.simbolo.set(simbolo);
     }
 
-    public String getImagen() {
-        return imagen.get();
+    public IndexedColors getColor() {
+        return color.get();
     }
 
-    public StringProperty imagenProperty() {
-        return imagen;
+    public ObjectProperty<IndexedColors> colorProperty() {
+        return color;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen.set(imagen);
+    public void setColor(IndexedColors color) {
+        this.color.set(color);
+    }
+
+    public FillPatternType getPattern() {
+        return pattern.get();
+    }
+
+    public ObjectProperty<FillPatternType> patternProperty() {
+        return pattern;
+    }
+
+    public void setPattern(FillPatternType pattern) {
+        this.pattern.set(pattern);
     }
 
     @Override
@@ -97,12 +109,11 @@ public class SuelosProperty {
         SuelosProperty that = (SuelosProperty) o;
         return Objects.equals(ID, that.ID) &&
                 Objects.equals(nombre, that.nombre) &&
-                Objects.equals(simbolo, that.simbolo) &&
-                Objects.equals(imagen, that.imagen);
+                Objects.equals(simbolo, that.simbolo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ID, nombre, simbolo, imagen);
+        return Objects.hash(ID, nombre, simbolo);
     }
 }

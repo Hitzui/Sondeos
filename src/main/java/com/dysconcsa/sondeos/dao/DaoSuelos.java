@@ -1,6 +1,8 @@
 package com.dysconcsa.sondeos.dao;
 
 import com.dysconcsa.sondeos.model.SuelosProperty;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class DaoSuelos {
         connection = new DataConnection();
         try {
             Connection conn = connection.getConnection();
-            String sql = "CREATE TABLE IF NOT EXISTS `suelos` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `nombre` TEXT NOT NULL, `simbolo` TEXT NOT NULL, `imagen` TEXT NOT NULL )";
+            String sql = "CREATE TABLE IF NOT EXISTS `suelos` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `nombre` TEXT NOT NULL, `simbolo` TEXT NOT NULL,color int,pattern int)";
             Statement statement = conn.createStatement();
             statement.execute(sql);
         } catch (SQLException ex) {
@@ -38,7 +40,7 @@ public class DaoSuelos {
             ResultSet rs = stmt.executeQuery("SELECT  * FROM suelos");
             while (rs.next()) {
                 SuelosProperty suelosProperty = new SuelosProperty(rs.getInt("id"), rs.getString("nombre"),
-                        rs.getString("simbolo"), rs.getString("imagen"));
+                        rs.getString("simbolo"), IndexedColors.fromInt(rs.getInt("color")), FillPatternType.forInt(rs.getInt("pattern")));
                 listSuelos.add(suelosProperty);
             }
             return listSuelos;
@@ -59,7 +61,11 @@ public class DaoSuelos {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                suelosProperty = new SuelosProperty(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("simbolo"), resultSet.getString("imagen"));
+                suelosProperty = new SuelosProperty(resultSet.getInt("id"),
+                        resultSet.getString("nombre"),
+                        resultSet.getString("simbolo"),
+                        IndexedColors.fromInt(resultSet.getInt("color")),
+                        FillPatternType.forInt(resultSet.getInt("pattern")));
             }
             return suelosProperty;
         } catch (SQLException ex) {
@@ -77,7 +83,11 @@ public class DaoSuelos {
             preparedStatement.setString(1, simbolo);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                suelosProperty = new SuelosProperty(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("simbolo"), resultSet.getString("imagen"));
+                suelosProperty = new SuelosProperty(resultSet.getInt("id"),
+                        resultSet.getString("nombre"),
+                        resultSet.getString("simbolo"),
+                        IndexedColors.fromInt(resultSet.getInt("color")),
+                        FillPatternType.forInt(resultSet.getInt("pattern")));
             }
         } catch (Exception ex) {
             _error = ex;
@@ -87,12 +97,13 @@ public class DaoSuelos {
 
     public void save(SuelosProperty suelosProperty) {
         try {
-            String sql = "INSERT INTO suelos(nombre,simbolo,imagen) VALUES (?,?,?)";
+            String sql = "INSERT INTO suelos(nombre,simbolo,color,pattern) VALUES (?,?,?,?)";
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql);
             preparedStatement.setString(1, suelosProperty.nombreProperty().get());
             preparedStatement.setString(2, suelosProperty.simboloProperty().get());
-            preparedStatement.setString(3, suelosProperty.imagenProperty().get());
+            preparedStatement.setInt(3, suelosProperty.getColor().getIndex());
+            preparedStatement.setInt(4, suelosProperty.getPattern().getCode());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             _error = ex;
@@ -101,13 +112,14 @@ public class DaoSuelos {
 
     public void update(SuelosProperty suelosProperty) {
         try {
-            String sql = "UPDATE suelos SET nombre = ?, simbolo = ?, imagen = ? WHERE id=?";
+            String sql = "UPDATE suelos SET nombre = ?, simbolo = ?, color = ?,pattern=? WHERE id=?";
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql);
             preparedStatement.setString(1, suelosProperty.getNombre());
             preparedStatement.setString(2, suelosProperty.getSimbolo());
-            preparedStatement.setString(3, suelosProperty.getImagen());
-            preparedStatement.setInt(4, suelosProperty.getID());
+            preparedStatement.setInt(3, suelosProperty.getColor().getIndex());
+            preparedStatement.setInt(4, suelosProperty.getPattern().getCode());
+            preparedStatement.setInt(5, suelosProperty.getID());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             _error = ex;

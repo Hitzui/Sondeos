@@ -7,26 +7,23 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="centerPane" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.181"
-           xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="centerPane" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane style="-fx-background-color: #343a40;" StackPane.alignment="CENTER">
             <children>
-                <TableView fx:id="tableSuelos" layoutY="47.0" prefHeight="483.0" prefWidth="728.0"
-                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                           AnchorPane.topAnchor="60.0">
+                <TableView fx:id="tableSuelos" layoutY="47.0" prefHeight="483.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                     <columns>
-                        <TableColumn fx:id="colDescripcion" prefWidth="179.0" text="Descripcion"/>
-                        <TableColumn fx:id="colSimbolo" prefWidth="201.0" text="Simbolo"/>
-                        <TableColumn fx:id="colImagen" prefWidth="287.0" text="Imagen"/>
+                        <TableColumn fx:id="colDescripcion" prefWidth="179.0" text="Descripcion" />
+                        <TableColumn fx:id="colSimbolo" prefWidth="201.0" text="Simbolo" />
+                  <TableColumn fx:id="colColor" prefWidth="127.0" text="Color" />
+                  <TableColumn fx:id="colPattern" prefWidth="161.0" text="Patron" />
                     </columns>
                 </TableView>
-                <HBox alignment="CENTER_LEFT" layoutX="31.0" prefHeight="51.0" prefWidth="257.0" spacing="20.0"
-                      AnchorPane.leftAnchor="31.0" AnchorPane.topAnchor="0.0">
+                <HBox alignment="CENTER_LEFT" layoutX="31.0" prefHeight="51.0" prefWidth="257.0" spacing="20.0" AnchorPane.leftAnchor="31.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Button fx:id="btnNuevo" mnemonicParsing="false" text="Nuevo"/>
-                        <Button fx:id="btnEditar" mnemonicParsing="false" text="Editar"/>
-                        <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar"/>
+                        <Button fx:id="btnNuevo" mnemonicParsing="false" text="Nuevo" />
+                        <Button fx:id="btnEditar" mnemonicParsing="false" text="Editar" />
+                        <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar" />
                     </children>
                 </HBox>
             </children>
