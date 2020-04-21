@@ -36,7 +36,6 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -540,7 +539,9 @@ public class FormValoresController {
         colAdemeDescripion.setCellValueFactory(value -> value.getValue().descripcionProperty());
     }
 
+    @SuppressWarnings("rawtypes")
     private void setupClasificacionColumn() {
+        DaoSuelos daoSuelos = new DaoSuelos();
         colProfundidadSucs.setCellValueFactory(value -> value.getValue().profundidadProperty().asObject());
         colProfundidadSucs.setCellFactory(EditCell.forTableColumn(new DoubleStringConverter()));
         colProfundidadSucs.setOnEditCommit(event -> {
@@ -575,17 +576,17 @@ public class FormValoresController {
             return comboBoxTableCell;
         });
         colTipoSuelo.setCellValueFactory(value -> {
-            DaoSuelos daoSuelos = new DaoSuelos();
             SuelosProperty suelosProperty = daoSuelos.findById(value.getValue().getTipoSuelo());
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
-            DaoSuelos daoSuelos = new DaoSuelos();
             ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
             SuelosProperty suelos = daoSuelos.findBYSimbolo(String.valueOf(event.getNewValue()));
-            //TablePosition<ClasificacionSucsProperty, ?> pos = tableClasificacion.getFocusModel().getFocusedCell();
+            TablePosition pos = tableClasificacion.getFocusModel().getFocusedCell();
             //clasificacionSucsProperties.get(pos.getRow()).setDescripcion(suelos.getNombre().toUpperCase());
             clasificacionSucsProperty.setTipoSuelo(suelos.getID());
+            clasificacionSucsProperties.get(pos.getRow()).setColor(suelos.getColor());
+            clasificacionSucsProperties.get(pos.getRow()).setPattern(suelos.getPattern());
             event.consume();
         });
         colDescipcion.setCellValueFactory(value -> value.getValue().descripcionProperty());
@@ -943,12 +944,12 @@ public class FormValoresController {
         patternTypesProperties.addAll(FillPatternType.values());
     }
 
-    private ComboBoxTableCell<ClasificacionSucsProperty,IndexedColors> comboBoxColors() {
+    private ComboBoxTableCell<ClasificacionSucsProperty, IndexedColors> comboBoxColors() {
         Utility utility = new Utility();
         return utility.comboBoxColors(itemsColorPoperties);
     }
 
-    private ComboBoxTableCell<ClasificacionSucsProperty,FillPatternType> comboBoxPattern() {
+    private ComboBoxTableCell<ClasificacionSucsProperty, FillPatternType> comboBoxPattern() {
         Utility utility = new Utility();
         return utility.comboBoxPattern(patternTypesProperties);
     }

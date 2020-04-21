@@ -128,6 +128,8 @@ public class ArchivoExcel {
             cellStyleRight.setVerticalAlignment(VerticalAlignment.TOP);
             datosCliente(sheet, empresaProperty, profundidadSondeo);
             data(sheet, profundidadSondeo, cellStyle, wb, fontBold);
+            //ancho de la fila 0, donde esta la cota, no se ve el valor, por eso lo ampliamos
+            sheet.setColumnWidth(0,4000);
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
@@ -161,9 +163,9 @@ public class ArchivoExcel {
             //borde exterior completo
             pt.drawBorders(new CellRangeAddress(5, size + 11, 0, lastRow), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
             //operador
-            pt.drawBorders(new CellRangeAddress(6, 6, 13, 22), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(6, 6, 13, 21), BorderStyle.THIN, BorderExtent.BOTTOM);
             //nivel freatico
-            pt.drawBorders(new CellRangeAddress(6, 6, 26, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
+            pt.drawBorders(new CellRangeAddress(6, 6, 25, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
             //observaciones
             pt.drawBorders(new CellRangeAddress(7, 7, 13, lastRow - 1), BorderStyle.THIN, BorderExtent.BOTTOM);
             //archivo
@@ -278,7 +280,8 @@ public class ArchivoExcel {
         Cell cellSondeo = row.createCell(24);
         CellStyle cellStyleSondeoNumero = wb.createCellStyle();
         Font fontSondeo = wb.createFont();
-        fontSondeo.setFontHeightInPoints((short) 22);
+        fontSondeo.setFontHeightInPoints((short) 28);
+        fontSondeo.setBold(true);
         cellStyleSondeoNumero.setFont(fontSondeo);
         cellStyleSondeoNumero.setAlignment(HorizontalAlignment.CENTER);
         cellSondeo.setCellStyle(cellStyleSondeoNumero);
@@ -317,18 +320,18 @@ public class ArchivoExcel {
         sheet.addMergedRegion(new CellRangeAddress(6, 6, 10, 12));
         cellLugar.setCellValue("Operador: ");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 22));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 13, 21));
         cellLugar = rowVacia.createCell(13);
         cellLugar.setCellValue(profundidadSondeo.getOperador());
         cellLugar.setCellStyle(cellStyleLeft);
         // ********************** nivel friatico *************************/
-        cellLugar = rowVacia.createCell(23);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 23, 25));
+        cellLugar = rowVacia.createCell(22);
         //sheet.setColumnWidth(21, 3500);
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 22, 24));
         cellLugar.setCellValue("Nivel Freatico:");
         cellLugar.setCellStyle(cellStyleRight);
-        sheet.addMergedRegion(new CellRangeAddress(6, 6, 26, lastRow - 1));
-        cellLugar = rowVacia.createCell(26);
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 25, lastRow - 1));
+        cellLugar = rowVacia.createCell(25);
         cellLugar.setCellValue(profundidadSondeo.getNivelFreatico());
         cellLugar.setCellStyle(cellStyleLeft);
         // ***************** observaciones *******************/
@@ -375,6 +378,7 @@ public class ArchivoExcel {
         XSSFCell cellEspesor = rowVacia.createCell(2);
         cellEspesor.setCellValue("Espesor \nEstratos \nen metros");
         borderCellRotate(cellEspesor, wb, fontBold, (short) 90);
+        sheet.setColumnWidth(cellEspesor.getColumnIndex(), 5000);
         XSSFCell cellAdeme = rowVacia.createCell(3);
         cellAdeme.setCellValue("Ademe");
         borderCellRotate(cellAdeme, wb, fontBold, (short) 90);
@@ -562,11 +566,12 @@ public class ArchivoExcel {
         CellStyle cellStyleDatos = wb.createCellStyle();
         cellStyleDatos.setWrapText(true);
         cellStyleDatos.setRotation(rotation);
-        fontBold.setFontHeightInPoints((short) 19);
+        fontBold.setFontHeightInPoints((short) 24);
         borderCell(cell, cellStyleDatos, fontBold);
         Sheet sheet = cell.getSheet();
-        int rowIndex = cell.getRowIndex();
         int columnIndex = cell.getColumnIndex();
+        cell.getRow().setHeightInPoints(40);
+        sheet.setColumnWidth(columnIndex, 35 * 100);
         sheet.addMergedRegion(new CellRangeAddress(5, 9, columnIndex, columnIndex));
     }
 

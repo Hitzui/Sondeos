@@ -81,15 +81,22 @@ public class DaoSuelos {
             Connection cnn = connection.getConnection();
             PreparedStatement preparedStatement = cnn.prepareStatement(sql);
             preparedStatement.setString(1, simbolo);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                suelosProperty = new SuelosProperty(resultSet.getInt("id"),
-                        resultSet.getString("nombre"),
-                        resultSet.getString("simbolo"),
-                        IndexedColors.fromInt(resultSet.getInt("color")),
-                        FillPatternType.forInt(resultSet.getInt("pattern")));
-            }
+            suelosProperty = findOne(preparedStatement);
         } catch (Exception ex) {
+            _error = ex;
+        }
+        return suelosProperty;
+    }
+
+    public SuelosProperty findByIndexedColors(IndexedColors colors){
+        SuelosProperty suelosProperty = null;
+        try{
+            String sql = "select * from suelos where color = ?";
+            Connection cnn = connection.getConnection();
+            PreparedStatement preparedStatement = cnn.prepareStatement(sql);
+            preparedStatement.setInt(1,colors.getIndex());
+            suelosProperty = findOne(preparedStatement);
+        }catch (Exception ex){
             _error = ex;
         }
         return suelosProperty;
@@ -136,5 +143,17 @@ public class DaoSuelos {
         } catch (SQLException ex) {
             _error = ex;
         }
+    }
+    private SuelosProperty findOne(PreparedStatement preparedStatement) throws SQLException {
+        SuelosProperty suelosProperty=null;
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            suelosProperty = new SuelosProperty(resultSet.getInt("id"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("simbolo"),
+                    IndexedColors.fromInt(resultSet.getInt("color")),
+                    FillPatternType.forInt(resultSet.getInt("pattern")));
+        }
+        return suelosProperty;
     }
 }

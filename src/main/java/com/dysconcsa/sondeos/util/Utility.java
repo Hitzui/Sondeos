@@ -168,10 +168,10 @@ public class Utility {
     }
 
     void crearDatosCampo(XSSFSheet sheet, ObservableList<DatosCampoProperty> datosCampoProperties) {
-        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 18);
-        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 18);
-        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 18);
-        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 32);
+        CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 22);
+        CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 22);
+        CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 22);
+        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 34);
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
             if (row == null) {
@@ -270,15 +270,15 @@ public class Utility {
         DataFormat format = wb.createDataFormat();
         double acumProf = 0.0;
         double acum_espesor = 0d;
-        XSSFCellStyle cellStyleBottom = customCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM, (short) 16);
-        XSSFCellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
+        XSSFCellStyle cellStyleBottom = customCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM, (short) 22);
+        XSSFCellStyle cellStyle = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 22);
         CellStyle style;
         cellStyleBottom.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00"));
         DaoSuelos daoSuelos = new DaoSuelos();
         int valorAnterior = initRow;
         double espesor;
-        CellStyle styleFormat = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 16);
+        CellStyle styleFormat = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 22);
         for (int index = 0; index < clasificacionSucsProperties.size(); index++) {
             XSSFRow row = sheet.getRow(valorAnterior);
             if (row == null) {
