@@ -129,7 +129,7 @@ public class ArchivoExcel {
             datosCliente(sheet, empresaProperty, profundidadSondeo);
             data(sheet, profundidadSondeo, cellStyle, wb, fontBold);
             //ancho de la fila 0, donde esta la cota, no se ve el valor, por eso lo ampliamos
-            sheet.setColumnWidth(0,4000);
+            sheet.setColumnWidth(0, 4000);
             heightCell(sheet, datosCampoProperties);
             // esto es para darle borde a todo
             PropertyTemplate pt = new PropertyTemplate();
@@ -605,8 +605,7 @@ public class ArchivoExcel {
         r.setT(title);
     }
 
-    private void chart(XSSFSheet sheet, XSSFSheet sheet2, ObservableList<DatosCampoProperty> datosCampoProperties,
-                       Utility utility) {
+    private void chart(XSSFSheet sheet, XSSFSheet sheet2, ObservableList<DatosCampoProperty> datosCampoProperties, Utility utility) {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
         int num_rows = (datosCampoProperties.size() * 3) + 13;
         List<Double> yList = utility.yValues(datosCampoProperties);
