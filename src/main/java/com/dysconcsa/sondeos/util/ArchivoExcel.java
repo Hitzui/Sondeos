@@ -417,10 +417,10 @@ public class ArchivoExcel {
         cell = rowDatos.createCell(0);
         cell.setCellValue("Elevacion en metros: " + profundidadSondeos.get(0).getElevacion());
         cell.setCellStyle(cellStyleLeft);
-        rowDatos.setHeight((short) 850);
+        rowDatos.setHeightInPoints(45);
         Row xRow = sheet.getRow(11);
         if (xRow == null) xRow = sheet.createRow(11);
-        xRow.setHeight((short) 850);
+        xRow.setHeightInPoints(45);
         cell = rowDatos.createCell(10);
         sheet.addMergedRegion(new CellRangeAddress(10, 11, 10, 10));
         cell.setCellValue("Recobro");
@@ -457,7 +457,7 @@ public class ArchivoExcel {
             utility.crearDatosCampo(sheet, datosCampoProperties);
             utility.clasificacion(sheet, clasificacionSucsProperties, profundidadSondeos.get(0).getElevacion());
             utility.datosHumedad(sheet, humedadProperties, size);
-            utility.generateSeriesX(datosCampoProperties);
+            //utility.generateSeriesX(datosCampoProperties);
             utility.datosTrepano(sheet, trepanoProperties, size);
             valoresGrafico(datosCampoProperties, wb);
             // Ingreso del ademe
@@ -525,8 +525,9 @@ public class ArchivoExcel {
                 List<Integer> x = xValue.getValue();
                 for (Integer value : x) {
                     Row row = sheet.getRow(i);
-                    if (row == null)
+                    if (row == null) {
                         row = sheet.createRow(i);
+                    }
                     Cell cell = row.createCell(3);
                     cell.setCellValue(value);
                     i++;
@@ -553,7 +554,7 @@ public class ArchivoExcel {
             cell.setCellValue(yValues.get(yValues.size() - 1));
             chart((XSSFSheet) wb.getSheetAt(0), sheet, datosCampoProperties, utility);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -631,7 +632,7 @@ public class ArchivoExcel {
         CTTextBody ctTextBody = ctValAx.addNewTxPr();
         ctTextBody.addNewBodyPr(); //body properties
         CTTextCharacterProperties ctTextCharacterProperties = ctTextBody.addNewP().addNewPPr().addNewDefRPr(); //character properties
-        ctTextCharacterProperties.setSz(15 * 100); //size in 100th of a point
+        ctTextCharacterProperties.setSz(20 * 100); //size in 100th of a point
         setAxisTitle(chart, "N = Golpes / Pie");
         // https://stackoverflow.com/questions/32010765
         bottomAxis.setCrosses(AxisCrosses.AUTO_ZERO);

@@ -60,7 +60,7 @@
                     <Tab fx:id="tabEstratigrafia" text="Estratigrafia">
                         <AnchorPane style="-fx-background-color: -fx-secondary;">
                             <children>
-                                <TableView fx:id="tableClasificacion" editable="true" layoutX="14.0" layoutY="7.0" prefHeight="165.0" prefWidth="852.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="16.0">
+                                <TableView fx:id="tableClasificacion" editable="true" layoutX="14.0" layoutY="7.0" prefHeight="281.0" prefWidth="926.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="10.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadSucs" prefWidth="109.0" sortable="false" text="Profundidad" />
                                         <TableColumn fx:id="colLimiteLiquido" prefWidth="97.0" sortable="false" text="Limite Liq." />
@@ -71,7 +71,7 @@
                               <TableColumn fx:id="colPattern" prefWidth="130.0" text="Patron" />
                                     </columns>
                                 </TableView>
-                                <TableView fx:id="tableHumedad" editable="true" layoutX="15.0" layoutY="195.0" prefHeight="200.0" prefWidth="390.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="195.0">
+                                <TableView fx:id="tableHumedad" editable="true" layoutX="15.0" layoutY="299.0" prefHeight="200.0" prefWidth="390.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="300.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadInicialHumedad" prefWidth="111.0" sortable="false" text="Prof. Inicial" />
                                         <TableColumn fx:id="colProfundidadFinalHumedad" prefWidth="148.0" sortable="false" text="Prof. Final" />
@@ -81,7 +81,7 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                 </TableView>
-                                <TableView fx:id="tableAdeme" editable="true" layoutX="435.0" layoutY="195.0" prefHeight="200.0" prefWidth="398.0" AnchorPane.leftAnchor="435.0" AnchorPane.topAnchor="195.0">
+                                <TableView fx:id="tableAdeme" editable="true" layoutX="435.0" layoutY="299.0" prefHeight="200.0" prefWidth="398.0" AnchorPane.leftAnchor="435.0" AnchorPane.topAnchor="300.0">
                                     <columns>
                                         <TableColumn fx:id="colProfundidadAdeme" prefWidth="134.0" text="Prof. Ademe" />
                                         <TableColumn fx:id="colAdemeDescripion" editable="false" prefWidth="186.0" sortable="false" text="Descripcion" />

@@ -171,7 +171,7 @@ public class Utility {
         CellStyle cellStyleCenter = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 18);
         CellStyle cellStyleLeft = customCellStyle(wb, HorizontalAlignment.LEFT, (short) 18);
         CellStyle cellStyleRight = customCellStyle(wb, HorizontalAlignment.RIGHT, (short) 18);
-        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 28);
+        CellStyle cellStyleCenter2 = customCellStyle(wb, HorizontalAlignment.CENTER, (short) 32);
         for (DatosCampoProperty dato : datosCampoProperties) {
             Row row = sheet.getRow(initRow);
             if (row == null) {
@@ -207,7 +207,7 @@ public class Utility {
                 row = sheet.createRow(initRow);
             }
             cell = row.createCell(11);
-            if (dato.getGolpe2() == 0) {
+            if (dato.getGolpe1() == 0 && dato.getGolpe2() == 0 && dato.getGolpe3() == 0) {
                 cell.setCellValue("");
                 cell = row.createCell(16);
                 cell.setCellValue("R O T A D O");
@@ -471,67 +471,78 @@ public class Utility {
 
     void generateSeriesX(ObservableList<DatosCampoProperty> datosCampoProperties) {
         try {
+            mapRotadosX.clear();
+            mapRotadosY.clear();
+            List<Integer> cantZeros = new ArrayList<>();
+            List<Integer> cantValues = new ArrayList<>();
             List<Double> yLista = yValues(datosCampoProperties);
             List<Integer> xLista = xValues(datosCampoProperties);
-            List<Integer> zeros = new ArrayList<>();
-            int countZero = 0;
-            int _rotado = 0;
+            int indexZero = 0;
+            int indexValue = 0;
             for (int i = 0; i < xLista.size(); i++) {
+                int val = xLista.get(i);
                 if (i == 0) {
-                    zeros.add(0);
-                    if (xLista.get(i) == 0) {
-                        countZero++;
+                    if (val != 0) {
+                        cantZeros.add(0);
                     }
                 } else {
-                    if (_rotado == xLista.get(i)) {
-                        if (xLista.get(i) == 0) {
-                            if (countZero == 0) {
-                                zeros.add(i - 1);
-                            }
-                            countZero++;
-                        } else {
-                            if (countZero > 0) {
-                                zeros.add(zeros.get(zeros.size() - 1) + countZero + 1);
-                            }
-                            countZero = 0;
-                        }
-                    }
-                    if (i == xLista.size() - 1) {
-                        zeros.add(i + 1);
-                    }
-                }
-                _rotado = xLista.get(i);
-            }
-            for (int i = 0; i < zeros.size(); i++) {
-                int val = zeros.get(i);
-                int nextVal;
-                if (i == (zeros.size() - 1)) {
-                    nextVal = 0;
-                } else {
-                    nextVal = zeros.get(i + 1);
-                }
-
-                List<Double> y = new ArrayList<>();
-                List<Integer> x = new ArrayList<>();
-                x.add(0);
-                if (i == 0) {
-                    y.add(0d);
-                } else {
-                    if (val >= yLista.size()) {
-                        y.add(yLista.get(yLista.size() - 1));
+                    if (val == 0) {
+                        indexZero += 1;
+                        if (indexValue > 0) cantValues.add(indexValue);
+                        indexValue = 0;
                     } else {
-                        y.add(yLista.get(val));
+                        if (indexZero > 0) cantZeros.add(i);
+                        indexValue = i;
+                        indexZero = 0;
                     }
                 }
-                y.addAll(yLista.subList(val, nextVal));
-                x.addAll(xLista.subList(val, nextVal));
+                if (xLista.size() - 1 == i) {
+                    if (cantValues.size() != cantZeros.size()) cantValues.add(xLista.size() - 1);
+                }
+            }
+            System.out.println("Values list > " + cantValues);
+            System.out.println("Zeros list > " + cantZeros);
+            if (cantValues.size() <= 0) {
+                List<Integer> x = new ArrayList<>();
+                List<Double> y = new ArrayList<>();
+                System.out.println("here");
+                x.add(0);
+                y.add(0d);
+                x.addAll(xLista);
+                y.addAll(yLista);
                 x.add(0);
                 x.add(0);
-                y.add(y.get(y.size() - 1));
+                y.add(yLista.get(yLista.size() - 1));
                 y.add(y.get(0));
-                mapRotadosX.put(mapRotadosX.size() + 1, x);
-                mapRotadosY.put(mapRotadosY.size() + 1, y);
-                i += 1;
+                mapRotadosX.put(1, x);
+                mapRotadosY.put(1, y);
+            } else {
+                for (int j = 0; j < cantZeros.size(); j++) {
+                    List<Integer> x = new ArrayList<>();
+                    List<Double> y = new ArrayList<>();
+                    x.add(0);
+                    int toIndex = cantValues.get(j) + 1;
+                    int fromIndex = cantZeros.get(j);
+                    if (cantZeros.get(j) == 0) {
+                        y.add(0d);
+                    } else {
+                        y.add(yLista.get(cantZeros.get(j) - 1));
+                    }
+                    System.out.println("From index: " + fromIndex + " > To index: " + toIndex);
+                    List<Double> tempList = yLista.subList(fromIndex, toIndex);
+                    System.out.println("Temp list: " + tempList);
+                    y.addAll(tempList);
+                    List<Integer> tempList2 = xLista.subList(fromIndex, toIndex);
+                    System.out.println("Temp list 2: " + tempList2);
+                    x.addAll(tempList2);
+                    x.add(0);
+                    x.add(0);
+                    y.add(tempList.get(tempList.size() - 1));
+                    y.add(tempList.get(0));
+                    mapRotadosX.put(mapRotadosX.size() + 1, x);
+                    mapRotadosY.put(mapRotadosY.size() + 1, y);
+                }
+                System.out.println(mapRotadosX + " <> " + mapRotadosY);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -540,8 +551,7 @@ public class Utility {
 
     List<Integer> xValues(ObservableList<DatosCampoProperty> datosCampoProperties) {
         List<Integer> listaValores = new ArrayList<>();
-        for (int i = 0; i < datosCampoProperties.size(); i++) {
-            DatosCampoProperty dato = datosCampoProperties.get(i);
+        for (DatosCampoProperty dato : datosCampoProperties) {
             Integer multi = dato.getGolpe1() * 2;
             Integer suma = dato.getGolpe2() + dato.getGolpe3();
             listaValores.add(multi);
@@ -557,7 +567,6 @@ public class Utility {
         List<Integer> listaValores = this.xValues(datosCampoProperties);
         List<Double> listaConstante = new ArrayList<>();
         int size = datosCampoProperties.size() * 3;
-        System.out.println("Size " + size);
         for (int j = 1; j <= size; j++) {
             listaConstante.add(constantePulgadas);
             if (j % 2 == 0) {
@@ -594,6 +603,7 @@ public class Utility {
         cellStyle.setFillForegroundColor(color.index);
         return cellStyle;
     }
+
     public void loadColors(ObservableList<IndexedColors> itemsColorPoperties) {
         for (IndexedColors colors : IndexedColors.values()) {
             try {
@@ -606,7 +616,8 @@ public class Utility {
         }
 
     }
-    public<T> ComboBoxTableCell<T,IndexedColors> comboBoxColors(ObservableList<IndexedColors> itemsColorPoperties) {
+
+    public <T> ComboBoxTableCell<T, IndexedColors> comboBoxColors(ObservableList<IndexedColors> itemsColorPoperties) {
         ComboBoxTableCell<T, IndexedColors> comboBoxTableCell = new ComboBoxTableCell<>();
         comboBoxTableCell.getItems().addAll(itemsColorPoperties);
         comboBoxTableCell.updateSelected(true);
@@ -618,7 +629,7 @@ public class Utility {
         return comboBoxTableCell;
     }
 
-    public<T> ComboBoxTableCell<T, FillPatternType> comboBoxPattern(ObservableList<FillPatternType> patternTypesProperties ) {
+    public <T> ComboBoxTableCell<T, FillPatternType> comboBoxPattern(ObservableList<FillPatternType> patternTypesProperties) {
         ComboBoxTableCell<T, FillPatternType> comboBoxTableCell = new ComboBoxTableCell<>();
         comboBoxTableCell.getItems().addAll(patternTypesProperties);
         comboBoxTableCell.updateSelected(true);

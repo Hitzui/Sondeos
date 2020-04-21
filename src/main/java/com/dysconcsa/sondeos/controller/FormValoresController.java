@@ -212,7 +212,7 @@ public class FormValoresController {
     @ActionMethod("action_btnDatosSondeos")
     public void action_btnDatosSondeos() {
         if (showDatosSondeosDialog(profundidadSondeo)) {
-            System.out.println("Sondeo numero: " + profundidadSondeo.getSondeoNumero());
+            //System.out.println("Sondeo numero: " + profundidadSondeo.getSondeoNumero());
         }
     }
 
@@ -224,11 +224,11 @@ public class FormValoresController {
         int index = tableDatos.getSelectionModel().getSelectedIndex();
         DatosCampoProperty datosCampoProperty = tableDatos.getSelectionModel().getSelectedItem();
         datosCampoProperties.remove(datosCampoProperty);
-        for (int i = index; i < datosCampoProperties.size(); i++) {
+        /*for (int i = index; i < datosCampoProperties.size(); i++) {
             DatosCampoProperty datos = datosCampoProperties.get(i);
             datos.setProfundidadInicial(datos.getProfundidadInicial() - 1.5);
             datos.setProfundidadFinal(datos.getProfundidadFinal() - 1.5);
-        }
+        }*/
     }
 
     @ActionMethod("action_btnInsertar")
@@ -580,7 +580,6 @@ public class FormValoresController {
             return new SimpleObjectProperty<>(suelosProperty);
         });
         colTipoSuelo.setOnEditCommit(event -> {
-            System.out.println(event.getNewValue());
             DaoSuelos daoSuelos = new DaoSuelos();
             ClasificacionSucsProperty clasificacionSucsProperty = event.getRowValue();
             SuelosProperty suelos = daoSuelos.findBYSimbolo(String.valueOf(event.getNewValue()));
